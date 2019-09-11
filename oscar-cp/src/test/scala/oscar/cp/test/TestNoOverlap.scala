@@ -24,31 +24,31 @@ class AbstractNoOverlapTest extends FunSuite with Matchers with Assertions {
   val probOptional = 0.2F
 
   test("Random instance of 2 activities 1 family") {
-    genericTest(2, 1, 1000, shouldRun = true, testSols = true, printStats=false, probaOptional = probOptional)
+    genericTest(2, 1, 100, shouldRun = true, testSols = true, printStats=false, probaOptional = probOptional)
   }
 
   test("Random instance of 2 activities 2 families") {
-    genericTest(2, 2, 1000, shouldRun = true, testSols = true, printStats=false, probaOptional = probOptional)
+    genericTest(2, 2, 100, shouldRun = true, testSols = true, printStats=false, probaOptional = probOptional)
   }
 
   test("Random instance of 3 activities 1 family") {
-    genericTest(3, 1, 50, shouldRun = true, testSols = true, printStats=false, probaOptional = probOptional)
+    genericTest(3, 1, 10, shouldRun = true, testSols = true, printStats=false, probaOptional = probOptional)
   }
 
   test("Random instance of 3 activities 3 families") {
-    genericTest(3, 3, 1000, minimization=true, testSols = true, printStats=false, probaOptional = probOptional)
+    genericTest(3, 3, 100, minimization=true, testSols = true, printStats=false, probaOptional = probOptional)
   }
 
   test("Random instance of 4 activities") {
-    genericTest(4, 1, 500, minimization=true, printStats=false, probaOptional = probOptional)
+    genericTest(4, 1, 50, minimization=true, printStats=false, probaOptional = probOptional)
   }
 
   test("Random instance of 4 activities 2 families") {
-    genericTest(4, 2, 500, minimization=true, printStats=false, probaOptional = probOptional)
+    genericTest(4, 2, 50, minimization=true, printStats=false, probaOptional = probOptional)
   }
 
   test("Random instance of 4 activities 4 families") {
-    genericTest(4, 4, 500, minimization=true, printStats=false, probaOptional = probOptional)
+    genericTest(4, 4, 50, minimization=true, printStats=false, probaOptional = probOptional)
   }
 
   test("Random instance of 5 activities") {
@@ -67,19 +67,17 @@ class AbstractNoOverlapTest extends FunSuite with Matchers with Assertions {
       val minDuration = 5 + randGen.nextInt(30)
       val maxDuration = minDuration + randGen.nextInt(30)
       val (nActis, nJobs, nMach, machines, durations, ttMatrixWithSetup, isOptional) =
-        RandomFamilyInstanceGenerator.generateRandomJobShopInstance(nActivities, nMachines, nFamilies, minDuration, maxDuration, minTT, maxTT, familiesOfEqualSize=false, probaOptional)
+        RandomFamilyInstanceGenerator.generateRandomJobShopInstance(nActivities, nMachines, nFamilies, minDuration, maxDuration, minTT, maxTT, familiesOfEqualSize = false, probaOptional)
       val ttMatrix = ttMatrixWithSetup.map(_.drop(1)).drop(1)
 
       if (shouldRun) {
         if (printStats) {
           println(s"Run #${i}")
         }
-        val nOptional : Int = isOptional.filter(_ == true).length
+        val nOptional: Int = isOptional.filter(_ == true).length
         if (nOptional < nActivities || !minimization)
-            compareWithDecomp(nActivities, durations, ttMatrix, isOptional, minimize = minimization, verbose = printStats, testSolutions = testSols, numSolutions = numSols)
-        else
-          println("Skip because all activities are optional")
-        }
+          compareWithDecomp(nActivities, durations, ttMatrix, isOptional, minimize = minimization, verbose = printStats, testSolutions = testSols, numSolutions = numSols)
+      }
     }
   }
 
@@ -141,7 +139,7 @@ class AbstractNoOverlapTest extends FunSuite with Matchers with Assertions {
     val stats = basicSolver.start(/*numSolutions,*/ timeLimit = 5)
 
     if (!stats.completed) {
-      println("DECOMP COULD NOT FINISH INSTANCE")
+      //println("DECOMP COULD NOT FINISH INSTANCE")
       return
     }
 
@@ -353,8 +351,8 @@ class SmallNoOverlapTransitionTimeTest extends FunSuite with Matchers with Asser
 
     assert(!resources(2).hasValue(1))
 
-    println("starts:\n" + starts.mkString("\n"))
-    println("resources:\n" + resources.mkString("\n"))
+    //println("starts:\n" + starts.mkString("\n"))
+    //println("resources:\n" + resources.mkString("\n"))
 
   }
 }
