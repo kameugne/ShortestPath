@@ -53,13 +53,13 @@ object OscarBuild {
 
   object Dependencies {
     // Regular libraries
-    val antlr4Runtime = "org.antlr" % "antlr4-runtime" % "latest.milestone"
-    val jcommon = "org.jfree" % "jcommon" % "latest.milestone"
+    val antlr4Runtime = "org.antlr" % "antlr4-runtime" % "4.7.2"
+    val jcommon = "org.jfree" % "jcommon" % "1.0.24"
     val jfreechart = "org.jfree" % "jfreechart" % "1.5.0"
-    val jsci = "net.sf.jsci" % "jsci" % "latest.milestone"
+    val jsci = "net.sf.jsci" % "jsci" % "1.2"
     val scalaParserCombinators = "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2"
     val scalaXml = "org.scala-lang.modules" %% "scala-xml" % "1.1.0"
-    val scalaSwing = "org.scala-lang.modules" %% "scala-swing" % "latest.milestone"
+    val scalaSwing = "org.scala-lang.modules" %% "scala-swing" % "2.1.1"
     val swingx = "org.swinglabs" % "swingx" % "1.6.1"
     val swingxWs = "org.swinglabs" % "swingx-ws" % "1.0"
     val xmlApisExt = "xml-apis" % "xml-apis-ext" % "latest.milestone"

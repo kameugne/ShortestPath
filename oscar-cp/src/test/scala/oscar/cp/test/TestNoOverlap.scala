@@ -24,11 +24,11 @@ class AbstractNoOverlapTest extends FunSuite with Matchers with Assertions {
   val probOptional = 0.2F
 
   test("Random instance of 2 activities 1 family") {
-    genericTest(2, 1, 100, shouldRun = true, testSols = true, printStats=false, probaOptional = probOptional)
+    genericTest(2, 1, 10, shouldRun = true, testSols = true, printStats=false, probaOptional = probOptional)
   }
 
   test("Random instance of 2 activities 2 families") {
-    genericTest(2, 2, 100, shouldRun = true, testSols = true, printStats=false, probaOptional = probOptional)
+    genericTest(2, 2, 10, shouldRun = true, testSols = true, printStats=false, probaOptional = probOptional)
   }
 
   test("Random instance of 3 activities 1 family") {
@@ -36,27 +36,19 @@ class AbstractNoOverlapTest extends FunSuite with Matchers with Assertions {
   }
 
   test("Random instance of 3 activities 3 families") {
-    genericTest(3, 3, 100, minimization=true, testSols = true, printStats=false, probaOptional = probOptional)
+    genericTest(3, 3, 10, minimization=true, testSols = true, printStats=false, probaOptional = probOptional)
   }
 
   test("Random instance of 4 activities") {
-    genericTest(4, 1, 50, minimization=true, printStats=false, probaOptional = probOptional)
+    genericTest(4, 1, 10, minimization=true, printStats=false, probaOptional = probOptional)
   }
 
   test("Random instance of 4 activities 2 families") {
-    genericTest(4, 2, 50, minimization=true, printStats=false, probaOptional = probOptional)
+    genericTest(4, 2, 10, minimization=true, printStats=false, probaOptional = probOptional)
   }
 
   test("Random instance of 4 activities 4 families") {
-    genericTest(4, 4, 50, minimization=true, printStats=false, probaOptional = probOptional)
-  }
-
-  test("Random instance of 5 activities") {
-    genericTest(5, 1, 10, minimization=true, printStats=false, probaOptional = probOptional)
-  }
-
-  test("Random instance of 5 activities 5 families") {
-    genericTest(5, 5, 10, minimization=true, printStats=false, probaOptional = probOptional)
+    genericTest(4, 4, 10, minimization=true, printStats=false, probaOptional = probOptional)
   }
 
   def genericTest(nActivities: Int, nFamilies: Int, nRuns: Int, minimization: Boolean=false, printStats: Boolean=false, shouldRun: Boolean=true, testSols: Boolean=false, numSols: Int = Int.MaxValue, probaOptional: Float = 0) = {
@@ -382,7 +374,5 @@ class SmallAlternativeResourcesTransitionTimeTest extends FunSuite with Matchers
     assertResult(31)(starts(1).min)
     assertResult(31)(starts(3).min)
 
-    println("starts:\n" + starts.mkString("\n"))
-    println("resources:\n" + resources.mkString("\n"))
   }
 }
