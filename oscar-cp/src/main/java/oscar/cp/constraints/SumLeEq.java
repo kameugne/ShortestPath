@@ -82,7 +82,7 @@ public class SumLeEq extends Constraint {
 			return;
 		}
 		
-		y.updateMax(maxsumx);
+		y.updateMin(minsumx);
 		
 		for (int i = 0; i < x.length; i++) {
 			int minsumxi = minsumx - x[i].getMin();
