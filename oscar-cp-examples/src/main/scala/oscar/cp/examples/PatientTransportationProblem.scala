@@ -13,7 +13,7 @@ import oscar.cp._
   *
   * @author Charles Thomas cftmthomas@gmail.com
   */
-object PatientTransportProblem extends CPModel with App {
+object PatientTransportationProblem extends CPModel with App {
 
   /* data */
 
@@ -85,7 +85,7 @@ object PatientTransportProblem extends CPModel with App {
     (start, end, end-start)
   }).unzip3
 
-  //Time related variables for forward trips:
+  //Time related variables for backward trips:
   val (startBackward, endBackward, durBackward) = patientBackward.map(p =>{
     val start = CPIntVar(patientRdvEnd(p) to math.min(horizon, patientRdvEnd(p) + maxWaitTime))
     val end = CPIntVar(patientRdvEnd(p) to math.min(horizon, patientRdvEnd(p) + maxWaitTime))

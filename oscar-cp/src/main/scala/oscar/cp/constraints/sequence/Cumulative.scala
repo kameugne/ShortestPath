@@ -50,6 +50,8 @@ abstract class Cumulative(
   override def associatedVars(): Iterable[CPVar] = Array(sequence) ++ loads :+ maxCapacity :+ minCapacity
 
   override def setup(l: CPPropagStrength): Unit = {
+    for(i <- starts.indices) sequence.store.add(Dependency(sequence, Set(starts(i), ends(i)))) //Posting dependency constraints
+
     sequence.callPropagateWhenDomainChanges(this)
     for(i <- loads.indices)loads(i).callPropagateWhenBoundsChange(this)
     maxCapacity.callPropagateWhenBoundsChange(this)
