@@ -54,7 +54,7 @@ class VisualCalendarTile(d: VisualDrawing, s: RoundRectangle2D.Double, dayLabel:
 
 object VisualCalendarTile {
 
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     val f = VisualFrame("toto");
     val d = VisualDrawing(false);
     val inf = f.createFrame("Drawing");

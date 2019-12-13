@@ -148,7 +148,7 @@ object TestCapacity extends App{
     profile(vlsn1pt),
     customThreeOpt(5,false),
     customTwoOpt,
-    segExchange(10))) onExhaustRestartAfter (doubleRemove acceptAll(),5,myVRP.obj)
+    segExchange(10))) onExhaustRestartAfter (doubleRemove.acceptAll(),5,myVRP.obj)
 
   //search.verbose = 1
   search.verboseWithExtraInfo(2, ()=> "" + myVRP)

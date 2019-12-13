@@ -57,13 +57,13 @@ class Metropolis(a: Neighborhood, temperature: Int => Float = _ => 100, base: Fl
     math.random < math.pow(base, -gain / temperatureValue)
   }
 
-  def notifyMoveTaken() {
+  def notifyMoveTaken(): Unit = {
     moveCount += 1
     temperatureValue = temperature(moveCount)
   }
 
   //this resets the internal state of the move combinators
-  override def reset() {
+  override def reset(): Unit = {
     super.reset()
     moveCount = 0
     temperatureValue = temperature(moveCount)
@@ -127,7 +127,7 @@ class GuidedLocalSearch(a: Neighborhood, objectives: List[Objective], resetOnExh
   }
 
   //this resets the internal state of the Neighborhood
-  override def reset() {
+  override def reset(): Unit = {
     tailObjectives = objectives
     switchToNext()
     if (currentSun != null) currentSun.reset()

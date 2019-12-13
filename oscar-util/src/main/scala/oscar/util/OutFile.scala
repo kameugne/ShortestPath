@@ -33,7 +33,7 @@ class OutFile(filepath: String, critical: Boolean, verbous: Boolean) {
     }
   }
 
-  private def errorHandling(e: Error) {
+  private def errorHandling(e: Error): Unit = {
     if (verbous) println(e.getMessage)
     if (critical) System.exit(-1)
   }

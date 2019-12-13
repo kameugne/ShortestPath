@@ -136,7 +136,7 @@ trait Benchmark {
         startSol.objective
       )
 
-      lazy val relaxStore = if (coupled) new RandomStore[ALNSOperator](Array(new ALNSNoParamOperator("dummy", 0, () => (_ => Unit, None, None))))
+      lazy val relaxStore = if (coupled) new RandomStore[ALNSOperator](Array(new ALNSNoParamOperator("dummy", 0, () => (_ => (), None, None))))
       else if(fixed) builder.instantiateOperatorStore(builder.instantiateFixedRelaxOperators, startSol.objective)
       else builder.instantiateOperatorStore(builder.instantiateRelaxOperators, startSol.objective)
 
@@ -211,7 +211,7 @@ trait Benchmark {
       var lowestResult: Option[ALNSSearchResults] = None
       Random.shuffle(operators.toSeq).foreach(op =>{
         try {
-          lazy val relaxStore = new RandomStore[ALNSOperator](Array(new ALNSNoParamOperator("dummy", 0, () => (_ => Unit, None, None))))
+          lazy val relaxStore = new RandomStore[ALNSOperator](Array(new ALNSNoParamOperator("dummy", 0, () => (_ => (), None, None))))
           lazy val searchStore = new RandomStore[ALNSOperator](Array(op))
 
           val config = new ALNSConfig(

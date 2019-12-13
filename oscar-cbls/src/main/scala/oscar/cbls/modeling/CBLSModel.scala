@@ -50,10 +50,10 @@ class CBLSModel(val verbose:Boolean = false,
   implicit val s = new Store(verbose, checker, noCycle, topologicalSort,propagateOnToString)
   implicit val c = new ConstraintSystem(s)
 
-  def close()(implicit s:Store) {s.close()}
+  def close()(implicit s:Store): Unit = {s.close()}
 
-  def add(c:Constraint)(implicit cs:ConstraintSystem) {cs.post(c)}
-  def post(c:Constraint)(implicit cs:ConstraintSystem) {cs.post(c)}
+  def add(c:Constraint)(implicit cs:ConstraintSystem): Unit = {cs.post(c)}
+  def post(c:Constraint)(implicit cs:ConstraintSystem): Unit = {cs.post(c)}
 
   def violation()(implicit cs:ConstraintSystem) = cs.violation
   def violations[V<:Variable](v:Array[V])(implicit cs:ConstraintSystem) = cs.violations(v)

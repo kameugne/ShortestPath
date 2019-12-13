@@ -152,12 +152,12 @@ case class SortSequence(v: SeqValue, sortValue:Int => Int, orderName:String="ord
 
   private val checkpointStack = new SeqCheckpointedValueStack[IntSequence]()
 
-  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate) {
+  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate): Unit = {
     digestChanges(changes)
     //check(new ErrorChecker(),v.newValue,this.newValue)
   }
 
-  private def digestChanges(changes : SeqUpdate){
+  private def digestChanges(changes : SeqUpdate): Unit ={
     changes match {
       case s@SeqUpdateInsert(value : Int, pos : Int, prev : SeqUpdate) =>
         digestChanges(prev)
@@ -198,10 +198,10 @@ case class SortSequence(v: SeqValue, sortValue:Int => Int, orderName:String="ord
 
   private def sortSequenceBy(i:IntSequence,by:Int => Int):IntSequence = IntSequence(i.toList.sortBy(i => (by(i),i)))
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     check(c, v.value,this.value)
   }
-  def check(c:Checker,in:IntSequence,out:IntSequence){
+  def check(c:Checker,in:IntSequence,out:IntSequence): Unit ={
     require(out quickEquals this.value)
     c.check(out.toList equals sortSequenceBy(in,sortValue).toList, Some("this.out=" + out.toList + " should be " +sortSequenceBy(in,sortValue).toList))
     /*

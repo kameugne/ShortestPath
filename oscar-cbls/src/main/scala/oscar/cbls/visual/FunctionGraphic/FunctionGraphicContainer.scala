@@ -38,7 +38,7 @@ abstract class FunctionGraphicContainer(title:String,dimension: Dimension) exten
 
   validate()
 
-  def drawGlobalCurve()
+  def drawGlobalCurve(): Unit
 
   def clear(): Unit ={
     graphic.clear()

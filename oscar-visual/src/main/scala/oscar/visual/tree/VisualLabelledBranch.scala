@@ -39,7 +39,7 @@ class VisualLabelledBranch(d: VisualDrawing, shapes: (VisualLine, VisualLine, Vi
 	* Moves to the specified coordinates
 	* @param x
 	*/
-  def move(xorig: Double, yorig: Double, xdest: Double, ydest: Double) {
+  def move(xorig: Double, yorig: Double, xdest: Double, ydest: Double): Unit = {
     branch._1.orig_=(xorig, yorig)
     branch._1.dest_=(xorig, (ydest + 2 * yorig) / 3)
     branch._2.orig_=(xorig, (ydest + 2 * yorig) / 3)
@@ -64,7 +64,7 @@ class VisualLabelledBranch(d: VisualDrawing, shapes: (VisualLine, VisualLine, Vi
 
 object VisualLabelledBranch {
   	
-  def main(args : Array[String]) {
+  def main(args : Array[String]): Unit = {
     val f = VisualFrame("toto")
     val d = VisualDrawing(flipped=false)
     val inf = f.createFrame("Drawing")

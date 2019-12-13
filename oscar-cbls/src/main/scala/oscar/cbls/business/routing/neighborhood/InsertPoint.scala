@@ -39,7 +39,7 @@ abstract class InsertPoint(vrp: VRP,
   override def instantiateCurrentMove(newObj: Int) =
     InsertPointMove(insertedPointForInstantiation, insertAtPositionForInstantiation, newObj, this, vrp, neighborhoodNameToString)
 
-  def doMove(insertedPoint: Int, insertAtPosition:Int) {
+  def doMove(insertedPoint: Int, insertAtPosition:Int): Unit = {
     seq.insertAtPosition(insertedPoint, insertAtPosition)
   }
 }
@@ -55,7 +55,7 @@ case class InsertPointMove(insertedPoint: Int,
   //TODO
   override def impactedPoints: List[Int] = List(insertedPoint)
 
-  override def commit() {
+  override def commit(): Unit = {
     neighborhood.doMove(insertedPoint, insertAtPosition)
   }
 

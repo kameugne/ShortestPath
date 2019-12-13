@@ -51,7 +51,7 @@ class IFlatIRelax(p: Planning,
    * @param maxIt the max number of iterations of the search
    * @param stable the number of no successive noimprove that will cause the search to stop
    */
-  def solve(maxIt: Int, stable: Int) {
+  def solve(maxIt: Int, stable: Int): Unit = {
     var finished = false;
 
     flattenWorseFirst()
@@ -126,7 +126,7 @@ class IFlatIRelax(p: Planning,
    * from a seemignly exhausted search zone
    *
    */
-  def jumpAndFlatten() {
+  def jumpAndFlatten(): Unit = {
     if (verbose) println("jumping****************")
     for (i <- 0 until nbRelax * 3) { relax(pkillPerRelax); }
     flattenWorseFirst()
@@ -167,7 +167,7 @@ class IFlatIRelax(p: Planning,
     true
   }
 
-  def doRelax(from: Activity, to: Activity, verbose: Boolean) {
+  def doRelax(from: Activity, to: Activity, verbose: Boolean): Unit = {
     to.removeDynamicPredecessor(from, verbose)
   }
 
@@ -195,7 +195,7 @@ class IFlatIRelax(p: Planning,
   }
 
   /**implements the standard flatten procedure*/
-  def flattenWorseFirst() {
+  def flattenWorseFirst(): Unit = {
     var iterations = 0
     while (p.worseOvershotResource.value.nonEmpty) {
       if (iterations > maxIterations)
@@ -245,7 +245,7 @@ class IFlatIRelax(p: Planning,
 
   /**implements the standard flatten procedure
     * except that it prefers to add a priority to a moveable activity. */
-  def flattenWorseFirst2() {
+  def flattenWorseFirst2(): Unit = {
     FlattenWorseFirst(p, maxIterations, estimateMakespanExpansionForNewDependency, true)().doIt()
   }
 

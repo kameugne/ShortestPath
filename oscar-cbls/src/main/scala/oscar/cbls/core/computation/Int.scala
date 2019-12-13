@@ -62,7 +62,7 @@ object IntValue {
 }
 
 trait IntNotificationTarget{
-  def notifyIntChanged(v: ChangingIntValue, id: Int, OldVal: Int, NewVal: Int)
+  def notifyIntChanged(v: ChangingIntValue, id: Int, OldVal: Int, NewVal: Int): Unit
 }
 
 /**An IntVar is a variable managed by the [[oscar.cbls.core.computation.Store]] whose type is integer.
@@ -105,7 +105,7 @@ abstract class ChangingIntValue(initialValue:Int, initialDomain:Domain)
   override def toStringNoPropagate = s"$name:=$mNewValue"
 
   @inline
-  def setValue(v:Int){
+  def setValue(v:Int): Unit ={
     if (v != mNewValue){
       assert(domain.contains(v),v+ " is not in the domain of "+this+"("+min+".."+max+"). This might indicate an integer overflow.")
       mNewValue = v
@@ -127,9 +127,9 @@ abstract class ChangingIntValue(initialValue:Int, initialDomain:Domain)
     mNewValue
   }
 
-  override def performPropagation(){performIntPropagation()}
+  override def performPropagation(): Unit ={performIntPropagation()}
 
-  final protected def performIntPropagation(){
+  final protected def performIntPropagation(): Unit ={
     if(mOldValue!=mNewValue){
       val old=mOldValue
       mOldValue=mNewValue  //TODO: the change should be made AFTER the notification
@@ -150,29 +150,29 @@ abstract class ChangingIntValue(initialValue:Int, initialDomain:Domain)
     }
   }
 
-  override def checkInternals(c:Checker){
+  override def checkInternals(c:Checker): Unit ={
     c.check(mOldValue == mNewValue)
   }
 
-  protected def :=(v: Int) {
+  protected def :=(v: Int): Unit = {
     setValue(v)
   }
 
-  protected def :+=(v: Int) {
+  protected def :+=(v: Int): Unit = {
     setValue(v + mNewValue)
   }
 
-  protected def :*=(v: Int) {
+  protected def :*=(v: Int): Unit = {
     setValue(v * mNewValue)
   }
 
-  protected def :-=(v:Int) {
+  protected def :-=(v:Int): Unit = {
     setValue(mNewValue - v)
   }
 
   /** increments the variable by one
     */
-  protected def ++ {
+  protected def ++ : Unit = {
     setValue(1 + mNewValue)
   }
 
@@ -215,41 +215,41 @@ class CBLSIntVar(givenModel: Store, initialValue: Int, initialDomain:Domain, n: 
 
   override def name: String = if (n == null) defaultName else n
 
-  override def :=(v: Int) {
+  override def :=(v: Int): Unit = {
     setValue(v)
   }
 
-  override def :+=(v: Int) {
+  override def :+=(v: Int): Unit = {
     setValue(v + newValue)
   }
 
-  override def :*=(v: Int) {
+  override def :*=(v: Int): Unit = {
     setValue(v * newValue)
   }
 
-  override def :-=(v:Int) {
+  override def :-=(v:Int): Unit = {
     setValue(newValue - v)
   }
 
   /** increments the variable by one
     */
-  override def ++ {
+  override def ++ : Unit = {
     setValue(1 + newValue)
   }
 
   /**this operator swaps the value of two IntVar*/
-  def :=:(v:CBLSIntVar){
+  def :=:(v:CBLSIntVar): Unit ={
     val a:Int = v.value
     v:=this.value
     this := a
   }
 
   /**this operator swaps the value of two IntVar*/
-  def swap(v: CBLSIntVar) {
+  def swap(v: CBLSIntVar): Unit = {
     this :=: v
   }
 
-  def <==(i: IntValue) {IdentityInt(this,i)}
+  def <==(i: IntValue): Unit = {IdentityInt(this,i)}
 }
 
 object CBLSIntVar{
@@ -276,7 +276,7 @@ class CBLSIntConst(override val value:Int)
   override def min: Int = value
   override def max: Int = value
   override def name = value.toString
-  override def restrictDomain(d:Domain){
+  override def restrictDomain(d:Domain): Unit ={
     require(d.contains(value))
   }
 }
@@ -320,14 +320,14 @@ abstract class IntInvariant(initialValue:Int = 0, initialDomain:Domain = FullRan
 
   override final def name: String = if(customName == null) this.getClass.getSimpleName else customName
 
-  override final def performPropagation(){
+  override final def performPropagation(): Unit ={
     performInvariantPropagation()
     performIntPropagation()
   }
 }
 
 object IdentityInt{
-  def apply(toValue:CBLSIntVar, fromValue:IntValue){
+  def apply(toValue:CBLSIntVar, fromValue:IntValue): Unit ={
     fromValue match{
       case c:CBLSIntConst => toValue := c.value
       case c:ChangingIntValue => new IdentityInt(toValue, c)
@@ -345,11 +345,11 @@ class IdentityInt(toValue:CBLSIntVar, fromValue:IntValue) extends Invariant with
 
   toValue := fromValue.value
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     toValue := NewVal
   }
 
-  override def checkInternals(c:Checker){
+  override def checkInternals(c:Checker): Unit ={
     c.check(toValue.value == fromValue.value)
   }
 }

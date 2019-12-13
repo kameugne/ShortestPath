@@ -68,10 +68,10 @@ class DoublyLinkedList[T] extends Iterable[T]{
     d.elem
   }
 
-  def +(elem:T){addElem(elem)}
-  def ++(elems:Iterable[T]) {for(elem <- elems) addElem(elem)}
+  def +(elem:T): Unit ={addElem(elem)}
+  def ++(elems:Iterable[T]): Unit = {for(elem <- elems) addElem(elem)}
 
-  def dropAll(){
+  def dropAll(): Unit ={
     phantom.setNext(phantom)
   }
 
@@ -97,7 +97,7 @@ class DLLStorageElement[T](val elem:T){
   var next:DLLStorageElement[T] = null
   var prev:DLLStorageElement[T] = null
 
-  def setNext(d:DLLStorageElement[T]){
+  def setNext(d:DLLStorageElement[T]): Unit ={
     this.next = d
     d.prev = this
   }

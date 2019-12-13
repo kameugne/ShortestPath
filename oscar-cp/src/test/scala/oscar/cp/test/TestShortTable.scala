@@ -126,7 +126,8 @@ class TestShortTable extends TestSuite {
         binaryStatic(x)
       } onSolution {
         nbSol += 1
-      } start()
+      }
+      cp.start
       nbSol should be(26)
     }
 

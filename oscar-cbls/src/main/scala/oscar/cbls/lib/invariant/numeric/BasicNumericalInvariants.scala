@@ -56,11 +56,11 @@ class Sum(vars: Iterable[IntValue])
   for (v <- vars) registerStaticAndDynamicDependency(v)
   finishInitialization()
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     this :+= NewVal - OldVal
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value == vars.foldLeft(0)((acc, intvar) => acc + intvar.value),
       Some("output.value == vars.foldLeft(0)((acc,intvar) => acc+intvar.value)"))
   }
@@ -87,11 +87,11 @@ class Linear(vars: Iterable[IntValue], coeffs: IndexedSeq[Int])
   finishInitialization()
  
 
-  override def notifyIntChanged(v: ChangingIntValue, idx: Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, idx: Int, OldVal: Int, NewVal: Int): Unit = {
     this :+= (NewVal - OldVal) * coeffs(idx)
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value == vars.zip(coeffs).foldLeft(0)((acc, intvar) => acc + intvar._1.value*intvar._2),
       Some("output.value == vars.zip(coeff).foldLeft(0)((acc, intvar) => acc + intvar._1.value*intvar._2)"))
   }
@@ -126,7 +126,7 @@ class Nvalue(x: Iterable[IntValue]) extends
   }
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     ValueCount(OldVal + offset) -= 1
     ValueCount(NewVal + offset) += 1
 
@@ -134,7 +134,7 @@ class Nvalue(x: Iterable[IntValue]) extends
     if (ValueCount(NewVal + offset) == 1) {this :+= 1}
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     var MyValueCount: Array[Int] = (for (i <- 0 to N) yield 0).toArray
     var Distinct: Int = 0
     for (element <- x){
@@ -163,22 +163,22 @@ class ExtendableSum(model: Store, domain: Domain)
 
   finishInitialization(model)
 
-  def addTerm(i: IntValue) {
+  def addTerm(i: IntValue): Unit = {
     registerStaticAndDynamicDependency(i)
     this :+= i.value
   }
 
-  def addTerms(is: Iterable[IntValue]) {
+  def addTerms(is: Iterable[IntValue]): Unit = {
     for (i <- is) {
       addTerm(i)
     }
   }
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     this :+= NewVal - OldVal
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     if(this.getDynamicallyListenedElements != null) {
       c.check(this.value == this.getDynamicallyListenedElements.foldLeft(0)((acc, intvar) => acc + intvar.asInstanceOf[IntValue].value),
         Some("output.value == vars.foldLeft(0)((acc,intvar) => acc+intvar.value)"))
@@ -215,7 +215,7 @@ with IntNotificationTarget{
     -myMax to myMax})
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     assert(OldVal != NewVal)
     if (OldVal == 0 && NewVal != 0) {
       NullVarCount -= 1
@@ -234,7 +234,7 @@ with IntNotificationTarget{
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     var prod = 1
     for (v <- vars) prod *= v.value
     c.check(this.value == prod,

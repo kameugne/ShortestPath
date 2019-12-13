@@ -17,7 +17,7 @@ package oscar.cp.examples.hakank
 import oscar.cp._
 import oscar.cp.constraints._
 import collection.mutable._
-import scala.collection.JavaConversions._
+import scala.jdk.CollectionConverters._
 /**
   Crosswords in OscaR.
   This is a standard example for constraint logic programming. See e.g.

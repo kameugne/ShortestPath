@@ -147,20 +147,20 @@ class NodeVehicleRestrictions(routes:ChangingSeqValue,
   val vehicleChangedSinceCheckpoint:Array[Boolean] = Array.fill(v)(true)
   var changedVehicleSinceCheckpoint:QList[Int] = vehicles.foldLeft[QList[Int]](null)((acc,v) => QList(v,acc))
 
-  def setVehicleChangedSinceCheckpoint(vehicle:Int) {
+  def setVehicleChangedSinceCheckpoint(vehicle:Int): Unit = {
     if(!vehicleChangedSinceCheckpoint(vehicle)){
       vehicleChangedSinceCheckpoint(vehicle) = true
       changedVehicleSinceCheckpoint = QList(vehicle,changedVehicleSinceCheckpoint)
     }
   }
 
-  def setAllVehicleChangedSinceCheckpoint(){
+  def setAllVehicleChangedSinceCheckpoint(): Unit ={
     for (vehicle <- vehicles) {
       setVehicleChangedSinceCheckpoint(vehicle)
     }
   }
 
-  def updateAllInvalidPrecomputationsToCheckpointAndSaveCheckpoint(){
+  def updateAllInvalidPrecomputationsToCheckpointAndSaveCheckpoint(): Unit ={
     while(changedVehicleSinceCheckpoint != null){
       val vehicle = changedVehicleSinceCheckpoint.head
       changedVehicleSinceCheckpoint = changedVehicleSinceCheckpoint.tail
@@ -168,7 +168,7 @@ class NodeVehicleRestrictions(routes:ChangingSeqValue,
     }
   }
 
-  def doUpdateAllPrecomputationsToCheckpointAndSaveCheckpoint(){
+  def doUpdateAllPrecomputationsToCheckpointAndSaveCheckpoint(): Unit ={
     for (vehicle <- vehicles) {
       violationAtCheckpoint(vehicle) = doUpdatePrecomputationToCheckpointAndSaveCheckpoint(vehicle)
     }
@@ -263,7 +263,7 @@ class NodeVehicleRestrictions(routes:ChangingSeqValue,
     }
   }
 
-  override def notifySeqChanges(v : ChangingSeqValue, d : Int, changes : SeqUpdate) {
+  override def notifySeqChanges(v : ChangingSeqValue, d : Int, changes : SeqUpdate): Unit = {
     if (!digestUpdates(changes)) {
       setAllVehicleChangedSinceCheckpoint()
       for (vehicle <- vehicles) {

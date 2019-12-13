@@ -72,12 +72,12 @@ class Activity(var duration: IntValue, val planning: Planning, val name: String 
 
   var staticPredecessors: List[Activity] = List.empty
 
-  def addStaticPredecessor(j: Activity) {
+  def addStaticPredecessor(j: Activity): Unit = {
     staticPredecessors = j :: staticPredecessors
     j.hasSuccessor = true
   }
 
-  def precedes(j: Activity) {
+  def precedes(j: Activity): Unit = {
     j.addStaticPredecessor(this)
   }
 
@@ -86,20 +86,20 @@ class Activity(var duration: IntValue, val planning: Planning, val name: String 
   def uses(n: IntValue): ActivityAndAmount = ActivityAndAmount(this, n)
 
   case class ActivityAndAmount(t: Activity, amount: IntValue) {
-    def ofResource(r: CumulativeResource) {
+    def ofResource(r: CumulativeResource): Unit = {
       t.usesCumulativeResource(r, amount)
     }
 
-    def ofResources(rr: CumulativeResource*) {
+    def ofResources(rr: CumulativeResource*): Unit = {
       for (r <- rr) { t.usesCumulativeResource(r, amount) }
     }
 
-    def ofResources(rr: Iterable[CumulativeResource]) {
+    def ofResources(rr: Iterable[CumulativeResource]): Unit = {
       rr.foreach(t.usesCumulativeResource(_, amount))
     }
   }
 
-  def removeNonTightAdditionalPredecessors() {
+  def removeNonTightAdditionalPredecessors(): Unit = {
     for (iD: Int <- additionalPredecessors.value) {
       if (!potentiallyKilledPredecessors.value.contains(iD)) {
         additionalPredecessors :-= iD
@@ -116,7 +116,7 @@ class Activity(var duration: IntValue, val planning: Planning, val name: String 
    * @param amount the amount of this resource that the activity uses
    * FIXME potential problem if amount = 0
    */
-  def usesCumulativeResource(r: CumulativeResource, amount: IntValue) {
+  def usesCumulativeResource(r: CumulativeResource, amount: IntValue): Unit = {
     Resources = (r, amount) :: Resources
     r.notifyUsedBy(this, amount)
   }
@@ -146,12 +146,12 @@ class Activity(var duration: IntValue, val planning: Planning, val name: String 
   var definingPredecessors: SetValue = null
   var potentiallyKilledPredecessors: SetValue = null
 
-  def addDynamicPredecessor(t: Activity, verbose: Boolean = false) {
+  def addDynamicPredecessor(t: Activity, verbose: Boolean = false): Unit = {
     if (verbose) println("added " + t + "->" + this)
     additionalPredecessors :+= t.getEndActivity.ID
   }
 
-  def removeDynamicPredecessor(t: Activity, verbose: Boolean = false) {
+  def removeDynamicPredecessor(t: Activity, verbose: Boolean = false): Unit = {
     if (verbose) println("killed " + t + "->" + this)
     additionalPredecessors :-= t.getEndActivity.ID
   }
@@ -163,7 +163,7 @@ class Activity(var duration: IntValue, val planning: Planning, val name: String 
 
   // var ParasiticPrecedences:IntSetVar = null
   /**This method is called by the planning when all activities are created*/
-  def close() {
+  def close(): Unit = {
     if (staticPredecessorsID == null) {
 
       staticPredecessorsID = CBLSSetConst(SortedSet.empty[Int] ++ staticPredecessors.map((j: Activity) => j.ID))

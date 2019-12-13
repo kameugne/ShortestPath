@@ -75,6 +75,6 @@ object Assignment extends CPModel with App {
     }
     println()
     numSols += 1
-  } start ()
+  } start;
   println("\nIt was " + numSols + " solutions.")
 }

@@ -269,7 +269,7 @@ object GraphUtils {
       }
     }
 
-    (mst, weight)
+    (mst.toSeq, weight)
   }
 
   def kruskal(nodes: Seq[Int], edgeCosts: Array[Array[Int]]): (Seq[(Int, Int)], Int) = kruskal(nodes, for(i <- nodes; j <- nodes if i != j) yield (i, j), edgeCosts)

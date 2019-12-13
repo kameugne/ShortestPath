@@ -1,5 +1,7 @@
 import oscar.OscarBuild
 import oscar.OscarBuild._
+import sbt.Keys.scalacOptions
+import sbt.addCompilerPlugin
 
 lazy val aggregatedProjects: Seq[ProjectReference] = Seq(oscarAlgebra, oscarAlgo, oscarCbls, oscarCp, oscarCPXcsp3, oscarPerf, oscarModeling, oscarDfo, oscarUtil, oscarVisual, oscarFzn, oscarFznCbls, oscarFznCp, oscarDes, oscarInvariants)
 
@@ -12,7 +14,10 @@ lazy val root = (project in file(".")) // has to be named root.
   .settings(ScalaUnidocPlugin.globalSettings)
   .settings(unidocProjectFilter in(ScalaUnidoc, unidoc) := inAnyProject -- inProjects(oscarFzn, oscarFznCbls, oscarFznCp, oscarPerf))
   .enablePlugins(PackPlugin)
-  .settings(PackPlugin.packSettings)
+  .settings(PackPlugin.packSettings,
+    scalafixDependencies in ThisBuild += "org.scala-lang.modules" %% "scala-collection-migrations" % "2.1.3",
+    addCompilerPlugin(scalafixSemanticdb),
+    scalacOptions ++= List("-Yrangepos", "-P:semanticdb:synthetics:on"))
 
 
 lazy val oscarAlgebra = (project in file("oscar-algebra"))
@@ -154,12 +159,6 @@ lazy val oscarVisual = (project in file("oscar-visual"))
   .settings(name := "oscar-visual")
   .settings(libraryDependencies ++= Dependencies.testDeps :+ Dependencies.jfreechart :+ Dependencies.swingx :+ Dependencies.swingxWs :+ Dependencies.scalaXml)
   .dependsOn(oscarUtil)
-
-
-
-
-
-
 
 
 

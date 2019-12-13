@@ -35,7 +35,7 @@ trait LinearSelectors{
 
   var Randomized:Boolean = true
   setRandomized(true)
-  def setRandomized(Randomized:Boolean){
+  def setRandomized(Randomized:Boolean): Unit ={
     this.Randomized = Randomized
 
     RandomGenerator = if (Randomized) { new Random() } else { new Random(0) }

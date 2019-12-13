@@ -39,7 +39,7 @@ class StartPointOfVehicles(routes:ChangingSeqValue,
     vehicleReachingNode(node) contains vehicle
   }
 
-  override def notifySeqChanges(v : ChangingSeqValue, d : Int, changes : SeqUpdate) {
+  override def notifySeqChanges(v : ChangingSeqValue, d : Int, changes : SeqUpdate): Unit = {
     currentVehicleLocation = digestUpdates(changes)
   }
 
@@ -70,7 +70,7 @@ class StartPointOfVehicles(routes:ChangingSeqValue,
     }
   }
 
-  override def checkInternals(c : Checker){
+  override def checkInternals(c : Checker): Unit ={
     currentVehicleLocation.checkOnSequence(routes.value)
   }
 }

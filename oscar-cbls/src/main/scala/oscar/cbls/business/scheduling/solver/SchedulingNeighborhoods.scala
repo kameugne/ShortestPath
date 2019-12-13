@@ -49,10 +49,10 @@ case class FlattenWorseFirst(p: Planning,
   override def shortDescription(): String = "Flattening worse first"
 
   //this resets the internal state of the Neighborhood
-  override def reset() {}
+  override def reset(): Unit = {}
 
   /** implements the standard flatten procedure */
-  override def doIt() {
+  override def doIt(): Unit = {
     var iterations = 0
     while (p.worseOvershotResource.value.nonEmpty) {
       if (iterations > maxIterations)
@@ -141,7 +141,7 @@ case class Relax(p: Planning, pKill: Int,
                  doRelax: (Activity, Activity, Boolean) => Unit = (from: Activity, to: Activity, verbose: Boolean) => to.removeDynamicPredecessor(from, verbose))(activitiesToRelax: () => Iterable[Int] = p.sentinelActivity.staticPredecessorsID)
   extends JumpNeighborhoodParam[List[(Activity, Activity)]] with LinearSelectors {
 
-  override def doIt(potentiallyKilledPrecedences: List[(Activity, Activity)]) {
+  override def doIt(potentiallyKilledPrecedences: List[(Activity, Activity)]): Unit = {
     for ((from, to) <- potentiallyKilledPrecedences) {
       doRelax(from, to, printTakenMoves)
     }
@@ -168,7 +168,7 @@ case class Relax(p: Planning, pKill: Int,
     "Relax critical Path " + param.map { case (a, b) => a + "->" + b }.mkString(", ")
 
   //this resets the internal state of the Neighborhood
-  override def reset() {}
+  override def reset(): Unit = {}
 }
 
 /**
@@ -220,7 +220,7 @@ case class RelaxNoConflict(p: Planning, twoPhaseCheck: Boolean = false)
  */
 case class CleanPrecedences(p: Planning) extends JumpNeighborhood with LinearSelectors {
 
-  override def doIt() {
+  override def doIt(): Unit = {
     for (t: Activity <- p.activityArray) {
       for (iD: Int <- t.additionalPredecessors.value) {
         if (!t.potentiallyKilledPredecessors.value.contains(iD)) {

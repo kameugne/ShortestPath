@@ -26,7 +26,7 @@ abstract class Pareto[Sol](protected val maxObj: Array[Boolean]) {
   
   var observers: List[ParetoObserver] = List()
   
-  def addObserver(obs: ParetoObserver) {
+  def addObserver(obs: ParetoObserver): Unit = {
     observers = obs :: observers
   }
   

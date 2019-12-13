@@ -20,7 +20,7 @@ import oscar.cp.core.delta._
 
 import scala.collection.mutable
 
-abstract class CPSeqVar extends CPVar with mutable.Traversable[Int] {
+abstract class CPSeqVar extends CPVar with mutable.Iterable[Int] {
 
   /**
    * @return true if the domain of the variable has exactly one value, false if the domain has more than one value
@@ -148,6 +148,7 @@ abstract class CPSeqVar extends CPVar with mutable.Traversable[Int] {
 
 
   override def foreach[U](f: Int => U): Unit = allMembers.foreach(f)
+  override def iterator(): Iterator[Int] = allMembers.iterator
 
   override def toString(): String = "sequence(mem:" + allMembers.mkString(" -> ") + "; req:[" + allRequiredNotMember.mkString(", ") + "]; poss:[" + allPossibleOrRequired.mkString(", ") + "])"
 }

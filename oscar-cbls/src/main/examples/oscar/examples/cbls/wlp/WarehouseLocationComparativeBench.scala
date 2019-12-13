@@ -79,7 +79,7 @@ object WarehouseLocationComparativeBench extends App{
     orElse (RandomizeNeighborhood(warehouseOpenArray, () => W/5) maxMoves 2) saveBest obj restoreBestOnExhaust)
 
   val neighborhood5 = ()=>("simulatedAnnealing",AssignNeighborhood(warehouseOpenArray, "SwitchWarehouse")
-    metropolis() maxMoves W/2 withoutImprovementOver obj saveBest obj restoreBestOnExhaust)
+    .metropolis().maxMoves(W/2).withoutImprovementOver(obj).saveBest(obj).restoreBestOnExhaust)
 
   val neighborhood6 = ()=>("roundRobin",AssignNeighborhood(warehouseOpenArray, "SwitchWarehouse")
     roundRobin SwapsNeighborhood(warehouseOpenArray, "SwapWarehouses") step 1

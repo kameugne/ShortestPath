@@ -23,7 +23,7 @@ import oscar.cp.core.variables.CPIntVar;
 import oscar.cp.core.variables.CPVar;
 import oscar.cp.util.ArrayUtils;
 import scala.collection.Iterable;
-import scala.collection.JavaConversions;
+import scala.jdk.javaapi.CollectionConverters;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -65,7 +65,7 @@ public class SimpleBinPackingCard extends Constraint {
         List<CPVar> l = new LinkedList<>(Arrays.asList(x));
         l.addAll(Arrays.asList(this.l));
         l.addAll(Arrays.asList(c));
-        return JavaConversions.iterableAsScalaIterable(l);
+        return CollectionConverters.asScala(l);
     }
 
     @Override

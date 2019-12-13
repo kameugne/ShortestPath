@@ -23,7 +23,7 @@ class BasicSaveBest(a: Neighborhood, o: Objective) extends NeighborhoodCombinato
   protected var best = if (currentSolutionIsAcceptable) s.solution() else null
 
   //this resets the internal state of the move combinators
-  override def reset() {
+  override def reset(): Unit = {
     super.reset()
     bestObj = Int.MaxValue
     best = null
@@ -50,7 +50,7 @@ class BasicSaveBest(a: Neighborhood, o: Objective) extends NeighborhoodCombinato
 
   protected def currentSolutionIsAcceptable = true
 
-  def restoreBest() {
+  def restoreBest(): Unit = {
     val isCurrentAccepteable = currentSolutionIsAcceptable
     if (best == null && !isCurrentAccepteable) {
       if (verbose >= 1) println("no single acceptable solution seen")

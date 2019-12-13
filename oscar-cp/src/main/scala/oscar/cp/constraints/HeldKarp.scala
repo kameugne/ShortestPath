@@ -250,7 +250,7 @@ class CCTreeNode(private[constraints] var parent: Int, private[constraints] var 
   private[constraints] var h: Int = 0
   def height = h
   
-  private def reset() {
+  private def reset(): Unit = {
     parent = -1
     left = -1
     right = -1
@@ -269,7 +269,7 @@ class CCTree(n: Int) {
   private var rooted = false
 
   
-  def reset() {
+  def reset(): Unit = {
     index = n
     rooted = false
   }
@@ -295,9 +295,9 @@ class CCTree(n: Int) {
     parent
   }
   
-  private def computeHeights() {
+  private def computeHeights(): Unit = {
     height(root)
-    def height(n : CCTreeNode) {
+    def height(n : CCTreeNode): Unit = {
       n.h = if (n.hasParent) nodes(n.parent).h + 1 else 0
       if (n.hasLeft) height(nodes(n.left))
       if (n.hasRight) height(nodes(n.right))

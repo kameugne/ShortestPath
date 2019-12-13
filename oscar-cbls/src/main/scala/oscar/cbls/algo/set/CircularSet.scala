@@ -22,7 +22,7 @@
 
 package oscar.cbls.algo.set
 
-import scala.collection.Iterator
+import scala.collection.{Iterator, SortedSet}
 
 /**Circular set is a dedicated data structure to represent set of integers in an efficient way
  * although the memory footprint will not be efficient at all
@@ -31,7 +31,7 @@ import scala.collection.Iterator
   * @author renaud.delandtsheer@cetic.be
   * @author gael.thouvenin@student.umons.ac.be
  */
-class CircularIntSet(val maxsize:Int) extends scala.collection.mutable.SortedSet[Int]{
+class CircularIntSet(val maxsize:Int) extends scala.collection.SortedSet[Int]{
 
   private val containsvar:Array[Boolean] = new Array[Boolean](maxsize)
   private[set] val next:Array[Int] = new Array[Int](maxsize) //gives the id of the next element, so that they constitute a cycle in the array
@@ -82,7 +82,7 @@ class CircularIntSet(val maxsize:Int) extends scala.collection.mutable.SortedSet
   this
   }
 
-  private def insertAfter(elem:Int, newElem:Int){
+  private def insertAfter(elem:Int, newElem:Int): Unit ={
     val elemAfter:Int = next(elem)
     next(elem) = newElem
     next(newElem) = elemAfter
@@ -133,7 +133,7 @@ class CircularIntSet(val maxsize:Int) extends scala.collection.mutable.SortedSet
    * @param until upper bound (inclusive) of the elements to keep
    * @return sorted version of this set, truncated such as each element \in [from, until]
    */
-  override def rangeImpl(from: Option[Int], until: Option[Int]): scala.collection.mutable.SortedSet[Int] = {
+  override def rangeImpl(from: Option[Int], until: Option[Int]): scala.collection.SortedSet[Int] = {
     if(inserted) reorder()
     new CircularIntSet(maxsize) ++ (for(e <- this if e >= from.getOrElse(0) && e <= until.getOrElse(maxsize)) yield e)
   }
@@ -148,6 +148,9 @@ class CircularIntSet(val maxsize:Int) extends scala.collection.mutable.SortedSet
     if(inserted) reorder()
     new CircularIntSetIterator(handle, this).filter(x => x >= start)
   }
+
+  override def iteratorFrom(start: Int): Iterator[Int] = ???
+  override def diff(that: collection.Set[Int]): SortedSet[Int] = ???
 }
 
 class CircularIntSetIterator(handle:Int, on:CircularIntSet) extends Iterator[Int]{

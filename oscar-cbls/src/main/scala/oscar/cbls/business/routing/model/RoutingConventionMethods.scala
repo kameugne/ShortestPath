@@ -120,7 +120,7 @@ class CachedPositionOf(maxValue:Int){
   //-1 stands for NONE, -2 is an error
   private val cachedAnyPosition:Array[Int] = Array.fill(maxValue+1)(-2)
 
-  def updateToCheckpoint(checkpoint:IntSequence){
+  def updateToCheckpoint(checkpoint:IntSequence): Unit ={
     tokenOfCurrentCheckpoint = checkpoint.token
   }
   def positionOfAnyOccurrence(seq:IntSequence,value:Int):Option[Int] = {
@@ -143,7 +143,7 @@ class CachedPositionOf(maxValue:Int){
     }
   }
 
-  def savePos(seq:IntSequence,value:Int,position:Option[Int]){
+  def savePos(seq:IntSequence,value:Int,position:Option[Int]): Unit ={
     if(seq.token == tokenOfCurrentCheckpoint){
       checkpointIDOfSavedValue(value) = tokenOfCurrentCheckpoint
       position match{

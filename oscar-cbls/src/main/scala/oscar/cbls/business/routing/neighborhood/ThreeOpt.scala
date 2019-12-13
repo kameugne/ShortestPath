@@ -161,11 +161,11 @@ case class ThreeOpt(potentialInsertionPoints:()=>Iterable[Int], //must be routed
       neighborhoodName)
 
   //this resets the internal state of the Neighborhood
-  override def reset(){
+  override def reset(): Unit ={
     startIndice = 0
   }
 
-  def doMove(insertionPosition: Int, segmentStartPosition: Int, segmentEndPosition: Int, flip: Boolean) {
+  def doMove(insertionPosition: Int, segmentStartPosition: Int, segmentEndPosition: Int, flip: Boolean): Unit = {
     seq.move(segmentStartPosition,segmentEndPosition,insertionPosition,flip)
   }
 }
@@ -184,7 +184,7 @@ case class ThreeOptMove(segmentStartPosition:Int,
   override def impactedPoints: Iterable[Int] = QList(insertionPoint,neighborhood.vrp.routes.value.valuesBetweenPositionsQList(segmentStartPosition,segmentEndPosition))
 
   // overriding methods
-  override def commit() {
+  override def commit(): Unit = {
     neighborhood.doMove(insertionPointPosition, segmentStartPosition, segmentEndPosition, flipSegment)
   }
 

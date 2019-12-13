@@ -37,7 +37,7 @@ case class RouteExchange(firstVehicles:()=>Iterable[Int],
   var positionOfVehicleNextToSecond:Int = -1
   var secondVehicleIsEmpty:Boolean = false
 
-  override def exploreNeighborhood() {
+  override def exploreNeighborhood(): Unit = {
 
     val iterationSchemeOnZone =
       if (hotRestart) HotRestart(firstVehicles(), startFirstVehicle)
@@ -125,7 +125,7 @@ case class RouteExchange(firstVehicles:()=>Iterable[Int],
              firstVehicleIsEmpty:Boolean,
              positionOfSecondVehicle:Int,
              positionOfVehicleNextToSecond:Int,
-             secondVehicleIsEmpty:Boolean) {
+             secondVehicleIsEmpty:Boolean): Unit = {
     if (firstVehicleIsEmpty) {
       if (secondVehicleIsEmpty) {
         System.err.println("doing Route exchange with two empty routes")
@@ -162,7 +162,7 @@ case class RouteExchangeMove(firstVehicle:Int,
   //TODO: Implement this
   override def impactedPoints: Iterable[Int] = ???
 
-  override def commit() {
+  override def commit(): Unit = {
     neighborhood.doMove(positionOfFirstVehicle,
       positionOfVehicleNextToFirst,
       firstVehicleIsEmpty,

@@ -59,7 +59,7 @@ abstract class BestNeighborhoodFirst(l:List[Neighborhood],
   neighborhoodArray.indices.foreach(neighborhoodHeap.insert)
 
   private def getBestNeighborhooID:Int = neighborhoodHeap.getFirst
-  private def updateNeighborhodPerformances(neighborhooID:Int){
+  private def updateNeighborhodPerformances(neighborhooID:Int): Unit ={
     neighborhoodHeap.notifyChange(neighborhooID)
   }
   private def updateTabu(): Unit ={
@@ -126,7 +126,7 @@ abstract class BestNeighborhoodFirst(l:List[Neighborhood],
   /**
    * prints the profile info for the neighborhoods, for verbosity purposes
    */
-  def printStatus(){
+  def printStatus(): Unit ={
     println(Profile.selectedStatisticInfo(neighborhoodArray))
   }
 }
@@ -150,7 +150,7 @@ abstract class BestNeighborhoodFirstSlidingWindow(l:List[Neighborhood], windowsS
   neighborhoodArray.indices.foreach(neighborhoodHeap.insert)
 
   private def getBestNeighborhooID:Int = neighborhoodHeap.getFirst
-  private def updateNeighborhodPerformances(neighborhooID:Int){
+  private def updateNeighborhodPerformances(neighborhooID:Int): Unit ={
     neighborhoodHeap.notifyChange(neighborhooID)
   }
   private def updateTabu(): Unit ={
@@ -217,7 +217,7 @@ abstract class BestNeighborhoodFirstSlidingWindow(l:List[Neighborhood], windowsS
   /**
    * prints the profile info for the neighborhoods, for verbosity purposes
    */
-  def printStatus(){
+  def printStatus(): Unit ={
     println(Profile.selectedStatisticInfo(neighborhoodArray))
   }
 }
@@ -257,7 +257,7 @@ class RoundRobin(l: List[Neighborhood], steps: Int = 1)
     }
   }
 
-  private def moveToNextRobin() {
+  private def moveToNextRobin(): Unit = {
     if (tail.tail.isEmpty) {
       tail = l
     } else {
@@ -267,7 +267,7 @@ class RoundRobin(l: List[Neighborhood], steps: Int = 1)
   }
 
   //this resets the internal state of the move combinators
-  override def reset() {
+  override def reset(): Unit = {
     remainingSteps = steps
     tail = l
     super.reset()
@@ -305,7 +305,7 @@ class RandomCombinator(a: Neighborhood*) extends NeighborhoodCombinator(a:_*) {
   private val r = new scala.util.Random()
 
   override def getMove(obj: Objective, initialObj:Int, acceptanceCriteria: (Int, Int) => Boolean): SearchResult = {
-    val neighborhoods = r.shuffle(a).toIterator
+    val neighborhoods = r.shuffle(a.toList).iterator
     while (neighborhoods.hasNext) {
       val current = neighborhoods.next
       current.getMove(obj, initialObj, acceptanceCriteria) match {
@@ -458,7 +458,7 @@ class ExhaustAndContinueIfMovesFound(a: Neighborhood, b: Neighborhood) extends N
   }
 
   //this resets the internal state of the move combinators
-  override def reset() {
+  override def reset(): Unit = {
     currentIsA = true
     movesFoundWithCurrent = false
     super.reset()

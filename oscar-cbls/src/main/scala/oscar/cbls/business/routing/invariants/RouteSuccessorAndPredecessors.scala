@@ -61,7 +61,7 @@ class RouteSuccessorAndPredecessors(routes:ChangingSeqValue,
 
   computeAllFromScratch(routes.value)
 
-  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate) {
+  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate): Unit = {
 
     val startValuesOfImpactedZone = computeStartValuesOfImpactedZone(changes:SeqUpdate)
     startValuesOfImpactedZone match{
@@ -127,7 +127,7 @@ class RouteSuccessorAndPredecessors(routes:ChangingSeqValue,
     }
   }
 
-  def computeAllFromScratch(seq:IntSequence){
+  def computeAllFromScratch(seq:IntSequence): Unit ={
     successorValues.foreach(node => node := defaultWhenNotInSequence)
     predecessorValues.foreach(node => node := defaultWhenNotInSequence)
     var explorer = seq.explorerAtPosition(0).head
@@ -149,7 +149,7 @@ class RouteSuccessorAndPredecessors(routes:ChangingSeqValue,
     }){}
   }
 
-  def updateStartFrom(startValue:Int,startExplorerOpt:Option[IntSequenceExplorer],seq:IntSequence){
+  def updateStartFrom(startValue:Int,startExplorerOpt:Option[IntSequenceExplorer],seq:IntSequence): Unit ={
     startExplorerOpt match{
       case None =>
         successorValues(startValue) := defaultWhenNotInSequence
@@ -195,7 +195,7 @@ class RouteSuccessorAndPredecessors(routes:ChangingSeqValue,
     successorValues
   }
 
-  override def checkInternals(c : Checker){
+  override def checkInternals(c : Checker): Unit ={
     require(routes.value quickEquals routes.newValue)
     val fromScratch = computeSuccessorsFromScratchNoAffect(routes.newValue)
     for(node <- 0 until n){

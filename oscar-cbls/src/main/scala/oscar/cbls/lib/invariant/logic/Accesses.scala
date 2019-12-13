@@ -42,7 +42,7 @@ case class IntITE(ifVar: IntValue, thenVar: IntValue, elseVar: IntValue, pivot: 
   finishInitialization()
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     if (v == ifVar) {
       if (NewVal > pivot && OldVal <= pivot) {
         //modifier le graphe de dependances
@@ -64,7 +64,7 @@ case class IntITE(ifVar: IntValue, thenVar: IntValue, elseVar: IntValue, pivot: 
     "ITE(" + ifVar + ',' + thenVar + "," + elseVar + ")"
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value == (if (ifVar.value <= pivot) elseVar.value else thenVar.value),
       Some("output.value (" + this.value
         + ") == (if (ifVar.value (" + ifVar.value + ") <= " + pivot + ") elseVar.value (" + elseVar.value
@@ -107,7 +107,7 @@ case class IntElement(index: IntValue, inputarray: Array[IntValue])
   }
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     if (v == index) {
       //modifier le graphe de dependances
       KeyToCurrentVar.performRemove()
@@ -119,7 +119,7 @@ case class IntElement(index: IntValue, inputarray: Array[IntValue])
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value == inputarray(index.value).value,
       Some("output.value (" + this.value + ") == inputarray(index.value ("
         + index.value + ")).value (" + inputarray(index.value).value + ")"))
@@ -150,7 +150,7 @@ case class IntElementNoVar(index: IntValue, inputarray: Array[Int])
   finishInitialization()
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
    // println(OldVal + " "+ NewVal)
     if(NewVal >= inputarray.length){
       println("something is wrong")
@@ -158,7 +158,7 @@ case class IntElementNoVar(index: IntValue, inputarray: Array[Int])
     this := inputarray(NewVal)
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value == inputarray(index.value),
       Some("output.value (" + this.value + ") == inputarray(index.value ("
         + index.value + ")) (" + inputarray(index.value) + ")"))
@@ -210,7 +210,7 @@ case class Elements[T <:IntValue](index: SetValue, inputarray: Array[T])
     InvariantHelper.getMinMaxRange(bulkedVar)
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     internalDelete(OldVal)
     internalInsert(NewVal)
   }
@@ -236,7 +236,7 @@ case class Elements[T <:IntValue](index: SetValue, inputarray: Array[T])
     }
   }
 
-  private def internalInsert(value:Int){
+  private def internalInsert(value:Int): Unit ={
     if (ValueCount(value - min) == 0){
       ValueCount(value - min) = 1
       this :+= value
@@ -246,7 +246,7 @@ case class Elements[T <:IntValue](index: SetValue, inputarray: Array[T])
     assert(ValueCount(value - min) > 0)
   }
 
-  private def internalDelete(value:Int){
+  private def internalDelete(value:Int): Unit ={
     assert(ValueCount(value - min) > 0)
     if (ValueCount(value - min) == 1){
       ValueCount(value - min) = 0
@@ -256,7 +256,7 @@ case class Elements[T <:IntValue](index: SetValue, inputarray: Array[T])
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(KeysToInputArray.indices.forall(i => (KeysToInputArray(i) != null) == index.value.contains(i)),
       Some("KeysToInputArray.indices.forall(i => ((KeysToInputArray(i) != null) == index.value.contains(i)))"))
     c.check(index.value.forall((i: Int) =>
@@ -304,7 +304,7 @@ case class SetElement[X<:SetValue](index: IntValue, inputarray: Array[X])
     InvariantHelper.getMinMaxBoundsSet(bulkedVar)
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     assert(v == index)
     //modifier le graphe de dependances
     KeyToCurrentVar.performRemove()
@@ -317,7 +317,7 @@ case class SetElement[X<:SetValue](index: IntValue, inputarray: Array[X])
     this := newValue
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value.intersect(inputarray(index.value).value).size == this.value.size,
       Some("output.value.intersect(inputarray(index.value (" + index.value + ")).value ("
         + inputarray(index.value).value + ")).size ("

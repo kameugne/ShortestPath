@@ -17,7 +17,7 @@ package oscar.cp.examples.hakank
 import oscar.cp._
 import oscar.cp.constraints._
 import collection.mutable._
-import scala.collection.JavaConversions._
+import scala.jdk.CollectionConverters._
 /**
  *
  * Nurse rostering using regular in Oscar.
@@ -90,7 +90,7 @@ object NurseRosteringRegular extends CPModel with App  {
     val accepting_states: Set[java.lang.Integer] = Set(0,1,2,3,4,5)
     val num_states  = 6
     val num_letters = shifts_a.length
-    val automaton = new Automaton(num_states, num_letters, initial_state, accepting_states)
+    val automaton = new Automaton(num_states, num_letters, initial_state, accepting_states.asJava)
     transition_tuples.foreach(a => 
                               automaton.addTransition(a(0), a(1), a(2))
                               )

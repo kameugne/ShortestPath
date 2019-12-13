@@ -41,9 +41,9 @@ class VisualLabelledTree[T](var tree: PositionedNode[T]) extends VisualDrawing(f
     this(Node.design(tree))
   }
 
-  def update(t: PositionedNode[T]) {
+  def update(t: PositionedNode[T]): Unit = {
     SwingUtilities.invokeLater(new Runnable() {
-      def run() {
+      def run(): Unit = {
         tree = t
         clear()
         rectSet = Set[VisualLabelledRoundRectangle]()
@@ -105,7 +105,7 @@ class VisualLabelledTree[T](var tree: PositionedNode[T]) extends VisualDrawing(f
 
 object VisualLabelledTree {
   	
-  def main(args : Array[String]) {
+  def main(args : Array[String]): Unit = {
     val f = VisualFrame("toto", 1, 1)
     val inf = f.createFrame("Drawing")
 

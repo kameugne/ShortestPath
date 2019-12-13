@@ -69,7 +69,7 @@ case class Table(variables: Array[IntValue], table:Array[Array[Int]]) extends In
     * because they can only be created before the model is closed.
     * */
   override def violation(v: Value): IntValue = {
-    val variablesIndex = variables.indexOf(v)
+    val variablesIndex = variables.indexOf(v.asInstanceOf[IntValue])
     if(variablesIndex >= 0){
       variableViolation(variablesIndex)
     }else{
@@ -85,7 +85,7 @@ case class Table(variables: Array[IntValue], table:Array[Array[Int]]) extends In
     */
   override def violation: IntValue = minViolation
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(minViolation.value == rowViolation.map(_.value).min, Some("Min violation is not min"))
     c.check(rowViolation(aMinViolatingRow.value).value == minViolation.value,Some("Min row is wrong"))
     for(i <- variables.indices){

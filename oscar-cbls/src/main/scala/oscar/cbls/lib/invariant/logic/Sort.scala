@@ -65,13 +65,13 @@ class Sort(var values:Array[IntValue], ReversePerm:Array[CBLSIntVar])
   def GetForwardPerm(): Array[CBLSIntVar] = ForwardPerm
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int): Unit = {
     if (NewVal > OldVal) BubbleUp(v, index)
     else BubbleDown(v, index)
   }
 
   @inline
-  private def BubbleUp(v: ChangingIntValue, PositionInInitialArray: Int) {
+  private def BubbleUp(v: ChangingIntValue, PositionInInitialArray: Int): Unit = {
     while (true) {
       val PositionInSorting: Int = ForwardPerm(PositionInInitialArray).newValue
       if (PositionInSorting == values.indices.last) return //last position
@@ -82,7 +82,7 @@ class Sort(var values:Array[IntValue], ReversePerm:Array[CBLSIntVar])
   }
 
   @inline
-  private def BubbleDown(v: ChangingIntValue, PositionInInitialArray: Int) {
+  private def BubbleDown(v: ChangingIntValue, PositionInInitialArray: Int): Unit = {
     while (true) {
       val PositionInSorting: Int = ForwardPerm(PositionInInitialArray).newValue
       if (PositionInSorting == 0) return //first position
@@ -93,7 +93,7 @@ class Sort(var values:Array[IntValue], ReversePerm:Array[CBLSIntVar])
   }
 
   @inline
-  private def swap(PositionInSorting1: Int, PositionInSorting2: Int) {
+  private def swap(PositionInSorting1: Int, PositionInSorting2: Int): Unit = {
     val PositionInInitialArray1: Int = ReversePerm(PositionInSorting1).newValue
     val PositionInInitialArray2: Int = ReversePerm(PositionInSorting2).newValue
 
@@ -104,7 +104,7 @@ class Sort(var values:Array[IntValue], ReversePerm:Array[CBLSIntVar])
     ForwardPerm(PositionInInitialArray2) := PositionInSorting1
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     val range = values.indices
     for (i <- range) {
       c.check(ReversePerm(ForwardPerm(i).value).value == i,

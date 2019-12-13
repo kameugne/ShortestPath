@@ -51,7 +51,7 @@ class VisualText(d: VisualDrawing, private var x: Double, private var y: Double,
    * @param x the relative number of pixels to move along the x-axis
    * @param y the relative number of pixels to move along the y-axis
    */
-  def move(x: Double, y: Double) {
+  def move(x: Double, y: Double): Unit = {
     this.x = x
     this.y = y
     shape.setRect(x, y, shape.getWidth, shape.getHeight)
@@ -60,14 +60,14 @@ class VisualText(d: VisualDrawing, private var x: Double, private var y: Double,
   
   def text = t
   
-  def text_=(t: String) {
+  def text_=(t: String): Unit = {
     this.t = t
     lines = t.trim.split("\n")
     shape.setRect(x, y, lines.map(lineStr => fm.stringWidth(lineStr)).max, nLines * fm.getHeight)
     d.repaint()
   }
 
-  override def draw(g: Graphics2D) {
+  override def draw(g: Graphics2D): Unit = {
     if (centered) {
       for (i <- 0 until nLines) {
         drawCenteredString(lines(i), x.toInt, y.toInt + i * fm.getHeight, g)
@@ -81,7 +81,7 @@ class VisualText(d: VisualDrawing, private var x: Double, private var y: Double,
     shape.setRect(x, y, fm.stringWidth(text), fm.getHeight)
   }
 
-  def drawCenteredString(text: String, x: Int, y: Int, g: Graphics2D) {
+  def drawCenteredString(text: String, x: Int, y: Int, g: Graphics2D): Unit = {
     g.setFont(font)
     g.setColor(fontColor)
     val fm = g.getFontMetrics

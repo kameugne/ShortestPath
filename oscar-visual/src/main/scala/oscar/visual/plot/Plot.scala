@@ -51,7 +51,7 @@ abstract class Plot(title: String, xlab: String, ylab: String, nbSeries: Int = 1
 
   def highlight(x: Double, y: Double, col: Color = Color.LIGHT_GRAY) = {
     SwingUtilities.invokeLater(new Runnable() {
-      def run() {
+      def run(): Unit = {
         xMarker.setPaint(col);
         yMarker.setPaint(col);
         plot.addDomainMarker(xMarker)
@@ -77,7 +77,7 @@ abstract class Plot(title: String, xlab: String, ylab: String, nbSeries: Int = 1
     //chart.fireChartChanged();
   }
 
-  def removeAllPoints(ser: Int = 0) {
+  def removeAllPoints(ser: Int = 0): Unit = {
     series(ser).clear();
   }
 

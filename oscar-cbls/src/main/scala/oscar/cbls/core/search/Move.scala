@@ -32,7 +32,7 @@ import oscar.cbls.core.objective.Objective
  */
 abstract class Move(val objAfter:Int = Int.MaxValue, val neighborhoodName:String = null){
   /**to actually take the move*/
-  def commit()
+  def commit(): Unit
 
   /**
    * to get the list of variables that are modified by the move.
@@ -79,7 +79,7 @@ object Move{
 class EasyMove(override val objAfter:Int, override val neighborhoodName:String = null, code: => Unit)
   extends Move(objAfter, neighborhoodName){
 
-  override def commit() {code}
+  override def commit(): Unit = {code}
 
   override def toString: String = neighborhoodNameToString + "EasyMove"
 
@@ -122,7 +122,7 @@ case class LoadSolutionMove(s:Solution,override val objAfter:Int, override val n
 case class AddToSetMove(s:CBLSSetVar,v:Int, override val objAfter:Int, override val neighborhoodName:String = null)
   extends Move(objAfter, neighborhoodName){
 
-  override def commit() {s :+= v}
+  override def commit(): Unit = {s :+= v}
 
   override def toString: String = {
     neighborhoodNameToString + "AddToSetMove(" + s + " :+= " + v + objToString + ")"
@@ -142,7 +142,7 @@ case class AddToSetMove(s:CBLSSetVar,v:Int, override val objAfter:Int, override 
 case class RemoveFromSetMove(s:CBLSSetVar,v:Int, override val objAfter:Int, override val neighborhoodName:String = null)
   extends Move(objAfter, neighborhoodName){
 
-  override def commit() {s :-= v}
+  override def commit(): Unit = {s :-= v}
 
   override def toString: String = {
     neighborhoodNameToString + "RemoveFromSetMove(" + s + " :-= " + v + objToString + ")"
@@ -194,7 +194,7 @@ case class CompositeMove(ml:List[Move], override val objAfter:Int, override val 
     this(ml, ml.last.objAfter)
   }
 
-  override def commit() {
+  override def commit(): Unit = {
     for(m <- ml) m.commit()
   }
 
@@ -244,7 +244,7 @@ case class NamedMove(m:Move, override val neighborhoodName:String = null)
   * @author renaud.delandtsheer@cetic.be
   */
 case class InstrumentedMove(initialMove:Move, callBack: () => Unit = null, afterMove: () => Unit = null) extends Move(initialMove.objAfter, initialMove.neighborhoodName){
-  def commit(){
+  def commit(): Unit ={
     if(callBack != null) callBack()
     initialMove.commit()
     if(afterMove != null) afterMove()
@@ -277,7 +277,7 @@ object CallBackMove{
   * @tparam T
   */
 case class CallBackMove[T](callBack: T => Unit, override val objAfter:Int, override val neighborhoodName:String, shortDescription:() => String, param:T = null) extends Move{
-  def commit(){
+  def commit(): Unit ={
     callBack(param)
   }
 

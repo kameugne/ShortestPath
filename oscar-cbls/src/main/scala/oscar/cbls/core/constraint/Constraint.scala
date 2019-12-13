@@ -98,20 +98,20 @@ trait Constraint{
     *
    * @param v the variable that is declared as constrained by the constraint
    */
-  def registerConstrainedVariable(v: Value){
+  def registerConstrainedVariable(v: Value): Unit ={
     v match{
       case c:AbstractVariable if c.model != null => _constrainedVariables = c :: _constrainedVariables
       case _ => ()
     }   //TODO unsure if constraints can handle constraints as input parameter...
   }
 
-  def registerConstrainedVariables(v: Value*){
+  def registerConstrainedVariables(v: Value*): Unit ={
     for (vv <- v){registerConstrainedVariable(vv)}
   }
 
-  def registerConstrainedVariables(v: Iterable[Value]){
+  def registerConstrainedVariables(v: Iterable[Value]): Unit ={
     for (vv <- v){registerConstrainedVariable(vv)}
   }
 
-  def checkInternals(c: Checker) {}
+  def checkInternals(c: Checker): Unit = {}
 }

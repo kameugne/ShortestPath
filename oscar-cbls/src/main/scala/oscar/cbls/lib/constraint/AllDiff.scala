@@ -88,7 +88,7 @@ case class AllDiff(variables: Iterable[IntValue])
   }
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     valueMinusOffsetToNbOccurrence(OldVal + offset) :-= 1
     valueMinusOffsetToNbOccurrence(NewVal + offset) :+= 1
 
@@ -114,7 +114,7 @@ case class AllDiff(variables: Iterable[IntValue])
     tmp
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     val myValueCount: Array[Int] = (for (i <- 0 to N) yield 0).toArray
     for (v <- variables) myValueCount(v.value + offset) += 1
     for (v <- range) {

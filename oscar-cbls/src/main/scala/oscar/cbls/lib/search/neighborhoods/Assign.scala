@@ -63,7 +63,7 @@ case class AssignNeighborhood(vars:Array[CBLSIntVar],
   var currentIndice:Int = 0
   var newVal:Int = 0
 
-  override def exploreNeighborhood() {
+  override def exploreNeighborhood(): Unit = {
 
     val iterationZone =
       if (searchZone == null) vars.indices
@@ -132,7 +132,7 @@ case class AssignNeighborhood(vars:Array[CBLSIntVar],
 case class AssignMove(i:CBLSIntVar,v:Int, id:Int, override val objAfter:Int, override val neighborhoodName:String = null)
   extends Move(objAfter, neighborhoodName){
 
-  override def commit() {i := v}
+  override def commit(): Unit = {i := v}
 
   override def toString: String = {
     neighborhoodNameToString + "AssignMove(" + i + " set to " + v + objToString + ")"

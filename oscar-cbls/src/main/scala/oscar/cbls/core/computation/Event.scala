@@ -130,37 +130,37 @@ class Event(v:Value, w:Variable, ModifiedVars:Iterable[Variable])
   private var intsetintaction:((SortedSet[Int],Int) => Unit) = null
   private var intintsetaction:((Int,SortedSet[Int]) => Unit) = null
 
-  def setAction(action: ()=>Unit){
+  def setAction(action: ()=>Unit): Unit ={
     this.action = action
   }
-  def setIntAction(action: Int=>Unit){
+  def setIntAction(action: Int=>Unit): Unit ={
     this.actionIntParam = action
     oldIntv = v.asInstanceOf[IntValue].value
   }
-  def setIntSetAction(action: SortedSet[Int] => Unit){
+  def setIntSetAction(action: SortedSet[Int] => Unit): Unit ={
     this.actionIntSetParam = action
     oldIntSetv = v.asInstanceOf[CBLSSetVar].value
   }
 
-  def setintintaction(intintaction: (Int,Int)=>Unit){
+  def setintintaction(intintaction: (Int,Int)=>Unit): Unit ={
     this.intintaction = intintaction
     this.oldIntv = v.asInstanceOf[CBLSIntVar].value
     this.oldIntw = w.asInstanceOf[CBLSIntVar].value
   }
 
-  def setintsetintsetaction(intsetintsetaction:(SortedSet[Int],SortedSet[Int]) => Unit){
+  def setintsetintsetaction(intsetintsetaction:(SortedSet[Int],SortedSet[Int]) => Unit): Unit ={
     this.intsetintsetaction = intsetintsetaction
     this.oldIntSetv = v.asInstanceOf[CBLSSetVar].value
     this.oldIntSetw = w.asInstanceOf[CBLSSetVar].value
   }
 
-  def setintsetintaction(intsetintaction:(SortedSet[Int],Int) => Unit){
+  def setintsetintaction(intsetintaction:(SortedSet[Int],Int) => Unit): Unit ={
     this.intsetintaction = intsetintaction
     this.oldIntSetv = v.asInstanceOf[CBLSSetVar].value
     this.oldIntw = w.asInstanceOf[CBLSIntVar].value
   }
 
-  def setintintsetaction(intintsetaction:(Int,SortedSet[Int]) => Unit){
+  def setintintsetaction(intintsetaction:(Int,SortedSet[Int]) => Unit): Unit ={
     this.intintsetaction = intintsetaction
     this.oldIntv = v.asInstanceOf[CBLSIntVar].value
     this.oldIntSetw = w.asInstanceOf[CBLSSetVar].value
@@ -172,7 +172,7 @@ class Event(v:Value, w:Variable, ModifiedVars:Iterable[Variable])
   if (ModifiedVars != null)
     for(variable <- ModifiedVars){variable.setDefiningInvariant(this)}
 
-  override def notifyIntChanged(v: ChangingIntValue, i: Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, i: Int, OldVal: Int, NewVal: Int): Unit = {
     scheduleForPropagation()
   }
 
@@ -180,11 +180,11 @@ class Event(v:Value, w:Variable, ModifiedVars:Iterable[Variable])
                                 addedValues: Iterable[Int],
                                 removedValues: Iterable[Int],
                                 oldValue: SortedSet[Int],
-                                newValue: SortedSet[Int]) {
+                                newValue: SortedSet[Int]): Unit = {
     scheduleForPropagation()
   }
 
-  override def performInvariantPropagation(){
+  override def performInvariantPropagation(): Unit ={
     if (action != null) action()
 
     if (actionIntParam!= null){

@@ -41,13 +41,13 @@ class AggregatedBinomialHeapQList[@specialized T](GetKey:T => Int,val maxPositio
   private[this] var empty:Boolean = true
 
   /**makes the datastruct empty**/
-  override def dropAll(){
+  override def dropAll(): Unit ={
     for (i <- b) a(i) = null
     empty = true
     b.dropAll()
   }
 
-  override def insert(elem:T){
+  override def insert(elem:T): Unit ={
     val position = GetKey(elem)
     val otherWithSamePosition = a(position)
     if (otherWithSamePosition == null){
@@ -112,13 +112,13 @@ class AggregatedBinomialHeapArrayList[@specialized T](GetKey:T => Int,val maxPos
   private[this] var msize:Int = 0
 
   /**makes the datastruct empty*/
-  def dropAll(){
+  def dropAll(): Unit ={
     for (i <- b) a(i).setEmpty()
     msize = 0
     b.dropAll()
   }
 
-  def insert(elem:T){
+  def insert(elem:T): Unit ={
     val position = GetKey(elem)
     val otherWithSamePosition = a(position)
     if(otherWithSamePosition.isEmpty) b.insert(position)

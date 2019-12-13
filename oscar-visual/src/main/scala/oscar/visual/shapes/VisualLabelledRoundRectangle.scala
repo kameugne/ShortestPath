@@ -67,7 +67,7 @@ class VisualLabelledRoundRectangle(d: VisualDrawing, s: RoundRectangle2D.Double,
    * Move the specified left corner
    * @param x
    */
-  override def move(x: Double, y: Double) {
+  override def move(x: Double, y: Double): Unit = {
     super.move(x, y)
     textDraw.move(xText, yText)
   }
@@ -79,7 +79,7 @@ class VisualLabelledRoundRectangle(d: VisualDrawing, s: RoundRectangle2D.Double,
 
 object VisualLabelledRoundRectangle {
 
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     val f = VisualFrame("toto")
     val d = VisualDrawing(flipped=false)
     val inf = f.createFrame("Drawing")

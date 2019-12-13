@@ -69,7 +69,7 @@ case class SwapsNeighborhood(vars:Array[CBLSIntVar],
   extends EasyNeighborhoodMultiLevel[SwapMove](name){
   //the indice to start with for the exploration
   var indiceOfFirstVariable:Int = 0
-  override def exploreNeighborhood() {
+  override def exploreNeighborhood(): Unit = {
 
     val firstIterationSchemeZone =
       if (searchZone1 == null) {
@@ -150,7 +150,7 @@ case class SwapsNeighborhood(vars:Array[CBLSIntVar],
 case class SwapMove(i:CBLSIntVar,j:CBLSIntVar, idI:Int, idJ:Int, override val objAfter:Int, override val neighborhoodName:String = null)
   extends Move(objAfter, neighborhoodName){
 
-  override def commit() {i :=: j}
+  override def commit(): Unit = {i :=: j}
 
   override def toString: String  = {
     neighborhoodNameToString + "SwapMove(" + i + " swapped with " + j + objToString + ")"

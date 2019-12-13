@@ -106,12 +106,12 @@ case class RemovePoint(relevantPointsToRemove:()=>Iterable[Int],
   override def instantiateCurrentMove(newObj: Int) =
     RemovePointMove(positionOfPointToRemove, pointToRemove, vrp, newObj, this, neighborhoodNameToString)
 
-  def doMove(positionOfPointToRemove: Int) {
+  def doMove(positionOfPointToRemove: Int): Unit = {
     seq.remove(positionOfPointToRemove)
   }
 
   //this resets the internal state of the Neighborhood
-  override def reset(){startIndice = 0}
+  override def reset(): Unit ={startIndice = 0}
 }
 
 /**
@@ -133,7 +133,7 @@ case class RemovePointMove(positionOfPointToRemove: Int,
 
   override def impactedPoints: List[Int] = List(pointToRemove)
 
-  override def commit() {
+  override def commit(): Unit = {
     neighborhood.doMove(positionOfPointToRemove)
   }
   override def toString: String = "RemovePoint(point:" + pointToRemove + objToString + ")"

@@ -46,7 +46,7 @@ case class BelongsTo(v: IntValue, set: SetValue)
   violation.setDefiningInvariant(this)
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     violation := (if (set.value.contains(v.value)) 0 else 1)
   }
 
@@ -64,7 +64,7 @@ case class BelongsTo(v: IntValue, set: SetValue)
    * this will be called for each invariant after propagation is performed.
    * It requires that the Model is instantiated with the variable debug set to true.
    */
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(violation.value == (if (set.value.contains(v.value)) 0 else 1),
       Some("Violation.value (" + violation.value
         + ") == (if(set.value" + set.value + ".contains(v.value (" + v.value + "))) 0 else 1)"))
@@ -115,7 +115,7 @@ case class BelongsToConstPreComputing(v: IntValue, set: Set[Int])
 
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
       try{
         violation := dists(NewVal-v.min)
       }catch{
@@ -131,7 +131,7 @@ case class BelongsToConstPreComputing(v: IntValue, set: Set[Int])
     * this will be called for each invariant after propagation is performed.
     * It requires that the Model is instantiated with the variable debug set to true.
     */
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
   }
 }
 
@@ -178,7 +178,7 @@ case class BelongsToConstCaching(v: IntValue, set: Set[Int])
 
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     if(dists.contains(NewVal)) {
       violation := dists(NewVal)
     }else {
@@ -195,7 +195,7 @@ case class BelongsToConstCaching(v: IntValue, set: Set[Int])
     * this will be called for each invariant after propagation is performed.
     * It requires that the Model is instantiated with the variable debug set to true.
     */
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
   }
 }
 

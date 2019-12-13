@@ -163,7 +163,7 @@ object AlphameticGenerate {
 
       numSols += 1
 
-    } start ()
+    } start;
 
     println("\nIt was " + numSols + " solutions to the problem " + problem_in)
 

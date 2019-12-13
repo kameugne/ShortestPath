@@ -36,7 +36,7 @@ class MapPainter(map : VisualMap) extends Painter[JXMapViewer] {
 
 	
 
-	def paint(gin : Graphics2D ,  map : JXMapViewer,  w : Int, h : Int) {
+	def paint(gin : Graphics2D ,  map : JXMapViewer,  w : Int, h : Int): Unit = {
 		var g =  gin.create().asInstanceOf[Graphics2D]
 		
 		//convert from viewport to world bitmap
@@ -111,7 +111,7 @@ class MapPainter(map : VisualMap) extends Painter[JXMapViewer] {
 		g.dispose()
 	}
 	
-	protected def paintWaypoint(w : Waypoint, g :  Graphics2D) {
+	protected def paintWaypoint(w : Waypoint, g :  Graphics2D): Unit = {
         renderer.paintWaypoint(g, mymap.viewer, w)
     }
 }

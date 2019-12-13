@@ -104,7 +104,7 @@ object PandigitalNumbers extends CPModel with App  {
 onSolution {
       println(num1 + " +" + num2 + " =" + res )
       numSols += 1
-    } start()
+    } start;
   }
     var base = 10
     var start = 1

@@ -105,7 +105,7 @@ trait Bulker {
     null
   }
 
-  def registerBulk(identifyingName: String, bulk: Bulk) {
+  def registerBulk(identifyingName: String, bulk: Bulk): Unit = {
     val knownbulk = Bulked.getOrElse(identifyingName, List.empty)
     Bulked += ((identifyingName, bulk :: knownbulk))
   }

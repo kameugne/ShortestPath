@@ -6,7 +6,7 @@ import org.xcsp.checker.SolutionChecker
 import org.xcsp.parser.entries.XConstraints.XCtr
 import org.xcsp.parser.entries.XObjectives.XObj
 
-import scala.collection.JavaConversions._
+import scala.jdk.CollectionConverters._
 
 /**
   * A "library-friendly" version of SolutionChecker
@@ -15,7 +15,7 @@ import scala.collection.JavaConversions._
   */
 class CheckerLib(filename: String, solution: String){
   val checker = new SolutionChecker(false, filename, new ByteArrayInputStream(solution.getBytes))
-  def getViolatedCtrs: List[String] = checker.violatedCtrs.toList
-  def getInvalidObjs: List[String] = checker.invalidObjs.toList
+  def getViolatedCtrs: List[String] = checker.violatedCtrs.asScala.toList
+  def getInvalidObjs: List[String] = checker.invalidObjs.asScala.toList
   def valid: Boolean = checker.violatedCtrs.isEmpty && checker.invalidObjs.isEmpty
 }

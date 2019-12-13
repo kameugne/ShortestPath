@@ -221,7 +221,7 @@ class CPHeadSeqVar(
 
   //Delta and propagation methods:
 
-  def callPropagateWhenDomainChanges(c: Constraint) {
+  def callPropagateWhenDomainChanges(c: Constraint): Unit = {
     onDomainL2.register(c)
     setDomain.callPropagateWhenDomainChanges(c)
   }

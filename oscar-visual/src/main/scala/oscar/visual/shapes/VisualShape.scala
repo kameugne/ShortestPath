@@ -14,7 +14,7 @@ abstract class VisualShape(protected val drawing: VisualDrawing) {
   
   private var onClickActions = List[() => Unit]()
   
-  def onClick(action: => Unit) {
+  def onClick(action: => Unit): Unit = {
     onClickActions = (() => action) :: onClickActions
   }
   
@@ -125,7 +125,7 @@ abstract class VisualShape(protected val drawing: VisualDrawing) {
   def repaint(): Unit = drawing.repaint()
 
   
-  def draw(g: Graphics2D) {
+  def draw(g: Graphics2D): Unit = {
     if (visible) {
       if (fill) {
         g.setColor(_fillColor)

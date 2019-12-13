@@ -57,7 +57,7 @@ case class ShiftNeighborhood(vars:Array[CBLSIntVar],
   var currentShiftSize:Int = 1
   var currentStart:Int = 0
 
-  override def exploreNeighborhood(){
+  override def exploreNeighborhood(): Unit ={
     val searchZoneObject = if(searchZone1 == null)null else searchZone1()
     val currentSearchZone = if(searchZone1 == null)vars.indices else searchZoneObject
 
@@ -168,7 +168,7 @@ case class ShiftMove(startIndice:Int,length:Int,offset:Int,variables:Array[CBLSI
   }
 
   /** to actually take the move */
-  override def commit() {
+  override def commit(): Unit = {
     val initialValues: Array[Int] = Array.tabulate(variables.length)(variables(_).value)
     //If the block is moved on the right
     if(offset > 0){

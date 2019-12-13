@@ -42,7 +42,7 @@ case class BinPackingLoad(items: Array[IntValue], itemsizes: Array[Int]) extends
     * this will be called for each invariant after propagation is performed.
     * It requires that the Model is instantiated with the variable debug set to true.
     */
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(true,Some("nothing to check, invariant is discharged"))
   }
 

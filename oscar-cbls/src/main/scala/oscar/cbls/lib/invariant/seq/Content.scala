@@ -40,7 +40,7 @@ case class Content(v:SeqValue)
     }
   }
 
-  private def updateFromScratch(u:IntSequence){
+  private def updateFromScratch(u:IntSequence): Unit ={
     this := (SortedSet.empty[Int] ++ u.unorderedContentNoDuplicate)
   }
 
@@ -75,7 +75,7 @@ case class Content(v:SeqValue)
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value.toList.sorted equals v.value.unorderedContentNoDuplicate.sorted,
       Some("this.value.toList:" + this.value.toList + " == v.value.toList:" + v.value.unorderedContentNoDuplicate.sorted + " v.value.unorderedContentNoDuplicate:" + v))
   }

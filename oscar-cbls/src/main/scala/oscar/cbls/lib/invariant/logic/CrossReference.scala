@@ -55,7 +55,7 @@ case class DenseRef(references:Array[SetValue], referencing:Array[CBLSSetVar])
     * this will be called for each invariant after propagation is performed.
     * It requires that the Model is instantiated with the variable debug set to true.
     */
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
   //Referencing(i) = {j | Reference(j) includes i}
     for (referencesId <- references.indices){
       for (referencingId <- referencing.indices){

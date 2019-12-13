@@ -48,7 +48,7 @@ abstract class MiaxSet(v: SetValue)
   }
 
   @inline
-  def notifyInsertOn(v: ChangingSetValue, value: Int) {
+  def notifyInsertOn(v: ChangingSetValue, value: Int): Unit = {
     if (wasEmpty){
       this := value
     }else if(!this.isScheduled && Better(value,this.newValue)){
@@ -58,7 +58,7 @@ abstract class MiaxSet(v: SetValue)
   }
 
   @inline
-  def notifyDeleteOn(v: ChangingSetValue, value: Int) {
+  def notifyDeleteOn(v: ChangingSetValue, value: Int): Unit = {
     if (v.value.isEmpty){ //TODO: avoid querying this directly on the intsetvar!
       wasEmpty = true
       this := Default
@@ -67,7 +67,7 @@ abstract class MiaxSet(v: SetValue)
     }
   }
 
-  override def performInvariantPropagation(){
+  override def performInvariantPropagation(): Unit ={
     throw new Exception("you must override this to set the this because it has been lost")
   }
 }
@@ -84,7 +84,7 @@ case class MinSet(v: SetValue, Default: Int = Int.MaxValue) extends MiaxSet(v) {
 
   override def Better(a:Int,b:Int):Boolean = a < b
 
-  override def performInvariantPropagation(){
+  override def performInvariantPropagation(): Unit ={
     if (v.value.isEmpty){
       this := Default
     }else{
@@ -92,7 +92,7 @@ case class MinSet(v: SetValue, Default: Int = Int.MaxValue) extends MiaxSet(v) {
     }
   }
 
-  override def checkInternals(c:Checker){
+  override def checkInternals(c:Checker): Unit ={
     if (v.value.isEmpty){
       c.check(this.value == Default, Some("this.value == Default"))
     }else{
@@ -114,7 +114,7 @@ case class MaxSet(v: SetValue, Default: Int = Int.MinValue) extends MiaxSet(v) {
 
   override def Better(a:Int,b:Int):Boolean = a > b
 
-  override def performInvariantPropagation(){
+  override def performInvariantPropagation(): Unit ={
     if (v.value.isEmpty){
       this := Default
     }else{
@@ -122,7 +122,7 @@ case class MaxSet(v: SetValue, Default: Int = Int.MinValue) extends MiaxSet(v) {
     }
   }
 
-  override def checkInternals(c:Checker){
+  override def checkInternals(c:Checker): Unit ={
     if (v.value.isEmpty){
       c.check(this.value == Default, Some("this.value == Default"))
     }else{

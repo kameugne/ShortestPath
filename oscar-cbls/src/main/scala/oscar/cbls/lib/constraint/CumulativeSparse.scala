@@ -37,7 +37,7 @@ case class CumulativeSparse(start: Array[IntValue], duration: Array[IntValue], a
   override def violation(v: Value): IntValue = Violation
   
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int): Unit = {
     if (start(index) == v) {
       //start
       profile.remove(OldVal, duration(index).value, amount(index).value)
@@ -59,7 +59,7 @@ case class CumulativeSparse(start: Array[IntValue], duration: Array[IntValue], a
     //println(violation)
   }
   
-  override def checkInternals(c: Checker) {c.check(false, Some("TODO: Implement checkinternal for CumulativeSparse"))}
+  override def checkInternals(c: Checker): Unit = {c.check(false, Some("TODO: Implement checkinternal for CumulativeSparse"))}
 }
 
 class Profile(n: Int,maxh: Int,model:Store){
@@ -83,7 +83,7 @@ class Profile(n: Int,maxh: Int,model:Store){
     println(max)
     max
   }
-  def print_profile(check: Boolean = true){
+  def print_profile(check: Boolean = true): Unit ={
     var s = ""
     var l = ""
     var h = ""
@@ -108,7 +108,7 @@ class Profile(n: Int,maxh: Int,model:Store){
 	    }
     }
   }
-  def remove(s: Int, d: Int, h: Int){
+  def remove(s: Int, d: Int, h: Int): Unit ={
 //    println("Before removing "+(s,d,h))
 //    print_profile()
     if(h==0 || d==0) return

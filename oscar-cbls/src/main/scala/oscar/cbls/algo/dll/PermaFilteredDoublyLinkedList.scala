@@ -22,21 +22,21 @@ package oscar.cbls.algo.dll
 
 
 abstract class AbstractPermaFilter[T]{
-  def notifyInsert(s: PFDLLStorageElement[T])
-  def notifyDelete(s: PFDLLStorageElement[T])
+  def notifyInsert(s: PFDLLStorageElement[T]): Unit
+  def notifyDelete(s: PFDLLStorageElement[T]): Unit
 }
 
 class PermaFilter[T,F <: AnyRef](mFilter:T => Boolean,
                        mMap:T=>F, filtered:PermaFilteredDoublyLinkedList[F])
   extends AbstractPermaFilter[T]{
 
-  override def notifyInsert(s: PFDLLStorageElement[T]){
+  override def notifyInsert(s: PFDLLStorageElement[T]): Unit ={
     if (mFilter(s.elem)){
       s.filtered = filtered.addElem(mMap(s.elem))
     }
   }
 
-  def notifyDelete(s: PFDLLStorageElement[T]){
+  def notifyDelete(s: PFDLLStorageElement[T]): Unit ={
     if(s.filtered != null)
       filtered.deleteElem(s.filtered.asInstanceOf[PFDLLStorageElement[F]])
   }
@@ -64,7 +64,7 @@ class DelayedPermaFilter[T, F <: AnyRef](mFilter:(T,()=>Unit, ()=> Boolean) => U
 
   }
 
-  def notifyDelete(s: PFDLLStorageElement[T]){
+  def notifyDelete(s: PFDLLStorageElement[T]): Unit ={
     if(s.filtered != null)
       filtered.deleteElem(s.filtered.asInstanceOf[PFDLLStorageElement[F]])
   }
@@ -117,10 +117,10 @@ class PermaFilteredDoublyLinkedList[T <: AnyRef] extends Iterable[T]{
   }
 
   /**adds an element to the data structure, cfr. method addElem*/
-  def +(elem:T){addElem(elem)}
+  def +(elem:T): Unit ={addElem(elem)}
 
   /**adds a bunch of items to the data structures*/
-  def ++(elems:Iterable[T]) {for(elem <- elems) addElem(elem)}
+  def ++(elems:Iterable[T]): Unit = {for(elem <- elems) addElem(elem)}
 
   /**deletes an item from the DLL and all the filtered DLL.
     * the item is specified through the reference given when it was inserted in the first place.
@@ -166,7 +166,7 @@ class PermaFilteredDoublyLinkedList[T <: AnyRef] extends Iterable[T]{
     filtered
   }
 
-  private def filterElementsForNewFilter(){
+  private def filterElementsForNewFilter(): Unit ={
     var currentstorageElement:PFDLLStorageElement[T]=phantom.next
     while(currentstorageElement!=phantom){
       permaFilter.notifyInsert(currentstorageElement)
@@ -200,7 +200,7 @@ class PFDLLStorageElement[T](val elem:T){
   var prev:PFDLLStorageElement[T] = null
   var filtered: AnyRef = null
 
-  def setNext(d:PFDLLStorageElement[T]){
+  def setNext(d:PFDLLStorageElement[T]): Unit ={
     this.next = d
     d.prev = this
   }

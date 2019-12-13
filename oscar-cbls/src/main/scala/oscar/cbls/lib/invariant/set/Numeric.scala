@@ -49,7 +49,7 @@ case class SetSum(on: SetValue, fun: (Int => Int) = (a: Int) => a)
     this :+= delta
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     var count = 0
     for (v <- on.value) count += fun(v)
     c.check(this.value == count, Some("this.value == count"))
@@ -77,7 +77,7 @@ case class SetProd(on: SetValue)
     this := nonZeroProduct
   }
 
-  override def notifySetChanges(v: ChangingSetValue, d: Int, addedValues: Iterable[Int], removedValues: Iterable[Int], oldValue: SortedSet[Int], newValue: SortedSet[Int]){
+  override def notifySetChanges(v: ChangingSetValue, d: Int, addedValues: Iterable[Int], removedValues: Iterable[Int], oldValue: SortedSet[Int], newValue: SortedSet[Int]): Unit ={
     for (deleted <- removedValues) if (deleted != 0) {nonZeroProduct /= deleted}
     for (added <- addedValues) if (added != 0) {nonZeroProduct *= added}
     if (newValue.contains(0)) {
@@ -87,7 +87,7 @@ case class SetProd(on: SetValue)
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     var countNZ = 1
     for (v <- on.value) if(v !=0) countNZ *= v
     c.check(nonZeroProduct == countNZ,

@@ -68,12 +68,12 @@ class MaxMoves(a: Neighborhood, val maxMove: Int, cond: Option[Move => Boolean] 
   }
 
   //this resets the internal state of the move combinators
-  override def reset() {
+  override def reset(): Unit = {
     remainingMoves = maxMove
     super.reset()
   }
 
-  def notifyMoveTaken(m: Move) {
+  def notifyMoveTaken(m: Move): Unit = {
     val shouldMoveBeConsidered = cond match{
       case None => true
       case Some(c) => c(m)}
@@ -150,13 +150,13 @@ class MaxMovesWithoutImprovement(a: Neighborhood,
   }
 
   //this resets the internal state of the move combinators
-  override def reset() {
+  override def reset(): Unit = {
     stepsSinceLastImprovement = 0
     bestObj = Int.MaxValue
     super.reset()
   }
 
-  def notifyMoveTaken(m: Move) {
+  def notifyMoveTaken(m: Move): Unit = {
     val shouldMoveBeConsidered = cond match{
       case None => true
       case Some(c) => c(m)}
@@ -213,7 +213,7 @@ class Exhaust(a: Neighborhood, b: Neighborhood) extends NeighborhoodCombinator(a
   }
 
   //this resets the internal state of the move combinators
-  override def reset() {
+  override def reset(): Unit = {
     currentIsA = true
     super.reset()
   }
@@ -237,7 +237,7 @@ case class StopWhen(a: Neighborhood, cond: () => Boolean) extends NeighborhoodCo
   }
 
   //this resets the internal state of the move combinators
-  override def reset() {
+  override def reset(): Unit = {
     isStopped = false
     super.reset()
   }
@@ -269,7 +269,7 @@ class UntilImprovement(a: Neighborhood, over: () => Int, val minMoves: Int = 0, 
   }
 
   //this resets the internal state of the move combinators
-  override def reset() {
+  override def reset(): Unit = {
     oldObjOnReset = over()
     movesQueriedSinceReset = 0
     super.reset()
@@ -291,7 +291,7 @@ class MaxSearches(a: Neighborhood, val maxMove: Int) extends NeighborhoodCombina
   }
 
   //this resets the internal state of the move combinators
-  override def reset() {
+  override def reset(): Unit = {
     remainingMoves = maxMove
     super.reset()
   }
@@ -329,7 +329,7 @@ class ExhaustBack(a: Neighborhood, b: Neighborhood) extends NeighborhoodCombinat
   }
 
   //this resets the internal state of the move combinators
-  override def reset() {
+  override def reset(): Unit = {
     currentIsA = true
     super.reset()
   }
@@ -366,7 +366,7 @@ class Retry(a: Neighborhood, cond: Int => Boolean = _ <= 1) extends Neighborhood
   }
 
   //this resets the internal state of the move combinators
-  override def reset() {
+  override def reset(): Unit = {
     super.reset()
     consecutiveFails = 0
   }

@@ -96,7 +96,7 @@ case class CumulativePrototype(start: Array[IntValue], duration: Array[IntValue]
   }
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int): Unit = {
     if(index == -1){
       updateVarViolation(0,horizon)
     }else if (start(index) == v && amount(index).value >0) {
@@ -138,7 +138,7 @@ case class CumulativePrototype(start: Array[IntValue], duration: Array[IntValue]
     //println(violation)
   }
 
-  override def checkInternals(c: Checker) {c.check(false, Some("TODO: Implement checkinternal for CumulativeSparse"))}
+  override def checkInternals(c: Checker): Unit = {c.check(false, Some("TODO: Implement checkinternal for CumulativeSparse"))}
 }
 
 class CumulativeProfile(m:Store, val nTasks:Int, val horizon:Int, val maxHeight:Int, var limit:IntValue){

@@ -58,7 +58,7 @@ class VisualRectangle(d: VisualDrawing, s: Rectangle2D.Double) extends VisualSha
    * Move the specified left corner
    * @param x
    */
-  def move(x: Double, y: Double) {
+  def move(x: Double, y: Double): Unit = {
     rect.setRect(x, y, width, height)
     drawing.repaint()
   }
@@ -79,7 +79,7 @@ class VisualRectangle(d: VisualDrawing, s: Rectangle2D.Double) extends VisualSha
    * Set width
    * @param w
    */
-  def width_=(w: Double) {
+  def width_=(w: Double): Unit = {
     rect.setRect(x, y, w, height)
     drawing.repaint()
   }
@@ -88,7 +88,7 @@ class VisualRectangle(d: VisualDrawing, s: Rectangle2D.Double) extends VisualSha
    * Set height
    * @param w
    */
-  def height_=(h: Double) {
+  def height_=(h: Double): Unit = {
     rect.setRect(x, y, width, h)
     drawing.repaint()
   }
@@ -97,7 +97,7 @@ class VisualRectangle(d: VisualDrawing, s: Rectangle2D.Double) extends VisualSha
 
 object VisualRectangle {
 
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
 
 
     val f = VisualFrame("toto");

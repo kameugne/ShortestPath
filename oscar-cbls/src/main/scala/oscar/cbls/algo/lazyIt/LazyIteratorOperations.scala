@@ -31,7 +31,7 @@ class NextIterator[T](base:Iterator[T]) extends Iterator[T]{
     }
   }
 
-  def pushBack(t:T){
+  def pushBack(t:T): Unit ={
     require(!anyNextToReturn,"can only push back one element")
     anyNextToReturn = true
     nextToReturn = t

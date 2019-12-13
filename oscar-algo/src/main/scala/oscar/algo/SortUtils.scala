@@ -25,7 +25,7 @@ object SortUtils {
 		stableSort1(a, l, r-1, new Array[K](a.length), f)
 	}
 
-	private def stableSort1[K : ClassTag](a: Array[K], lo: Int, hi: Int, scratch: Array[K], f: (K,K) => Boolean) {
+	private def stableSort1[K : ClassTag](a: Array[K], lo: Int, hi: Int, scratch: Array[K], f: (K,K) => Boolean): Unit = {
 	    if (lo < hi) {
 			val mid = (lo+hi) / 2
 			stableSort1(a, lo, mid, scratch, f)
@@ -193,7 +193,7 @@ object SortUtils {
 	
 	
 	
-	def main(args: Array[String]) {
+	def main(args: Array[String]): Unit = {
 		
 		val a = Array(5,6,2,9,6,8,3)
 		stableSort(a, 0, 4, (a : Int,b:Int) => a < b)

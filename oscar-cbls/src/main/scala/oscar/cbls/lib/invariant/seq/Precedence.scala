@@ -98,7 +98,7 @@ class Precedence(seq:ChangingSeqValue,
   def nodesStartingAPrecedence:SortedSet[Int] = SortedSet.empty[Int] ++ beforeAfter.map(_._1)
   def nodesEndingAPrecedenceStartedAt:(Int => Iterable[Int]) = (before:Int) => beforesToPrecedences(before).map(p => precedencesArray(p)._2)
 
-  def saveViolationForCheckpoint(precedence:Int){
+  def saveViolationForCheckpoint(precedence:Int): Unit ={
     if(!isViolationChangedSinceCheckpoint(precedence)){
       isViolationChangedSinceCheckpoint(precedence) = true
       changedPrecedenceViolationsSinceCheckpoint = QList(precedence,changedPrecedenceViolationsSinceCheckpoint)
@@ -106,7 +106,7 @@ class Precedence(seq:ChangingSeqValue,
     }
   }
 
-  def reloadViolationsAtCheckpoint(){
+  def reloadViolationsAtCheckpoint(): Unit ={
     //TODO: pas moyen de faire du O(1) ici, avec un tableau magique par exemple?
     for(precedence <- changedPrecedenceViolationsSinceCheckpoint){
       isViolationChangedSinceCheckpoint(precedence) = false
@@ -116,7 +116,7 @@ class Precedence(seq:ChangingSeqValue,
     this := violationAtCheckpoint
   }
 
-  def defineCheckpoint(i:IntSequence){
+  def defineCheckpoint(i:IntSequence): Unit ={
     for(precedence <- changedPrecedenceViolationsSinceCheckpoint) {
       isViolationChangedSinceCheckpoint(precedence) = false
     }
@@ -126,14 +126,14 @@ class Precedence(seq:ChangingSeqValue,
     cachedPositionFinderAtCheckpoint.updateToCheckpoint(i)
   }
 
-  def clearAllViolatedPrecedences(){
+  def clearAllViolatedPrecedences(): Unit ={
     for (precedence <- precedences) {
       saveViolationForCheckpoint(precedence)
       isPrecedenceViolated(precedence) = false
     }
   }
 
-  def computeAndAffectViolationsFromScratch(seq : IntSequence) {
+  def computeAndAffectViolationsFromScratch(seq : IntSequence): Unit = {
     //this assumes that we have lots of precedence constraints, so that we can afford crawling through the sequence (instead of iterating through the precedences)
     var totalViolation = 0
     val hasValueBeenSeen = Array.fill(this.seq.maxValue + 1)(false)
@@ -169,7 +169,7 @@ class Precedence(seq:ChangingSeqValue,
     this := totalViolation
   }
 
-  override def notifySeqChanges(v : ChangingSeqValue, d : Int, changes : SeqUpdate) {
+  override def notifySeqChanges(v : ChangingSeqValue, d : Int, changes : SeqUpdate): Unit = {
     if (!digestUpdates(changes)) {
       //this also updates checkpoint links
       computeAndAffectViolationsFromScratch(changes.newValue)

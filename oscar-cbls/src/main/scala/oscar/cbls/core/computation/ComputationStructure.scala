@@ -99,7 +99,7 @@ case class Store(override val verbose:Boolean = false,
     * This enables invariants to rebuild their internal data structure if needed.
     * Only solutions saved from the same model can be restored in the model.
     */
-  def restoreSolution(s:Solution){
+  def restoreSolution(s:Solution): Unit ={
     assert(s.model==this)
     s.restoreDecisionVariables()
   }
@@ -133,11 +133,11 @@ case class Store(override val verbose:Boolean = false,
 
   var toCallBeforeClose:List[(()=>Unit)] = List.empty
 
-  def addToCallBeforeClose(toCallBeforeCloseProc : (()=>Unit)){
+  def addToCallBeforeClose(toCallBeforeCloseProc : (()=>Unit)): Unit ={
     toCallBeforeClose = (toCallBeforeCloseProc) :: toCallBeforeClose
   }
 
-  protected def performCallsBeforeClose() {
+  protected def performCallsBeforeClose(): Unit = {
     for (p <- toCallBeforeClose) p()
     toCallBeforeClose = List.empty
   }
@@ -147,7 +147,7 @@ case class Store(override val verbose:Boolean = false,
     * and after all the invariants and variables have been declared.
     * @param dropStaticGraph true if you want to drop the static propagation graph to free memory. It takes little time
     */
-  def close(dropStaticGraph: Boolean = true){
+  def close(dropStaticGraph: Boolean = true): Unit ={
     assert(!closed, "cannot close a model twice")
     performCallsBeforeClose()
     setupPropagationStructure(dropStaticGraph)
@@ -239,7 +239,7 @@ case class Solution(saves:Iterable[AbstractVariableSnapShot],model:Store){
     "Solution(\n" + saves.mkString(",\n\t") + "\n)"
   }
 
-  def restoreDecisionVariables() {
+  def restoreDecisionVariables(): Unit = {
     for(snapshot <- saves) snapshot.restoreIfDecisionVariable()
   }
 }
@@ -253,7 +253,7 @@ case class Solution(saves:Iterable[AbstractVariableSnapShot],model:Store){
 class Snapshot(toRecord:Iterable[AbstractVariable], val model:Store) {
   lazy val varDico:SortedMap[AbstractVariable, AbstractVariableSnapShot] = SortedMap.empty[AbstractVariable, AbstractVariableSnapShot] ++ toRecord.map(v => ((v,v.snapshot)))
 
-  def restoreDecisionVariables() {
+  def restoreDecisionVariables(): Unit = {
     for(snapshot <- varDico.values) snapshot.restoreIfDecisionVariable()
   }
 
@@ -269,7 +269,7 @@ object Invariant{
 trait VaryingDependencies extends Invariant with VaryingDependenciesPE{
 
   /**register to determining element. It must be in the static dependency graph*/
-  def registerDeterminingDependency(v:Value,i:Int = -1){
+  def registerDeterminingDependency(v:Value,i:Int = -1): Unit ={
     registerDeterminingElement(v,i)
   }
 
@@ -325,7 +325,7 @@ trait Invariant extends PropagationElement{
     * no more variable can be registered statically after this method has been called unless you provide the model in the parameter.
     * @param model; if specified, it only checks that the model is coherent, and registers to it for the ordering
     */
-  final def finishInitialization(model:Store = null){
+  final def finishInitialization(model:Store = null): Unit ={
     val m:Store = preFinishInitialization(model)
     assert(uniqueID == -1)
     if (m != null){
@@ -339,11 +339,11 @@ trait Invariant extends PropagationElement{
     * You CANNOT register a variable twice. It is undetected, but will lead to unexpected behavior.
     * @param v the variable that you want to listen to (and be notified about change)
     */
-  def registerStaticDependency(v:Value){
+  def registerStaticDependency(v:Value): Unit ={
     registerStaticallyListenedElement(v)
   }
 
-  def registerStaticDependencies(v:Value*){
+  def registerStaticDependencies(v:Value*): Unit ={
     for (vv <- v)registerStaticDependency(vv)
   }
 
@@ -353,12 +353,12 @@ trait Invariant extends PropagationElement{
     * @param v the variable that we want to register to
     * @param i the integer value that will be passed to the invariant to notify some changes in the value of this variable
     */
-  def registerStaticAndDynamicDependency(v:Value,i:Int = -1){
+  def registerStaticAndDynamicDependency(v:Value,i:Int = -1): Unit ={
     registerStaticDependency(v)
     registerDynamicDependency(v,i)
   }
 
-  def registerStaticAndDynamicDependencies(v:((Value,Int))*){
+  def registerStaticAndDynamicDependencies(v:((Value,Int))*): Unit ={
     for (varint <- v){
       registerStaticDependency(varint._1)
       registerDynamicDependency(varint._1,varint._2)
@@ -381,14 +381,14 @@ trait Invariant extends PropagationElement{
   }
 
 
-  def registerStaticAndDynamicDependenciesNoID(v:Value*){
+  def registerStaticAndDynamicDependenciesNoID(v:Value*): Unit ={
     for (varint <- v){
       registerStaticDependency(varint)
       registerDynamicDependency(varint)
     }
   }
 
-  def registerStaticAndDynamicDependencyAllNoID(v:Iterable[Value]){
+  def registerStaticAndDynamicDependencyAllNoID(v:Iterable[Value]): Unit ={
     for (varint <- v){
       registerStaticDependency(varint)
       registerDynamicDependency(varint)
@@ -415,7 +415,7 @@ trait Invariant extends PropagationElement{
     * this will be called for each invariant after propagation is performed.
     * It requires that the Model is instantiated with the variable debug set to true.
     */
-  override def checkInternals(c:Checker){c.check(false, Some("DEFAULT EMPTY CHECK " + this.toString() + ".checkInternals"))}
+  override def checkInternals(c:Checker): Unit ={c.check(false, Some("DEFAULT EMPTY CHECK " + this.toString() + ".checkInternals"))}
 
   /** this is the propagation method that should be overridden by propagation elements.
     * notice that it is only called in a propagation wave if:
@@ -423,9 +423,9 @@ trait Invariant extends PropagationElement{
     * 2: it is included in the propagation wave: partial propagation wave do not propagate all propagation elements;
     * it only propagates the ones that come in the predecessors of the targeted propagation element
     * overriding this method is optional, so an empty body is provided by default */
-  override def performPropagation(){performInvariantPropagation()}
+  override def performPropagation(): Unit ={performInvariantPropagation()}
 
-  def performInvariantPropagation(){}
+  def performInvariantPropagation(): Unit ={}
 }
 
 object InvariantHelper{
@@ -513,7 +513,7 @@ trait Value extends BasicPropagationElement with DistributedStorageUtility {
 //TODO: try to remove the double inclusion of AbstractVariable into CBLSIntVar and SetVar
 trait Variable extends AbstractVariable{
   protected var definingInvariant:Invariant = null
-  def setDefiningInvariant(i:Invariant){
+  def setDefiningInvariant(i:Invariant): Unit ={
     assert(i.model == model || i.model == null,"i.model == null:" + (i.model == null) + " i.model == model:" + (i.model == model) + " model == null:" + (model == null))
     assert(! i.isInstanceOf[Variable])
     if(definingInvariant == null){
@@ -532,20 +532,20 @@ abstract class AbstractVariableSnapShot(val a:AbstractVariable){
   // to change if this affects the printing of other benchmarks
   override def toString: String = s"Variable[name:${a.name}, value:${a.valueString}]"
 
-  final def restore() {
+  final def restore(): Unit = {
     a match {
       case v : Variable if v.isDecisionVariable => doRestore()
       case _ => throw new Error("can only re-assign decision variable, not " + a)
     }
   }
 
-  final def restoreIfDecisionVariable(){
+  final def restoreIfDecisionVariable(): Unit ={
     a match {
       case v : Variable if v.isDecisionVariable => doRestore()
       case _ => ;
     }
   }
-  protected def doRestore()
+  protected def doRestore(): Unit
 }
 
 
@@ -585,7 +585,7 @@ trait AbstractVariable
   /**this method s to be called by any method that internally modifies the value of the variable
     * it schedules the variable for propagation, and performs a basic check of the identify of the executing invariant*/
   @inline
-  final def notifyChanged(){
+  final def notifyChanged(): Unit ={
     if(isScheduled) return
     //modifier le test.
     if (this.model == null ||(!this.model.isClosed && this.getDynamicallyListeningElements.isEmpty)){

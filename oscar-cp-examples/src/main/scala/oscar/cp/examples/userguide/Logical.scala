@@ -17,6 +17,6 @@ object Logical extends CPModel with App {
     binaryStatic(Seq(A,B,C,D))
   } onSolution {
     println(A+" "+B+" "+C+" "+D)
-  } start()
+  } start
 
 }

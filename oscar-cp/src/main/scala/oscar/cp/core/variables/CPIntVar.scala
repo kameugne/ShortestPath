@@ -248,7 +248,7 @@ abstract class CPIntVar extends CPVar with IntVarLike {
    * @param priority
    * @param filter Filters. Should return true when there will never be more filtering to do: the filter will be deactivated
    */
-  def filterWhenDomainChanges(idempot: Boolean = true, priority: Int = CPStore.MaxPriorityL2 - 2)(filter: => Boolean)(implicit constraint: Constraint) {
+  def filterWhenDomainChanges(idempot: Boolean = true, priority: Int = CPStore.MaxPriorityL2 - 2)(filter: => Boolean)(implicit constraint: Constraint): Unit = {
     new SubConstraint(this.store, "filterWhenDomainChanges on  " + this) {
       idempotent = idempot
       priorityL2 = priority
@@ -264,7 +264,7 @@ abstract class CPIntVar extends CPVar with IntVarLike {
    * @param priority
    * @param filter Filters. Should return true when there will never be more filtering to do: the filter will be deactivated
    */
-  def filterWhenBoundsChange(idempot: Boolean = false, priority: Int = CPStore.MaxPriorityL2 - 2)(filter: => Boolean) {
+  def filterWhenBoundsChange(idempot: Boolean = false, priority: Int = CPStore.MaxPriorityL2 - 2)(filter: => Boolean): Unit = {
     new SubConstraint(this.store, "filterWhenBoundsChange on  " + this) {
       idempotent = idempot
       priorityL2 = priority
@@ -279,7 +279,7 @@ abstract class CPIntVar extends CPVar with IntVarLike {
    * @param priority
    * @param filter Filters. Should return true when there will never be more filtering to do: the filter will be deactivated
    */
-  def filterWhenBind(idempot: Boolean = false, priority: Int = CPStore.MaxPriorityL2-2)(filter: => Boolean) {
+  def filterWhenBind(idempot: Boolean = false, priority: Int = CPStore.MaxPriorityL2-2)(filter: => Boolean): Unit = {
     new SubConstraint(this.store, "filterWhenBind on  " + this) {
       idempotent = idempot
       priorityL2 = priority
