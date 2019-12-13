@@ -44,10 +44,10 @@ object HtmlReporter extends App{
     htmlWriter.addElement(
       "line",
       "Anytime score",
-      HtmlWriter.tableToHtmlString(renderScoresByTime(anyTimeScores, configs, timeout, stepped = true))
+      HtmlWriter.tableToHtmlString(renderScoresByTime(anyTimeScores.toSeq, configs, timeout, stepped = true))
     )
 
-    val anyTimeGapsArray = renderGapsByTime(anyTimeGaps, configs, timeout)
+    val anyTimeGapsArray = renderGapsByTime(anyTimeGaps.toSeq, configs, timeout)
     if(anyTimeGapsArray.length > 1)
       htmlWriter.addHeading("Distance to BKS", 3)
       htmlWriter.addElement(
@@ -60,7 +60,7 @@ object HtmlReporter extends App{
     htmlWriter.addElement(
       "line",
       "Anytime quality",
-      HtmlWriter.tableToHtmlString(renderQualityByTime(anyTimeQuality, configs, timeout))
+      HtmlWriter.tableToHtmlString(renderQualityByTime(anyTimeQuality.toSeq, configs, timeout))
     )
 
     htmlWriter.addHeading("Operators statistics")
@@ -155,7 +155,6 @@ object HtmlReporter extends App{
         opStats.indices.foreach(i =>{
           if(!opStatsMap.contains(operators(i))) opStatsMap += operators(i) -> ArrayBuffer[(Int, Long, Int)](opStats(i))
           else opStatsMap(operators(i)) += opStats(i)
-          Unit
         })
         data(instance)._6 += config -> opWeights
       }
@@ -169,14 +168,12 @@ object HtmlReporter extends App{
         opStats.indices.foreach(i =>{
           if(!opStatsMap.contains(operators(i))) subOpMap += operators(i) -> ArrayBuffer[(Int, Long, Int)](opStats(i))
           else subOpMap(operators(i)) += opStats(i)
-          Unit
         })
         opStatsMap += config -> subOpMap
         val opScoresMap = mutable.Map[String, Seq[(Long, String, Double)]]()
         opScoresMap += config -> opWeights
         data += instance -> (isMax, bestKnown, solsMap, opMap, opStatsMap, opScoresMap)
       }
-      Unit //Workaround for strange bug in 2.12
     }
 
     (maxTimeout, instances.toSeq.sorted, configs.toSeq.sorted, instanceTypes, bks, data)
@@ -243,7 +240,7 @@ object HtmlReporter extends App{
         }
       }
 
-    solsByTime
+    solsByTime.toSeq
   }
 
   def aggregateRuns(sols: ArrayBuffer[Seq[(Long, Int)]], config: String): Seq[(Long, String, Option[Double], Option[Double])] = {
@@ -276,7 +273,7 @@ object HtmlReporter extends App{
       solsByTime += ((time, config, mean, std))
     }
 
-    solsByTime
+    solsByTime.toSeq
   }
 
   //Aggregates operator scores by time
@@ -294,7 +291,7 @@ object HtmlReporter extends App{
 //        else scoresByTime += ((time, currentScores.clone()))
 //      }
 
-    scoresByTime
+    scoresByTime.toSeq
   }
 
   //Aggreagates gaps by time
@@ -448,7 +445,7 @@ object HtmlReporter extends App{
       println("computing operator stats...")
       opStats.foreach{case(config, opStatsMap) =>
         val stats = opStatsMap.map{case (opName, runs) =>
-          val (e, t, imp) = collapseOpStats(runs)
+          val (e, t, imp) = collapseOpStats(runs.toSeq)
           (opName, e, t, imp)
         }
         if(!opStatsByConfig.contains(config)) opStatsByConfig += config -> mutable.Map[String, Array[(String, Double, Double, Double)]]()
@@ -505,7 +502,7 @@ object HtmlReporter extends App{
         if(opScores.contains(config)) opScoresByConfig += ((config, ops, opScoresByTime(ops, opScores(config))))
       }
 
-      instanceStats += ((name, sortedSols, instanceScores, instanceGaps, opScoresByConfig.toArray))
+      instanceStats += ((name, sortedSols, instanceScores.toSeq, instanceGaps, opScoresByConfig.toArray))
     })
 
     //Computing any time gaps:

@@ -71,7 +71,7 @@ class ConstraintsVisualisation(constraints: Array[Constraint], name: String) {
     val viewer = graph.display(false)
     val layout = new ForestLayout
     viewer.enableAutoLayout(layout)
-    layout.setRoots(roots.toList)
+    layout.setRoots(roots.toList.asJava)
     new Thread(new Runnable {
       def run(): Unit = {
         new TerminalNodeDisplay(viewer, graph).pump()

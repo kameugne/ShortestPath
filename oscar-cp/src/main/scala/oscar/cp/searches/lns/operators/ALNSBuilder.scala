@@ -458,7 +458,7 @@ class ALNSBuilder(
     case ALNSBuilder.FullRelax => new ALNSNoParamOperator(
       ALNSBuilder.FullRelax,
       if(opDeactivation) ALNSBuilder.DefNoParamFailThreshold else 0,
-      () => (_ => Unit, None, None)
+      () => (_ => (), None, None)
     )
   }
 
@@ -615,7 +615,7 @@ class ALNSBuilder(
           (sol: CPIntSol) => costImpact.costImpactRelax(sol, x))
         )
 
-    case ALNSBuilder.FullRelax => Array((opKey, _ => Unit))
+    case ALNSBuilder.FullRelax => Array((opKey, _ => ()))
   }
 
   private def instantiateSearchFunctions(opKey: String): Array[(String, CPIntSol => Unit)] = {

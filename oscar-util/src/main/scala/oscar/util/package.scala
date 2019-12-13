@@ -17,6 +17,7 @@ package oscar
 
 import scala.reflect.ClassTag
 import scala.util.Random
+import scala.Iterable
 package object util {
   val rand = new scala.util.Random(0)
 
@@ -158,7 +159,7 @@ package object util {
       elem
     }
 
-    def weightedSelect[@specialized(Int) B](col: Traversable[B])(prob: B => Int): B = {
+    def weightedSelect[@specialized(Int) B](col: Iterable[B])(prob: B => Int): B = {
       var acc = prob(col.head)
       var elem = col.head
       col.tail.foreach(e => {

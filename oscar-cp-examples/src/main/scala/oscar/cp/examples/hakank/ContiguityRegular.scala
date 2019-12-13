@@ -50,7 +50,7 @@ object ContiguityRegular extends CPModel with App {
     val initial_state = 0
     val num_states = 3
     val num_letters = 2
-    val automaton = new Automaton(num_states, num_letters, initial_state, accepting_states)
+    val automaton = new Automaton(num_states, num_letters, initial_state, accepting_states.asJava)
     transition_tuples.foreach(a => automaton.addTransition(a(0), a(1), a(2)))
     regular(x, automaton)
   }

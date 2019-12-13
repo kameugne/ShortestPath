@@ -47,7 +47,7 @@ public class Garded extends Constraint {
 
 	@Override
 	public Iterable<CPVar> associatedVars() {
-		List<CPVar> l = JavaConversions.seqAsJavaList(c.associatedVars().toList());
+		List<CPVar> l = CollectionConverters.asJava(c.associatedVars().toList());
 		l.add(b);
 		return CollectionConverters.asScala(l);
 	}

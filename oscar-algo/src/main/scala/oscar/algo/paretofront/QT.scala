@@ -15,13 +15,17 @@
 
 package oscar.algo.paretofront
 
+import java.util
+
 import oscar.util.RandomGenerator
+
+import scala.Iterable
 
 /**
   * @author Renaud Hartert ren.hartert@gmail.com
   * @author Cyrille Dejemeppe cyrille.dejemeppe@gmail.com
   */
-class QT[U: Numeric](private val nDim: Int, private val cmp: (Int, Int) => Boolean) extends ParetoFront[U, QTNode[U]] with Traversable[QTNode[U]] {
+class QT[U: Numeric](private val nDim: Int, private val cmp: (Int, Int) => Boolean) extends ParetoFront[U, QTNode[U]] with Iterable[QTNode[U]] {
   
   val nSuccessors = 1 << nDim
   val Successors = 0 until nSuccessors
@@ -218,7 +222,23 @@ class QT[U: Numeric](private val nDim: Int, private val cmp: (Int, Int) => Boole
     }
     if (root.isDefined) forEach0(root.get)
   }
-  
+
+  override def iterator: Iterator[QTNode[U]] = new Iterator[QTNode[U]] {
+    val todo = new util.Stack[QTNode[U]]
+    if (root.isDefined)
+      todo.push(root.get)
+
+    override def hasNext: Boolean = !todo.empty()
+
+    override def next(): QTNode[U] = {
+      val nroot = todo.pop()
+      for (son <- NonDomSuccessors if nroot.successors(son).isDefined) {
+        todo.push(nroot.successors(son).get)
+      }
+      nroot
+    }
+  }
+
   def getEvaluations: Set[Array[Double]] = {
     val qtNodeSet = this.toSet
     qtNodeSet.map((e: QTNode[U]) => e.objectives)
@@ -254,8 +274,6 @@ class QT[U: Numeric](private val nDim: Int, private val cmp: (Int, Int) => Boole
     }
     false
   }
-
-  override def iterator: Iterator[QTNode[U]] = ???
 }
 
 object QT {

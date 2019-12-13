@@ -48,7 +48,7 @@ object Steel extends CPModel with App {
           vals_ = vals_.drop(2)
           weight = weight :+ w
           col = col :+ c - 1 //color starts at 1 in input file
-        case Nil => Unit
+        case Nil => ()
       }
     }
     (capa toArray, weight, col)

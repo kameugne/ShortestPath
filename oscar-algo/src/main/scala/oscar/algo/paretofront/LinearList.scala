@@ -32,6 +32,8 @@ class LinearList[U: Numeric, T <: ParetoElement[U]] extends ParetoFront[U, T] wi
   override def foreach[E](f: T => E): Unit = {
     elements.foreach(f)
   }
+
+  override def iterator: Iterator[T] = elements.iterator
   
   def randomElement: T = {
     val randIndex = RandomGenerator.nextInt(elements.length)
@@ -54,8 +56,6 @@ class LinearList[U: Numeric, T <: ParetoElement[U]] extends ParetoFront[U, T] wi
     }
     false
   }
-
-  override def iterator: Iterator[T] = ???
 }
 
 object LinearList {

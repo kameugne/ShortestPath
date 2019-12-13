@@ -2083,7 +2083,8 @@ class Parser extends JavaTokenParsers { // RegexParsers {
         }
         cp.search {
           explo(ann, x, s)
-        } start ()
+        }
+        cp.start()
       }
       case "min" => {
         cp.minimize(
@@ -2099,9 +2100,9 @@ class Parser extends JavaTokenParsers { // RegexParsers {
           sol_found = true
           format_output(xs, xsstate)
         }
-        cp.search {
+        cp.search({
           explo(ann, x, s)
-        } start ()
+        }).start()
       }
     }
     if (sol_found) {

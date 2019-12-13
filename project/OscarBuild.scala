@@ -11,7 +11,7 @@ object OscarBuild {
     organization := "oscar",
     version := "4.1.0-SNAPSHOT",
     scalaVersion := "2.13.1",
-    sbtVersion := "1.3.0"
+    sbtVersion := "1.3.4"
   )
 
   lazy val commonSettings = buildSettings ++ Defaults.coreDefaultSettings ++ Seq(

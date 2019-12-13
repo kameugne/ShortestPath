@@ -15,7 +15,7 @@ import scala.jdk.CollectionConverters._
   */
 class CheckerLib(filename: String, solution: String){
   val checker = new SolutionChecker(false, filename, new ByteArrayInputStream(solution.getBytes))
-  def getViolatedCtrs: List[String] = checker.violatedCtrs.toList
-  def getInvalidObjs: List[String] = checker.invalidObjs.toList
+  def getViolatedCtrs: List[String] = checker.violatedCtrs.asScala.toList
+  def getInvalidObjs: List[String] = checker.invalidObjs.asScala.toList
   def valid: Boolean = checker.violatedCtrs.isEmpty && checker.invalidObjs.isEmpty
 }

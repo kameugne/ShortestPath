@@ -55,7 +55,7 @@ class TestWeightedSum extends TestSuite {
       binaryFirstFail(x)
     } onSolution {
       n += 1
-    } start ()
+    } start;
     n
   }
 

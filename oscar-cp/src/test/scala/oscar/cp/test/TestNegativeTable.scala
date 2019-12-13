@@ -121,7 +121,8 @@ class TestNegativeTable extends TestSuite {
         binaryStatic(x)
       } onSolution {
         nbSol += 1
-      } start()
+      }
+      cp.start
       nbSol should be(339)
     }
 
@@ -157,7 +158,8 @@ class TestNegativeTable extends TestSuite {
           binaryFirstFail(x)
         } onSolution {
           nbSol += 1
-        } start()
+        }
+        cp.start
         nbSol
       }
       nbSol(false) should be(nbSol(true))

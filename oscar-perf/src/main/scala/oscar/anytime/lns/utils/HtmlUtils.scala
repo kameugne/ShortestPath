@@ -40,7 +40,6 @@ object HtmlUtils extends App{
       val content = readXml(XML.loadFile(file))
       if(results.contains(content._1)) results(content._1) += ((content._2, content._3, file.getPath))
       else results += content._1 -> mutable.ArrayBuffer[(String, Option[Int], String)]((content._2, content._3, file.getPath))
-      Unit //Workaround for strange bug in 2.12
     }
 
     results.map{case (instance, opSols) => (instance, opSols.toSeq)}.toSeq

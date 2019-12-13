@@ -49,6 +49,10 @@ class DFSearchNode extends ReversibleContextImpl with ConstrainableContext {
   /** This function is executed when the node becomes a solution */
   def solFound(): Unit = ()
 
+  def start: Unit = {
+    start(Int.MaxValue, Int.MaxValue, Int.MaxValue, Int.MaxValue, null)
+  }
+
   def start(nSols: Int = Int.MaxValue, failureLimit: Int = Int.MaxValue, timeLimit: Int = Int.MaxValue, maxDiscrepancy: Int = Int.MaxValue, listener: DFSearchListener = null): SearchStatistics = {
     startSubjectTo(nSols, failureLimit, timeLimit, maxDiscrepancy, listener)()
   }

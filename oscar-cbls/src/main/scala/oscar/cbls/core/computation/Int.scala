@@ -172,7 +172,7 @@ abstract class ChangingIntValue(initialValue:Int, initialDomain:Domain)
 
   /** increments the variable by one
     */
-  protected def ++: Unit = {
+  protected def ++ : Unit = {
     setValue(1 + mNewValue)
   }
 
@@ -233,7 +233,7 @@ class CBLSIntVar(givenModel: Store, initialValue: Int, initialDomain:Domain, n: 
 
   /** increments the variable by one
     */
-  override def ++: Unit = {
+  override def ++ : Unit = {
     setValue(1 + newValue)
   }
 

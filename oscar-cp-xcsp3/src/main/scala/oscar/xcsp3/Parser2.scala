@@ -1014,8 +1014,8 @@ object RunEverything extends CPApp[String] with App {
         getFolderContent(x._2.getAbsolutePath).filter(_.getName.endsWith(".lzma")).map(f => (x._1, f.getName, f.getAbsolutePath))
       })
 
-  val working = scala.collection.mutable.MutableList[String]()
-  val notworking = scala.collection.mutable.MutableList[String]()
+  val working = scala.collection.mutable.ArrayDeque[String]()
+  val notworking = scala.collection.mutable.ArrayDeque[String]()
 
   val results = scala.util.Random.shuffle(inputs).map(tuple => {
     val (instanceName, fileName, instancePath) = tuple
