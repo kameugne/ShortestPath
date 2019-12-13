@@ -361,7 +361,7 @@ class BinomialHeapWithMove[T](getKey:T => Int,val maxsize:Int)(implicit val A:Or
  * @author renaud.delandtsheer@cetic.be
  * @param maxId
  */
-class ArrayMap(maxId:Int) extends scala.collection.mutable.Map[Int, Int]{
+class ArrayMap(maxId:Int) extends scala.collection.Map[Int, Int]{
   
   val array:Array[Int] = Array.fill[Int](maxId)(-1)
   def get(key: Int): Option[Int] =  {
@@ -383,6 +383,9 @@ class ArrayMap(maxId:Int) extends scala.collection.mutable.Map[Int, Int]{
     array(key) = -1
     this
   }
+
+  override def -(key: Int): collection.Map[Int, Int] = ???
+  override def -(key1: Int, key2: Int, keys: Int*): collection.Map[Int, Int] = ???
 }
 
 /**

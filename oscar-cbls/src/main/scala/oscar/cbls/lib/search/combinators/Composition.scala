@@ -18,9 +18,9 @@ object Mu {
     firstNeighborhood,
     (l,_) => neighborhoodGenerator(l) match{
     case None => None
-    case Some(n) => Some((n,Unit))
+    case Some(n) => Some((n,()))
     },
-    Unit,
+    (),
     maxDepth,
     intermediaryStops)
   }

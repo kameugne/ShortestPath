@@ -16,7 +16,6 @@ package oscar.cbls.test.invariants.bench
   ******************************************************************************/
 
 import org.scalacheck.{Gen, Prop}
-import org.scalatest.prop.Checkers
 import oscar.cbls._
 import oscar.cbls.algo.seq.IntSequence
 
@@ -845,6 +844,6 @@ class InvBench(verbose: Int = 0, moves:List[Move]) {
       case e: Exception =>
         println("Exception caught: " + e)
     }
-    Checkers.check(property)
+    property.check()
   }
 }

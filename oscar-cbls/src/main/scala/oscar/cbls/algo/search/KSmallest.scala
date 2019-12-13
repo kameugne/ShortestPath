@@ -163,10 +163,10 @@ class LazyQuicksort(val array:Array[Int], key:Int => Int = a => a) extends Itera
 
   class LazyQuickSortIterator(l:LazyQuicksort) extends Iterator[Int]{
     var nextPos:Int = 0
-    override val length = l.array.length
+    val mylength = l.array.length
 
     override def hasNext: Boolean = {
-      nextPos < length
+      nextPos < mylength
     }
 
     override def next(): Int = {

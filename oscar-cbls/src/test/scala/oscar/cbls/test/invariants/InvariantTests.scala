@@ -17,7 +17,6 @@ package oscar.cbls.test.invariants
 
 import org.scalacheck.Gen
 import org.scalatest.FunSuite
-import org.scalatest.prop.Checkers
 import oscar.cbls._
 import oscar.cbls.benchmarks.vrp.RoutingMatrixGenerator
 import oscar.cbls.business.routing.invariants._
@@ -35,7 +34,7 @@ import scala.collection.immutable.SortedMap
 /**
  * @author yoann.guyot@cetic.be
  */
-class InvariantTests extends FunSuite with Checkers {
+class InvariantTests extends FunSuite {
 
 
   {

@@ -305,7 +305,7 @@ class RandomCombinator(a: Neighborhood*) extends NeighborhoodCombinator(a:_*) {
   private val r = new scala.util.Random()
 
   override def getMove(obj: Objective, initialObj:Int, acceptanceCriteria: (Int, Int) => Boolean): SearchResult = {
-    val neighborhoods = r.shuffle(a).toIterator
+    val neighborhoods = r.shuffle(a.toList).iterator
     while (neighborhoods.hasNext) {
       val current = neighborhoods.next
       current.getMove(obj, initialObj, acceptanceCriteria) match {
