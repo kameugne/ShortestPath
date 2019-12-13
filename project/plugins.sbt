@@ -5,5 +5,3 @@ addSbtPlugin("org.xerial.sbt" % "sbt-pack" % "0.10.1")//"0.6.8")
 addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.4.1")
 
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.5.1")
-
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.11")
