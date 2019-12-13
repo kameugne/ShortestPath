@@ -16,6 +16,7 @@ object OscarBuild {
 
   lazy val commonSettings = buildSettings ++ Defaults.coreDefaultSettings ++ Seq(
     scalacOptions in Compile ++= Seq("-encoding", "UTF-8", "-deprecation", "-feature",
+      "-opt:l:inline", "-opt-inline-from:**",
       "-unchecked", "-Xdisable-assertions", "-language:implicitConversions",
       "-language:postfixOps"),
     licenses += ("LGPL-3.0", url("https://www.gnu.org/licenses/lgpl-3.0.en.html")),
