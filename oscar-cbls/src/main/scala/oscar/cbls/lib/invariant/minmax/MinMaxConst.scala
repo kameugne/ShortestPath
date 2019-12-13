@@ -160,7 +160,7 @@ abstract class MiaxConstArray(vars: Array[Int], cond: SetValue, default: Int)
   }
 
   @inline
-  def notifyInsertOn(v: ChangingSetValue, value: Int) {
+  def notifyInsertOn(v: ChangingSetValue, value: Int): Unit = {
     assert(v == cond)
 
     //mettre a jour le heap
@@ -168,7 +168,7 @@ abstract class MiaxConstArray(vars: Array[Int], cond: SetValue, default: Int)
   }
 
   @inline
-  def notifyDeleteOn(v: ChangingSetValue, value: Int) {
+  def notifyDeleteOn(v: ChangingSetValue, value: Int): Unit = {
     assert(v == cond)
 
     //mettre a jour le heap
@@ -226,7 +226,7 @@ abstract class MiaxConstArrayLazy(vars: Array[Int], cond: SetValue, default: Int
   def Ord(v: Int): Int
 
   @inline
-  private[this] def updateFromHeap() {
+  private[this] def updateFromHeap(): Unit = {
     if (h.isEmpty) {
       this := default
     } else {
@@ -235,7 +235,7 @@ abstract class MiaxConstArrayLazy(vars: Array[Int], cond: SetValue, default: Int
   }
 
   @inline
-  private[this] def updateFromNonEmptyHeap() {
+  private[this] def updateFromNonEmptyHeap(): Unit = {
     this := vars(h.getFirst)
   }
 
@@ -258,7 +258,7 @@ abstract class MiaxConstArrayLazy(vars: Array[Int], cond: SetValue, default: Int
    * does not perform final update because was not supposed to be impacted
    */
   @inline
-  private[this] def trimBackLog(){
+  private[this] def trimBackLog(): Unit ={
     while(true){
       if(backLog == null) return
       if(!isBacklogged(backLog.head)){
@@ -315,7 +315,7 @@ abstract class MiaxConstArrayLazy(vars: Array[Int], cond: SetValue, default: Int
   }
 
   @inline
-  def notifyInsertOn(v: ChangingSetValue, value: Int) {
+  def notifyInsertOn(v: ChangingSetValue, value: Int): Unit = {
     assert(v == cond)
     if(consideredValue(value)){ //anihilation
       assert(isBacklogged(value))
@@ -333,7 +333,7 @@ abstract class MiaxConstArrayLazy(vars: Array[Int], cond: SetValue, default: Int
   }
 
   @inline
-  def notifyDeleteOn(v: ChangingSetValue, value: Int) {
+  def notifyDeleteOn(v: ChangingSetValue, value: Int): Unit = {
     assert(v == cond)
     if(!consideredValue(value)){ //anihilation
       assert(isBacklogged(value))

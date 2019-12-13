@@ -154,7 +154,7 @@ class CPInsertSeqVar(
     }
   }
 
-  def allMembers: Seq[Int] = allMembersIterator.toArray
+  def allMembers: Seq[Int] = allMembersIterator.toSeq
 
   def nextMember(elem: Int): Int = {
     if(!isMember(elem)) throw new Exception("Elem is not a member")
@@ -347,13 +347,13 @@ class CPInsertSeqVar(
   }
 
   def clearInsertionsFor(elem: Int): Unit = {
-    insertions(elem).empty()
+    insertions(elem).makeEmpty()
   }
 
 
   //Propagation methods:
 
-  def callPropagateWhenDomainChanges(c: Constraint) {
+  def callPropagateWhenDomainChanges(c: Constraint): Unit = {
     onDomainL2.register(c)
     setDomain.callPropagateWhenDomainChanges(c)
   }

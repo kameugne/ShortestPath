@@ -34,19 +34,19 @@ case class OccurrencesOf(v: SeqValue, a:IntValue)
 
   finishInitialization()
 
-  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate) {
+  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate): Unit = {
     scheduleForPropagation()
   }
 
-  override def notifyIntChanged(v : ChangingIntValue, id : Int, OldVal : Int, NewVal : Int){
+  override def notifyIntChanged(v : ChangingIntValue, id : Int, OldVal : Int, NewVal : Int): Unit ={
     scheduleForPropagation()
   }
 
-  override def performInvariantPropagation() {
+  override def performInvariantPropagation(): Unit = {
     this := v.value.nbOccurrence(a.value)
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value equals v.value.positionsOfValue(a.value).size)
   }
 }

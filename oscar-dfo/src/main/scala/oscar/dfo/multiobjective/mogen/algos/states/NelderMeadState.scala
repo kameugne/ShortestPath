@@ -14,7 +14,6 @@
  ******************************************************************************/
 package oscar.dfo.multiobjective.mogen.algos.states
 
-import scala.Array.canBuildFrom
 import oscar.dfo.utils.MOOPoint
 import oscar.dfo.utils.MOEvaluator
 import oscar.dfo.utils.FeasibleRegion

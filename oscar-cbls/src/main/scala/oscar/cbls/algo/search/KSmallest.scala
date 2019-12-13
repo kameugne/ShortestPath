@@ -121,7 +121,7 @@ class LazyQuicksort(val array:Array[Int], key:Int => Int = a => a) extends Itera
   private[this] var toDo: QList = new QList(0, array.length - 1,null)
 
   private[this] var lastSortedPosition = -1
-  def sortUntil(k: Int) {
+  def sortUntil(k: Int): Unit = {
     if(k <= lastSortedPosition) return
     while (true) {
       if (toDo == null) return
@@ -138,7 +138,7 @@ class LazyQuicksort(val array:Array[Int], key:Int => Int = a => a) extends Itera
   }
 
   @inline
-  private[this] def sort1(l: Int, r: Int) {
+  private[this] def sort1(l: Int, r: Int): Unit = {
     val pivot: Int = key(array((l + r) / 2))
     var i = l
     var j = r

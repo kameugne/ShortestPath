@@ -147,7 +147,7 @@ class ConstantRoutingDistance(routes:ChangingSeqValue,
 
   affect(savedValues)
 
-  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate) {
+  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate): Unit = {
     if(!digestUpdates(changes)) {
       for(v <- 0 until this.v) recordTouchedVehicle(v)
       affect(computeValueFromScratch(changes.newValue))
@@ -392,7 +392,7 @@ class ConstantRoutingDistance(routes:ChangingSeqValue,
    * you also must call  recordTouchedVehicle(v:Int) for this saving to be effective.
    * @param s
    */
-  protected def saveCurrentCheckpoint(s:IntSequence){
+  protected def saveCurrentCheckpoint(s:IntSequence): Unit ={
     checkpoint = s
     if(perVehicle) {
       while (changedVehiclesSinceCheckpoint != null) {
@@ -407,7 +407,7 @@ class ConstantRoutingDistance(routes:ChangingSeqValue,
     if(v > 1) vehicleSearcher = RoutingConventionMethods.cachedVehicleReachingPosition(checkpoint,v)
   }
 
-  private def restoreCheckpoint(){
+  private def restoreCheckpoint(): Unit ={
     if(perVehicle) {
       while (changedVehiclesSinceCheckpoint != null) {
         val v = changedVehiclesSinceCheckpoint.head
@@ -420,7 +420,7 @@ class ConstantRoutingDistance(routes:ChangingSeqValue,
     }
   }
 
-  private def recordTouchedVehicle(v:Int){
+  private def recordTouchedVehicle(v:Int): Unit ={
     if(perVehicle){
       if(checkpoint!= null && !isVehicleChangedSinceCheckpoint(v)){
         savedValues(v) = distance(v).newValue
@@ -430,7 +430,7 @@ class ConstantRoutingDistance(routes:ChangingSeqValue,
     }
   }
 
-  private def affect(value:Array[Int]){
+  private def affect(value:Array[Int]): Unit ={
     var currentV = distance.length
     while(currentV >0){
       currentV -= 1
@@ -503,7 +503,7 @@ class ConstantRoutingDistance(routes:ChangingSeqValue,
     check(c, routes.value)
   }
 
-  def check(c : Checker,s:IntSequence) {
+  def check(c : Checker,s:IntSequence): Unit = {
     c.check(!distanceIsSymmetric || ConstantRoutingDistance.isDistanceSymmetric(distanceMatrix, n), Some("distance matrix should be symmetric if invariant told so"))
 
     if (perVehicle) {
@@ -580,7 +580,7 @@ class ConstantRoutingDistancePrecompute(routes:ChangingSeqValue,
   *
   * */
 
-  def computePrecomputedForwardCumulatedCostAtCheckpoint(vehicle : Int, seq : IntSequence) {
+  def computePrecomputedForwardCumulatedCostAtCheckpoint(vehicle : Int, seq : IntSequence): Unit = {
     var explorerOPt = seq.explorerAtAnyOccurrence(vehicle).get.next
     var prevValue = vehicle
     while(explorerOPt match{
@@ -599,7 +599,7 @@ class ConstantRoutingDistancePrecompute(routes:ChangingSeqValue,
     }){}
   }
 
-  def computePrecomputedBackwardCumulatedCostAtCheckpoint(vehicle : Int, seq : IntSequence) {
+  def computePrecomputedBackwardCumulatedCostAtCheckpoint(vehicle : Int, seq : IntSequence): Unit = {
     var explorerOPt = seq.explorerAtAnyOccurrence(vehicle).get.next
     var prevValue = vehicle
     while(explorerOPt match{
@@ -667,13 +667,13 @@ class ConstantRoutingDistancePrecompute(routes:ChangingSeqValue,
     }
   }
 
-  def doFWPrecomputeForVehicle(vehicle:Int){
+  def doFWPrecomputeForVehicle(vehicle:Int): Unit ={
     if(isFWPrecomputeUpToDate(vehicle)) return
     computePrecomputedForwardCumulatedCostAtCheckpoint(vehicle,checkpoint)
     isFWPrecomputeUpToDate(vehicle) = true
   }
 
-  def doBWPrecomputeForVehicle(vehicle:Int){
+  def doBWPrecomputeForVehicle(vehicle:Int): Unit ={
     if(isBWPrecomputeUpToDate(vehicle)) return
     computePrecomputedBackwardCumulatedCostAtCheckpoint(vehicle,checkpoint)
     isBWPrecomputeUpToDate(vehicle) = true

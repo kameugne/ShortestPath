@@ -40,12 +40,12 @@ class ConcreteDAGNode(val _UniqueID:Int) extends DAGNode{
   override def getDAGPrecedingNodes: Iterable[DAGNode] = PrecedingNodes
   override def getDAGSucceedingNodes: Iterable[DAGNode] = SucceedingNodes
 
-  def setAsPrecedingNodeKnownNotYetPreceding(b:ConcreteDAGNode){
+  def setAsPrecedingNodeKnownNotYetPreceding(b:ConcreteDAGNode): Unit ={
     PrecedingNodes = b :: PrecedingNodes
     b.SucceedingNodes = this :: b.SucceedingNodes
   }
 
-  def setAsSucceedingNodeKnownNotYetSucceeding(b:ConcreteDAGNode){
+  def setAsSucceedingNodeKnownNotYetSucceeding(b:ConcreteDAGNode): Unit ={
     b.setAsPrecedingNodeKnownNotYetPreceding(this)
   }
 }

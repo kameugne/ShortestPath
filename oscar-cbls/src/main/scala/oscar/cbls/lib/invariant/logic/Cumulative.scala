@@ -67,7 +67,7 @@ case class Cumulative(indices: Array[Int],
 
   for (i <- start.indices) insert(start(i).value, duration(i).value, amount(i).value, i)
 
-  def remove(start: Int, duration: Int, amount: Int, index: Int) {
+  def remove(start: Int, duration: Int, amount: Int, index: Int): Unit = {
     if (start < horizonPlus1) {
       for (t <- start until (horizonPlus1 min (start + duration))) {
         profile(t) :-= amount
@@ -76,7 +76,7 @@ case class Cumulative(indices: Array[Int],
     }
   }
 
-  def insert(start: Int, duration: Int, amount: Int, index: Int) {
+  def insert(start: Int, duration: Int, amount: Int, index: Int): Unit = {
     if (start < horizonPlus1) {
       for (t <- start until (horizonPlus1 min (start + duration))) {
         //sprintln(s"insert($start, $duration, $amount, $index) t=$t")
@@ -87,7 +87,7 @@ case class Cumulative(indices: Array[Int],
   }
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int): Unit = {
     if (start(index) == v) {
       //start
       remove(OldVal, duration(index).value, amount(index).value, index)
@@ -147,7 +147,7 @@ case class CumulativeNoSet(start: Array[IntValue],
 
   for (i <- start.indices) insert(start(i).value, duration(i).value, amount(i).value, i)
 
-  def remove(start: Int, duration: Int, amount: Int, index: Int) {
+  def remove(start: Int, duration: Int, amount: Int, index: Int): Unit = {
     if (start < horizonPlus1) {
       for (t <- start until (horizonPlus1 min (start + duration))) {
         profile(t) :-= amount
@@ -155,7 +155,7 @@ case class CumulativeNoSet(start: Array[IntValue],
     }
   }
 
-  def insert(start: Int, duration: Int, amount: Int, index: Int) {
+  def insert(start: Int, duration: Int, amount: Int, index: Int): Unit = {
     if (start < horizonPlus1) {
       for (t <- start until (horizonPlus1 min (start + duration))) {
         //sprintln(s"insert($start, $duration, $amount, $index) t=$t")
@@ -165,7 +165,7 @@ case class CumulativeNoSet(start: Array[IntValue],
   }
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int): Unit = {
     if (start(index) == v) {
       //start
       remove(OldVal, duration(index).value, amount(index).value, index)

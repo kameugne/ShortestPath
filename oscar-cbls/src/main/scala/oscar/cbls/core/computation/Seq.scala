@@ -204,7 +204,7 @@ class SeqUpdateMove(val fromIncluded:Int,val toIncluded:Int,val after:Int, val f
 
   //TODO: find O(1) solution
   private var localBijection:PiecewiseLinearBijectionNaive = null
-  private def ensureBijection(){
+  private def ensureBijection(): Unit ={
     if(localBijection == null) {
       localBijection = seq match{
         case m:MovedIntSequence
@@ -441,7 +441,7 @@ class SeqUpdateRollBackToCheckpoint(val checkpointValue:IntSequence,howToRollBac
   * notice that checkpoint definition is sent as any other update (although it is identity operator)
   */
 trait SeqNotificationTarget {
-  def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate)
+  def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate): Unit
 }
 
 class CBLSSeqConst(override val value:ConcreteIntSequence) extends SeqValue{
@@ -468,7 +468,7 @@ class CBLSSeqVar(givenModel:Store,
 
   model = givenModel
 
-  override def checkInternals(c : Checker){
+  override def checkInternals(c : Checker): Unit ={
     c.check(this.value.toList equals this.newValue.toList)
     c.check(this.toNotify.isInstanceOf[SeqUpdateLastNotified], Some("toNotify:" + toNotify))
   }
@@ -480,7 +480,7 @@ class CBLSSeqVar(givenModel:Store,
     * @param value the inserted value
     * @param pos the position where the value is located afer the insert is completed
     */
-  override def insertAtPosition(value:Int,pos:Int){
+  override def insertAtPosition(value:Int,pos:Int): Unit ={
     super.insertAtPosition(value,pos)
   }
 
@@ -490,7 +490,7 @@ class CBLSSeqVar(givenModel:Store,
     * @param pos the position where the value is located afer the insert is completed
     * @param seqAfter the sequence after the insert if performed. if you have it you can set it here, for speed
     */
-  override def insertAtPosition(value:Int,pos:Int,seqAfter:IntSequence){
+  override def insertAtPosition(value:Int,pos:Int,seqAfter:IntSequence): Unit ={
     super.insertAtPosition(value,pos,seqAfter)
   }
 
@@ -498,7 +498,7 @@ class CBLSSeqVar(givenModel:Store,
     * removes the value at the given position in the sequence, and shifts the tail by one position accordingly
     * @param position the position where the value is removed
     */
-  override  def remove(position:Int){
+  override  def remove(position:Int): Unit ={
     super.remove(position)
   }
 
@@ -507,7 +507,7 @@ class CBLSSeqVar(givenModel:Store,
     * @param position the position where the value is removed
     * @param seqAfter the sequence after the remove if performed. if you have it you can set it here, for speed
     */
-  override  def remove(position:Int,seqAfter:IntSequence){
+  override  def remove(position:Int,seqAfter:IntSequence): Unit ={
     super.remove(position,seqAfter)
   }
 
@@ -518,15 +518,15 @@ class CBLSSeqVar(givenModel:Store,
     * @param afterPosition
     * @param flip
     */
-  override def move(fromIncludedPosition:Int,toIncludedPosition:Int,afterPosition:Int,flip:Boolean){
+  override def move(fromIncludedPosition:Int,toIncludedPosition:Int,afterPosition:Int,flip:Boolean): Unit ={
     super.move(fromIncludedPosition,toIncludedPosition,afterPosition,flip)
   }
 
-  override def move(fromIncludedPosition:Int,toIncludedPosition:Int,afterPosition:Int,flip:Boolean,seqAfter:IntSequence){
+  override def move(fromIncludedPosition:Int,toIncludedPosition:Int,afterPosition:Int,flip:Boolean,seqAfter:IntSequence): Unit ={
     super.move(fromIncludedPosition,toIncludedPosition,afterPosition,flip,seqAfter)
   }
 
-  override def flip(fromIncludedPosition:Int,toIncludedPosition:Int){
+  override def flip(fromIncludedPosition:Int,toIncludedPosition:Int): Unit ={
     super.flip(fromIncludedPosition,toIncludedPosition)
   }
 
@@ -536,31 +536,31 @@ class CBLSSeqVar(givenModel:Store,
       firstSegmentStartPosition, firstSegmentEndPosition, flipFirstSegment,
       secondSegmentStartPosition, secondSegmentEndPosition, flipSecondSegment)
 
-  override  def setValue(seq:IntSequence) {super.setValue(seq)}
+  override  def setValue(seq:IntSequence): Unit = {super.setValue(seq)}
 
-  override  def :=(seq:IntSequence) {super.setValue(seq)}
+  override  def :=(seq:IntSequence): Unit = {super.setValue(seq)}
 
   override def defineCurrentValueAsCheckpoint(checkPointIsActive:Boolean):IntSequence = {
     super.defineCurrentValueAsCheckpoint(checkPointIsActive:Boolean)
   }
 
-  override def rollbackToTopCheckpoint(checkpoint:IntSequence) {
+  override def rollbackToTopCheckpoint(checkpoint:IntSequence): Unit = {
     super.rollbackToTopCheckpoint(checkpoint)
   }
 
-  override def releaseTopCheckpoint(){
+  override def releaseTopCheckpoint(): Unit ={
     super.releaseTopCheckpoint()
   }
 
-  override protected def releaseTopCheckpointsToLevel(level : Int, included:Boolean){
+  override protected def releaseTopCheckpointsToLevel(level : Int, included:Boolean): Unit ={
     super.releaseTopCheckpointsToLevel(level,included)
   }
 
-  def <==(i: SeqValue) {IdentitySeq(i,this)}
+  def <==(i: SeqValue): Unit = {IdentitySeq(i,this)}
 
 
 
-  override def performPropagation(){performSeqPropagation()}
+  override def performPropagation(): Unit ={performSeqPropagation()}
 }
 
 object CBLSSeqVar{
@@ -680,7 +680,7 @@ et cette stack doit être mise à jour au moment de la notification.
 
 
 
-  protected def insertAtPosition(value:Int,pos:Int){
+  protected def insertAtPosition(value:Int,pos:Int): Unit ={
     assert(pos <= toNotify.newValue.size)
     assert(pos >= 0)
     recordPerformedIncrementalUpdate((prev,newSeq) =>
@@ -689,7 +689,7 @@ et cette stack doit être mise à jour au moment de la notification.
     notifyChanged()
   }
 
-  protected def insertAtPosition(value:Int,pos:Int,seqAfter:IntSequence){
+  protected def insertAtPosition(value:Int,pos:Int,seqAfter:IntSequence): Unit ={
     assert(pos <= toNotify.newValue.size)
     assert(pos >= 0)
     recordPerformedIncrementalUpdate((prev,_) => SeqUpdateInsert(value,pos,prev,seqAfter))
@@ -697,7 +697,7 @@ et cette stack doit être mise à jour au moment de la notification.
     notifyChanged()
   }
 
-  protected def remove(position:Int){
+  protected def remove(position:Int): Unit ={
     require(toNotify.newValue.size > position && position >=0,
       "removing at position " + position + " size is " + newValue.size)
     recordPerformedIncrementalUpdate((prev,newSeq) =>
@@ -707,19 +707,19 @@ et cette stack doit être mise à jour au moment de la notification.
     notifyChanged()
   }
 
-  protected def remove(position:Int,seqAfter:IntSequence){
+  protected def remove(position:Int,seqAfter:IntSequence): Unit ={
     require(toNotify.newValue.size > position && position >=0, "removing at position " + position + " size is " + newValue.size)
     recordPerformedIncrementalUpdate((prev,_) => SeqUpdateRemove(position,prev,seqAfter))
     //println(" notify remove " + toNotify)
     notifyChanged()
   }
 
-  protected def flip(fromIncludedPosition:Int,toIncludedPosition:Int){
+  protected def flip(fromIncludedPosition:Int,toIncludedPosition:Int): Unit ={
     move(fromIncludedPosition,toIncludedPosition,fromIncludedPosition-1,true)
   }
 
   //-1 for first position
-  protected def move(fromIncludedPosition:Int,toIncludedPosition:Int,afterPosition:Int,flip:Boolean){
+  protected def move(fromIncludedPosition:Int,toIncludedPosition:Int,afterPosition:Int,flip:Boolean): Unit ={
     //println("seq.move(fromIncludedPosition:" + fromIncludedPosition + " toIncludedPosition:" + toIncludedPosition +" afterPosition:" + afterPosition + " flip:" + flip+ ")")
     require(toNotify.newValue.size > toIncludedPosition)
     require(toNotify.newValue.size > afterPosition, "toNotify.newValue.size(=" + toNotify.newValue.size + ") > afterPosition(=" + afterPosition + ")")
@@ -740,7 +740,7 @@ et cette stack doit être mise à jour au moment de la notification.
   }
 
   //-1 for first position
-  protected def move(fromIncludedPosition:Int,toIncludedPosition:Int,afterPosition:Int,flip:Boolean,seqAfter:IntSequence){
+  protected def move(fromIncludedPosition:Int,toIncludedPosition:Int,afterPosition:Int,flip:Boolean,seqAfter:IntSequence): Unit ={
 
     require(toNotify.newValue.size > fromIncludedPosition)
     require(toNotify.newValue.size > toIncludedPosition)
@@ -762,7 +762,7 @@ et cette stack doit être mise à jour au moment de la notification.
                              flipFirstSegment:Boolean,
                              secondSegmentStartPosition:Int,
                              secondSegmentEndPosition:Int,
-                             flipSecondSegment:Boolean){
+                             flipSecondSegment:Boolean): Unit ={
 
     require(firstSegmentStartPosition <= firstSegmentEndPosition)
     require(secondSegmentStartPosition <= secondSegmentEndPosition)
@@ -786,7 +786,7 @@ et cette stack doit être mise à jour au moment de la notification.
   }
 
   @inline
-  private final def recordPerformedIncrementalUpdate(updatefct:(SeqUpdate,IntSequence) => SeqUpdate) {
+  private final def recordPerformedIncrementalUpdate(updatefct:(SeqUpdate,IntSequence) => SeqUpdate): Unit = {
     //for notification recording
     toNotify = updatefct(toNotify,null)
 
@@ -798,7 +798,7 @@ et cette stack doit être mise à jour au moment de la notification.
     }
   }
 
-  protected [computation] def setValue(seq:IntSequence){
+  protected [computation] def setValue(seq:IntSequence): Unit ={
     require(
       performedSinceTopCheckpoint == null &&
         !toNotify.anyCheckpointDefinition &&
@@ -880,7 +880,7 @@ et cette stack doit être mise à jour au moment de la notification.
     toNotify.newValue
   }
 
-  protected def rollbackToTopCheckpoint(checkpoint : IntSequence){
+  protected def rollbackToTopCheckpoint(checkpoint : IntSequence): Unit ={
 
     // println("ChangingSeqValue got rollback to top checkpoint my level:" + levelOfTopCheckpoint)
     require(checkpoint quickEquals topCheckpoint,
@@ -948,7 +948,7 @@ et cette stack doit être mise à jour au moment de la notification.
     * releases the top checkpoint
     * @note You do not need to be at the top checkpoint value to call this, you can do it later no worries.
     */
-  protected def releaseTopCheckpoint() {
+  protected def releaseTopCheckpoint(): Unit = {
     require(topCheckpoint != null)
     require(levelOfTopCheckpoint >= 0)
 
@@ -989,7 +989,7 @@ et cette stack doit être mise à jour au moment de la notification.
     }
   }
 
-  protected def releaseTopCheckpointsToLevel(level:Int,included:Boolean){
+  protected def releaseTopCheckpointsToLevel(level:Int,included:Boolean): Unit ={
     if(included) {
       while (levelOfTopCheckpoint >= level) {
         releaseTopCheckpoint()
@@ -1002,7 +1002,7 @@ et cette stack doit être mise à jour au moment de la notification.
   }
 
   @inline
-  final protected def performSeqPropagation(){
+  final protected def performSeqPropagation(): Unit ={
     val dynListElements = getDynamicallyListeningElements
     val headPhantom = dynListElements.headPhantom
     var currentElement = headPhantom.next
@@ -1029,7 +1029,7 @@ et cette stack doit être mise à jour au moment de la notification.
     toNotify = SeqUpdateLastNotified(mOldValue)
   }
 
-  protected def :=(seq:IntSequence){
+  protected def :=(seq:IntSequence): Unit ={
     setValue(seq)
     notifyChanged()
   }
@@ -1246,14 +1246,14 @@ abstract class SeqInvariant(initialValue:IntSequence,
 
   override final def name: String = if(customName == null) this.getClass.getSimpleName else customName
 
-  override final def performPropagation(){
+  override final def performPropagation(): Unit ={
     performInvariantPropagation()
     performSeqPropagation()
   }
 }
 
 object IdentitySeq{
-  def apply(fromValue:SeqValue,toValue:CBLSSeqVar){
+  def apply(fromValue:SeqValue,toValue:CBLSSeqVar): Unit ={
     fromValue match{
       case c:CBLSSeqConst => toValue := c.value
       case c:ChangingSeqValue => new IdentitySeq(c,toValue)
@@ -1271,7 +1271,7 @@ class IdentitySeq(fromValue:ChangingSeqValue, toValue:CBLSSeqVar)
 
   toValue := fromValue.value
 
-  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate) {
+  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate): Unit = {
     assert(v == fromValue)
     digestChanges(changes)
   }
@@ -1281,7 +1281,7 @@ class IdentitySeq(fromValue:ChangingSeqValue, toValue:CBLSSeqVar)
   private var topCheckpoint:IntSequence = null
   private var levelTopCheckpoint:Int = -1
 
-  private def popTopCheckpoint(){
+  private def popTopCheckpoint(): Unit ={
     checkPointStackNotTop match{
       case (cp) :: tail =>
         topCheckpoint = cp
@@ -1294,7 +1294,7 @@ class IdentitySeq(fromValue:ChangingSeqValue, toValue:CBLSSeqVar)
     }
   }
 
-  private def pushTopCheckpoint(newCheckpoint:IntSequence){
+  private def pushTopCheckpoint(newCheckpoint:IntSequence): Unit ={
     if(topCheckpoint != null) {
       checkPointStackNotTop = topCheckpoint :: checkPointStackNotTop
     }
@@ -1302,7 +1302,7 @@ class IdentitySeq(fromValue:ChangingSeqValue, toValue:CBLSSeqVar)
     levelTopCheckpoint += 1
   }
 
-  def digestChanges(changes:SeqUpdate){
+  def digestChanges(changes:SeqUpdate): Unit ={
     changes match{
       case SeqUpdateInsert(value:Int,pos:Int,prev:SeqUpdate) =>
         digestChanges(prev)
@@ -1344,7 +1344,7 @@ class IdentitySeq(fromValue:ChangingSeqValue, toValue:CBLSSeqVar)
     }
   }
 
-  override def checkInternals(c:Checker){
+  override def checkInternals(c:Checker): Unit ={
     c.check(toValue.newValue.toList equals fromValue.newValue.toList,
       Some("IdentitySeq: toValue.value=" + toValue.value + " should equal fromValue.value=" + fromValue.value))
   }
@@ -1368,7 +1368,7 @@ class IdentitySeqTopMostCheckpointCircleAbove(fromValue:ChangingSeqValue, toValu
 
   toValue := fromValue.value
 
-  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate) {
+  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate): Unit = {
     assert(v == fromValue)
     digestChanges(changes)
   }
@@ -1378,7 +1378,7 @@ class IdentitySeqTopMostCheckpointCircleAbove(fromValue:ChangingSeqValue, toValu
 
   private var levelTopCheckpoint:Int = -1
 
-  private def popTopCheckpoint(){
+  private def popTopCheckpoint(): Unit ={
     checkPointStackNotTop match{
       case cp :: tail =>
         topCheckpoint = cp
@@ -1391,7 +1391,7 @@ class IdentitySeqTopMostCheckpointCircleAbove(fromValue:ChangingSeqValue, toValu
     }
   }
 
-  private def pushTopCheckpoint(newCheckpoint:IntSequence){
+  private def pushTopCheckpoint(newCheckpoint:IntSequence): Unit ={
     if(topCheckpoint != null) {
       checkPointStackNotTop = topCheckpoint :: checkPointStackNotTop
       topCheckpoint = newCheckpoint
@@ -1402,7 +1402,7 @@ class IdentitySeqTopMostCheckpointCircleAbove(fromValue:ChangingSeqValue, toValu
     }
   }
 
-  def digestChanges(changes:SeqUpdate){
+  def digestChanges(changes:SeqUpdate): Unit ={
     changes match{
       case SeqUpdateInsert(value:Int,pos:Int,prev:SeqUpdate) =>
         digestChanges(prev)
@@ -1451,7 +1451,7 @@ class IdentitySeqTopMostCheckpointCircleAbove(fromValue:ChangingSeqValue, toValu
     }
   }
 
-  override def checkInternals(c:Checker){
+  override def checkInternals(c:Checker): Unit ={
     c.check(toValue.value equals fromValue.value,
       Some("IdentitySeqTopMostCheckpointCircleAbove: toValue.value=" +toValue.value + " should equal fromValue.value=" + fromValue.value))
   }
@@ -1463,7 +1463,7 @@ class SeqCheckpointedValueStack[@specialized T]{
   private[this] var _outputAtTopCheckpoint:T = null.asInstanceOf[T]
   private[this] var checkpointStackLevel:Int = -1
 
-  private def popCheckpointStackToLevel(level:Int,included:Boolean){
+  private def popCheckpointStackToLevel(level:Int,included:Boolean): Unit ={
     if(included){
       while(checkpointStackLevel>=level) {
         popCheckpoint()
@@ -1475,7 +1475,7 @@ class SeqCheckpointedValueStack[@specialized T]{
     }
   }
 
-  private def popCheckpoint(){
+  private def popCheckpoint(): Unit ={
     require(checkpointStackLevel >=0)
     if(checkpointStackLevel>0){
       val top = checkpointStackNotTop.head
@@ -1497,7 +1497,7 @@ class SeqCheckpointedValueStack[@specialized T]{
 
   def topCheckpoint:IntSequence = _topCheckpoint
 
-  def defineTopCheckpoint(checkpoint:IntSequence,savedValue:T){
+  def defineTopCheckpoint(checkpoint:IntSequence,savedValue:T): Unit ={
     if(checkpointStackLevel>=0){
       checkpointStackNotTop = (_topCheckpoint,_outputAtTopCheckpoint) :: checkpointStackNotTop
     }
@@ -1511,7 +1511,7 @@ class SeqCheckpointedValueStack[@specialized T]{
     outputAtTopCheckpoint(checkpoint)
   }
 
-  def defineCheckpoint(checkpoint:IntSequence,checkpointLevel:Int,savedValue:T){
+  def defineCheckpoint(checkpoint:IntSequence,checkpointLevel:Int,savedValue:T): Unit ={
     require(checkpointLevel <= checkpointStackLevel+1)
     require(checkpointLevel >= 0)
     popCheckpointStackToLevel(checkpointLevel,true)

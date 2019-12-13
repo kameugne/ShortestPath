@@ -125,11 +125,11 @@ case class RoundUpCustom(from: IntValue, duration: IntValue, forbiddenZones: Lis
   this := roundup()
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     scheduleForPropagation()
   }
 
-  override def performInvariantPropagation() {
+  override def performInvariantPropagation(): Unit = {
     this := roundup()
   }
 
@@ -200,7 +200,7 @@ case class RoundUpCustom(from: IntValue, duration: IntValue, forbiddenZones: Lis
     else down
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(from.value <= this.value)
     for ((a, b) <- forbiddenZones) {
       c.check((this.value > b) || (this.value + duration.value - 1 < a), Some("from.value = " + from.value + " (this.value " + this.value + " > zoneEnd " + b + ") || (this.value " + this.value + "+ duration.value " + duration.value + " -1 < zoneStart " + a + ")"))

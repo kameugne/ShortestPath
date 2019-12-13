@@ -43,7 +43,7 @@ class ActivityWithDeadline(
 
   planning.addActivityWithDeadline(this)
 
-  def setDeadline(deadline: IntValue, weight: IntValue) {
+  def setDeadline(deadline: IntValue, weight: IntValue): Unit = {
     tardiness <== Max2(0, (earliestEndDate - deadline) * weight)
   }
 

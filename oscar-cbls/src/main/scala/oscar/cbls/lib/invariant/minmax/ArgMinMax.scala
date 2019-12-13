@@ -106,7 +106,7 @@ abstract class ArgMiax[X <: IntValue](vars: Array[X], cond: SetValue, default: I
   var miax = if (firsts.isEmpty) default else vars(h.getFirst).value
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int): Unit = {
     //mettre a jour le heap
     h.notifyChange(index)
 
@@ -138,7 +138,7 @@ abstract class ArgMiax[X <: IntValue](vars: Array[X], cond: SetValue, default: I
   }
 
   @inline
-  def notifyInsertOn(v: ChangingSetValue, value: Int) {
+  def notifyInsertOn(v: ChangingSetValue, value: Int): Unit = {
     assert(v == cond && cond != null)
     keyForRemoval(value) = registerDynamicDependency(vars(value), value)
 
@@ -155,7 +155,7 @@ abstract class ArgMiax[X <: IntValue](vars: Array[X], cond: SetValue, default: I
   }
 
   @inline
-  def notifyDeleteOn(v: ChangingSetValue, value: Int) {
+  def notifyDeleteOn(v: ChangingSetValue, value: Int): Unit = {
     assert(v == cond && cond != null)
 
     keyForRemoval(value).performRemove()
@@ -182,7 +182,7 @@ abstract class ArgMiax[X <: IntValue](vars: Array[X], cond: SetValue, default: I
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     var count: Int = 0
     for (i <- vars.indices) {
       if (cond == null || (cond != null && cond.value.contains(i))) {

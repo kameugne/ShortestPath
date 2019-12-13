@@ -124,7 +124,7 @@ class MapPath(m : VisualMap, o: MapPoint, d : MapPoint, col : Color = Color.BLAC
 
 object MapPath {
   
-  def main(args : Array[String]) {
+  def main(args : Array[String]): Unit = {
     val mp = new MapPath(new VisualMap(), 50.466246,4.869278,50.708634,4.572647)
     println(mp._lines.map(lin => "["+lin.orig._1+","+lin.orig._2+" to "+lin.dest._1+","+lin.dest._2+"]")) 
     

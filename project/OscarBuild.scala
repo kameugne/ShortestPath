@@ -10,7 +10,7 @@ object OscarBuild {
   lazy val buildSettings = Seq(
     organization := "oscar",
     version := "4.1.0-SNAPSHOT",
-    scalaVersion := "2.12.10",
+    scalaVersion := "2.13.1",
     sbtVersion := "1.3.0"
   )
 
@@ -41,7 +41,7 @@ object OscarBuild {
       t => Tests.Argument(TestFrameworks.ScalaTest, "-u","<%s>" format (t / "streams/test"))
     }).value,
     fork in PerfTest := true,
-    parallelExecution in PerfTest := false
+    parallelExecution in PerfTest := false,
   )
 
   object Resolvers {
@@ -58,7 +58,7 @@ object OscarBuild {
     val jfreechart = "org.jfree" % "jfreechart" % "1.5.0"
     val jsci = "net.sf.jsci" % "jsci" % "1.2"
     val scalaParserCombinators = "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.2"
-    val scalaXml = "org.scala-lang.modules" %% "scala-xml" % "1.1.0"
+    val scalaXml = "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
     val scalaSwing = "org.scala-lang.modules" %% "scala-swing" % "2.1.1"
     val swingx = "org.swinglabs" % "swingx" % "1.6.1"
     val swingxWs = "org.swinglabs" % "swingx-ws" % "1.0"
@@ -71,20 +71,18 @@ object OscarBuild {
     val scallop = "org.rogach" % "scallop_2.11" % "1.0.0"
 
     // Akka
-    val akkaActor = "com.typesafe.akka" %% "akka-actor" % "2.5.12"
-    val akkaRemote = "com.typesafe.akka" %% "akka-remote" % "2.5.12"
+    val akkaActor = "com.typesafe.akka" %% "akka-actor" % "2.6.1"
+    val akkaRemote = "com.typesafe.akka" %% "akka-remote" % "2.6.1"
 
     // Test libraries
     val junit = "junit" % "junit" % "4.12" % Test
     val scalaCheck = "org.scalacheck" %% "scalacheck" % "1.14.0" % Test
-    val scalaTest = "org.scalatest" %% "scalatest" % "3.2.0-SNAP10" % Test
+    val scalaTest = "org.scalatest" %% "scalatest" % "3.1.0" % Test
 
     val junit2 = "junit" % "junit" % "4.12" % PerfTest
     val scalaCheck2 = "org.scalacheck" %% "scalacheck" % "1.14.0" % PerfTest
-    val scalaTest2 = "org.scalatest" %% "scalatest" % "3.2.0-SNAP10" % PerfTest
+    val scalaTest2 = "org.scalatest" %% "scalatest" % "3.2.0-M2" % PerfTest
 
     val testDeps = Seq(junit, scalaCheck, scalaTest)
   }
-
-
 }

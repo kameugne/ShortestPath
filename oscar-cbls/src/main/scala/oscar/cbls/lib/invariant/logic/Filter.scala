@@ -43,14 +43,14 @@ case class Filter(values:Array[IntValue], cond:(Int=>Boolean)=_>0)
   finishInitialization()
 
   @inline
-  override def notifyIntChanged(v:ChangingIntValue,index:Int, OldVal:Int,NewVal:Int){
+  override def notifyIntChanged(v:ChangingIntValue,index:Int, OldVal:Int,NewVal:Int): Unit ={
     val OldCond = cond(OldVal)
     val NewCond = cond(NewVal)
     if(OldCond  && !NewCond) this.deleteValue(index)
     else if(NewCond && !OldCond) this.insertValue(index)
   }
 
-  override def checkInternals(c:Checker){
+  override def checkInternals(c:Checker): Unit ={
     for(i <- values.indices){
       c.check(!cond(values(i).value) || this.value.contains(i),
           Some("!cond(values(i).value) || this.value.contains(i)"))

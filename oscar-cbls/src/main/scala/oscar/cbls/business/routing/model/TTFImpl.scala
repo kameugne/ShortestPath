@@ -37,7 +37,7 @@ class TTFMatrix(nodeCount: Int, defaultTTF: PrimitiveTravelTimeFunction) extends
 
   private val matrix: Array[Array[PrimitiveTravelTimeFunction]] = Array.fill(nodeCount, nodeCount)(defaultTTF)
 
-  def setTTF(from: Int, to: Int, ttf: PrimitiveTravelTimeFunction) {
+  def setTTF(from: Int, to: Int, ttf: PrimitiveTravelTimeFunction): Unit = {
     matrix(from)(to) = ttf
   }
 
@@ -133,13 +133,13 @@ class TTFHistogram(val nbSlots: Int, val overallDuration: Int) extends Primitive
     "TTFHistogram(nbSlots " + nbSlots + ", " + { var strSlots = ""; for (slot <- slots) { strSlots += slot + "; " }; strSlots } + ")"
   }
 
-  def setTravelDurationAtSlot(slotNumber: Int, duration: Int) {
+  def setTravelDurationAtSlot(slotNumber: Int, duration: Int): Unit = {
     slots(slotNumber) = duration
     nimMaxAccurate = false
   }
   def getTravelDurationAtSlot(slotNumber: Int): Int = slots(rectifySlot(slotNumber))
 
-  private def updateMinMax() {
+  private def updateMinMax(): Unit = {
     if (!nimMaxAccurate) {
       nimMaxAccurate = true
       min = Int.MaxValue
@@ -226,7 +226,7 @@ class TTFSegments(val NbPoints: Int, val overallDuration: Int) extends Primitive
   private var max: Int = 0
 
   /**throws an error if the X is smaller than the predecessor's X, or if the slope is too steep*/
-  def setPoint(pointNr: Int, pointX: Int, pointY: Int) {
+  def setPoint(pointNr: Int, pointX: Int, pointY: Int): Unit = {
     this.pointX(pointNr) = pointX
     this.pointY(pointNr) = pointY
     nimMaxAccurate = false
@@ -257,7 +257,7 @@ class TTFSegments(val NbPoints: Int, val overallDuration: Int) extends Primitive
     (pointX(rectifiedPoint) + shifting, pointY(rectifiedPoint))
   }
 
-  private def updateMinMax() {
+  private def updateMinMax(): Unit = {
     if (!nimMaxAccurate) {
       nimMaxAccurate = true
       min = Int.MaxValue

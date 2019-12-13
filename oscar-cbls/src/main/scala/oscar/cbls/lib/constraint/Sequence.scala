@@ -108,7 +108,7 @@ case class Sequence(variables: Array[_ <: IntValue], length:Int, Max:Int, predic
   }
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, i: Int, OldVal: Int, NewVal: Int){
+  override def notifyIntChanged(v: ChangingIntValue, i: Int, OldVal: Int, NewVal: Int): Unit ={
     if (predicate(OldVal)){ //TODO: on peut éventuellement conserver predicate(OldVal) dans un tableau de booléens
       if(!predicate(NewVal)){
         //decrease the count
@@ -150,7 +150,7 @@ case class Sequence(variables: Array[_ <: IntValue], length:Int, Max:Int, predic
     * this will be called for each invariant after propagation is performed.
     * It requires that the Model is instantiated with the variable debug set to true.
     */
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     val countCheck:Array[Int] = Array.tabulate(sequences.size)(_ => 0)
     /**the violation of the sequence starting here*/
     val violatedCheck = Array.tabulate(sequences.size)(_ => 0)

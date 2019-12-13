@@ -126,14 +126,14 @@ class ForwardCumulativeConstraintOnVehicle(routes:ChangingSeqValue,
     true
   }
 
-  override def setNodesUnrouted(unroutedNodes : Iterable[Int]){
+  override def setNodesUnrouted(unroutedNodes : Iterable[Int]): Unit ={
     for(node <- unroutedNodes){
       violation :-= contentToViolation(contentAtNode(node))
       contentAtNode(node) = 0
     }
   }
 
-  override def setVehicleContentAtEnd(vehicle : Int, lastNode : Int){}
+  override def setVehicleContentAtEnd(vehicle : Int, lastNode : Int): Unit ={}
 
   /**
    * @param vehicle
@@ -155,7 +155,7 @@ class ForwardCumulativeConstraintOnVehicle(routes:ChangingSeqValue,
     }
   }
 
-  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate){
+  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate): Unit ={
 
     val (toUpdateZonesAndVehicleStartAfter,potentiallyRemovedNodes) =
       digestUpdatesAndUpdateVehicleStartPositionsAndSearchZoneToUpdate(changes,Some(RedBlackTreeMap.empty[List[(Int,Int)]],currentVehicleLocation),List.empty,v.value)

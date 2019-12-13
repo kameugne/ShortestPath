@@ -48,7 +48,7 @@ case class MaxArray(varss: Array[IntValue], cond: SetValue = null, default: Int 
         bulkedVar.foldLeft(Int.MinValue)((acc, intvar) => if (intvar.max > acc) intvar.max else acc))
     }else super.performBulkComputation(bulkedVar)
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     for (v <- this.varss) {
       c.check(this.value >= v.value,
         Some("output.value (" + this.value + ") >= " + v.name + ".value (" + v.value + ")"))
@@ -77,7 +77,7 @@ case class MinArray(varss: Array[IntValue], cond: SetValue = null, default: Int 
         bulkedVar.foldLeft(Int.MaxValue)((acc, intvar) => if (intvar.max < acc) intvar.max else acc))
     }else super.performBulkComputation(bulkedVar)
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     for (v <- this.varss) {
       c.check(this.value <= v.value,
         Some("this.value (" + this.value + ") <= " + v.name + ".value (" + v.value + ")"))
@@ -140,7 +140,7 @@ with SetNotificationTarget{
   }
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int): Unit = {
     //mettre a jour le heap
     h.notifyChange(index)
     this := vars(h.getFirst).value
@@ -151,7 +151,7 @@ with SetNotificationTarget{
     for(deleted <- removedValues) notifyDeleteOn(v: ChangingSetValue, deleted)
   }
 
-  def notifyInsertOn(v: ChangingSetValue, value: Int) {
+  def notifyInsertOn(v: ChangingSetValue, value: Int): Unit = {
     assert(v == cond)
     keyForRemoval(value) = registerDynamicDependency(vars(value), value)
 
@@ -160,7 +160,7 @@ with SetNotificationTarget{
     this := vars(h.getFirst).value
   }
 
-  def notifyDeleteOn(v: ChangingSetValue, value: Int) {
+  def notifyDeleteOn(v: ChangingSetValue, value: Int): Unit = {
     assert(v == cond)
 
     keyForRemoval(value).performRemove()

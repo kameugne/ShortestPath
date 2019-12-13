@@ -49,7 +49,7 @@ case class TwoOpt(segmentStartValues:()=>Iterable[Int],
   val v = vrp.v
   val seq = vrp.routes
 
-  def doMove(fromPositionIncluded:Int,toPositionIncluded:Int) {
+  def doMove(fromPositionIncluded:Int,toPositionIncluded:Int): Unit = {
     seq.flip(fromPositionIncluded,toPositionIncluded)
   }
 
@@ -156,7 +156,7 @@ case class TwoOptMove(segmentStartPosition:Int,
 
   override def impactedPoints: Iterable[Int] = vrp.routes.value.valuesBetweenPositionsQList(segmentStartPosition,segmentEndPosition)
 
-  override def commit() {
+  override def commit(): Unit = {
     neighborhood.doMove(segmentStartPosition, segmentEndPosition)
   }
 

@@ -2,7 +2,7 @@ package oscar.algo.paretofront
 
 import oscar.util.RandomGenerator
 
-class LinearList[U: Numeric, T <: ParetoElement[U]] extends ParetoFront[U, T] with Traversable[T] {
+class LinearList[U: Numeric, T <: ParetoElement[U]] extends ParetoFront[U, T] with Iterable[T] {
   var elements = List[T]()
   
   /** Attempts to insert an element in the Pareto front and modifies the tree accordingly */
@@ -54,6 +54,8 @@ class LinearList[U: Numeric, T <: ParetoElement[U]] extends ParetoFront[U, T] wi
     }
     false
   }
+
+  override def iterator: Iterator[T] = ???
 }
 
 object LinearList {

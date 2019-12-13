@@ -84,7 +84,7 @@ class DeltaSetBasedSeqVar(seq: CPSeqVar, val deltaSet: DeltaSetVar, idx: Int) ex
   }
 
 
-  final override def update() {
+  final override def update(): Unit = {
     val seqvs = seq.length
     if (seqvs != _oldSizeAppended) trail()
     _oldSizeAppended = seq.length

@@ -50,7 +50,7 @@ class NonMoveableActivity(startDate: Int, duration: IntValue, planning: Planning
       (startDate + duration.min) + ").")
 
   override def canAddPrecedence: Boolean = false
-  override def close() {
+  override def close(): Unit = {
 
     additionalPredecessors := SortedSet.empty[Int]
     allPrecedingActivities = SortedSet.empty[Int]

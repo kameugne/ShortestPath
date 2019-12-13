@@ -64,7 +64,7 @@ class CPGraphVar(val s: CPStore, val nNodes: Int, inputEdges: List[(Int,Int)], v
    * @param c
    * @see oscar.cp.core.Constraint#propagate()
    */
-  def callPropagateWhenDomainChanges(c: Constraint) {
+  def callPropagateWhenDomainChanges(c: Constraint): Unit = {
     // call propagator of the two CPVarSet
     N.callPropagateWhenDomainChanges(c)
     E.callPropagateWhenDomainChanges(c)
@@ -73,7 +73,7 @@ class CPGraphVar(val s: CPStore, val nNodes: Int, inputEdges: List[(Int,Int)], v
   /**
    * Level L1 registration called if an edge becomes required -> Call the CPVarSet method
    */
-  def callValRequiredWhenRequiredValue(c: Constraint) {
+  def callValRequiredWhenRequiredValue(c: Constraint): Unit = {
     E.callValRequiredWhenRequiredValue(c)
   }
 

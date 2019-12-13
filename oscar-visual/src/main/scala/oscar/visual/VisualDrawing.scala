@@ -144,24 +144,24 @@ class VisualDrawing(flipped: Boolean, scalable: Boolean) extends JPanel {
   addMouseMotionListener {
     val drawingPanel = this
     new MouseMotionListener() {
-      override def mouseMoved(e: MouseEvent) {
+      override def mouseMoved(e: MouseEvent): Unit = {
         drawingPanel.setToolTipText("")
         for (s <- shapes) {
           s.showToolTip(e.getPoint)
         }         
       }
-      override def mouseDragged(e: MouseEvent) {}
+      override def mouseDragged(e: MouseEvent): Unit = {}
     }
   }
   
-  private def scale(factor: Double) {
+  private def scale(factor: Double): Unit = {
     scale = scale * factor
     repaint()
   }
   
   addMouseListener {
     new MouseListener() {
-      override def mouseClicked(e: MouseEvent) {
+      override def mouseClicked(e: MouseEvent): Unit = {
         if (SwingUtilities.isRightMouseButton(e)) {
           scale(0.9)
         }
@@ -174,10 +174,10 @@ class VisualDrawing(flipped: Boolean, scalable: Boolean) extends JPanel {
           }
         }
       }
-      override def mouseEntered(e: MouseEvent) {}
-      override def mousePressed(e: MouseEvent) {}
-      override def mouseExited(e: MouseEvent) {}
-      override def mouseReleased(e: MouseEvent) {}
+      override def mouseEntered(e: MouseEvent): Unit = {}
+      override def mousePressed(e: MouseEvent): Unit = {}
+      override def mouseExited(e: MouseEvent): Unit = {}
+      override def mouseReleased(e: MouseEvent): Unit = {}
     }    
   }
 

@@ -49,7 +49,7 @@ class SuperActivity(start: Activity, end: Activity,  override val name: String =
 
   override def canAddPrecedence: Boolean = start.canAddPrecedence
 
-  override def close() {
+  override def close(): Unit = {
 
     start.close()
     end.close()
@@ -73,17 +73,17 @@ class SuperActivity(start: Activity, end: Activity,  override val name: String =
     //ParasiticPrecedences = SortedSet.empty[Int]
   }
 
-  override def addDynamicPredecessor(t: Activity, Verbose: Boolean = false) {
+  override def addDynamicPredecessor(t: Activity, Verbose: Boolean = false): Unit = {
     start.addDynamicPredecessor(t, Verbose)
   }
 
-  override def removeDynamicPredecessor(t: Activity, Verbose: Boolean = false) {
+  override def removeDynamicPredecessor(t: Activity, Verbose: Boolean = false): Unit = {
     start.removeDynamicPredecessor(t, Verbose)
   }
   override def getEndActivity: Activity = end.getEndActivity
   override def getStartActivity: Activity = start.getStartActivity
 
-  override def addStaticPredecessor(j: Activity) {
+  override def addStaticPredecessor(j: Activity): Unit = {
     start.addStaticPredecessor(j)
   }
 }

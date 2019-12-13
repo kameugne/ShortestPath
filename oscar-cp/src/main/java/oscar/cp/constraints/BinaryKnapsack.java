@@ -28,7 +28,7 @@ import oscar.cp.core.Constraint;
 import oscar.cp.core.CPStore;
 import oscar.cp.core.variables.CPVar;
 import scala.collection.Iterable;
-import scala.collection.JavaConversions;
+import scala.jdk.javaapi.CollectionConverters;
 
 
 /**
@@ -67,7 +67,7 @@ public class BinaryKnapsack extends Constraint {
 	public Iterable<CPVar> associatedVars() {
 		List<CPVar> l = new LinkedList<>(Arrays.asList(x));
 		l.add(c);
-		return JavaConversions.iterableAsScalaIterable(l);
+		return CollectionConverters.asScala(l);
 	}
 
     /**

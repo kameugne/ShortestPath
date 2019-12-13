@@ -29,7 +29,7 @@ abstract sealed class SearchResult
 case object NoMoveFound extends SearchResult
 
 case class MoveFound(m: Move) extends SearchResult {
-  def commit() { m.commit() }
+  def commit(): Unit = { m.commit() }
   def objAfter = m.objAfter
   override def toString: String = m.toString
 }
@@ -45,7 +45,7 @@ abstract class JumpNeighborhood extends Neighborhood {
    * notice that this method is called when the move is committed,
    * which happens after the neighborhood returns the move.
    */
-  def doIt()
+  def doIt(): Unit
 
   /**
    * this method checks that the jump can actually be performed
@@ -77,11 +77,11 @@ abstract class JumpNeighborhood extends Neighborhood {
 
 abstract class JumpNeighborhoodParam[T] extends Neighborhood {
 
-  final def doIt() {
+  final def doIt(): Unit = {
     doIt(getParam)
   }
 
-  def doIt(param: T)
+  def doIt(param: T): Unit
 
   /**if null is returned, the neighborhood returns NoMoveFound*/
   def getParam: T
@@ -121,9 +121,9 @@ abstract class Neighborhood(name:String = null) {
 
 
   //this resets the internal state of the Neighborhood
-  def reset() {}
+  def reset(): Unit = {}
 
-  def resetStatistics() {}
+  def resetStatistics(): Unit = {}
 
   override def toString: String = (if(name == null) this.getClass.getSimpleName else name)
 
@@ -136,7 +136,7 @@ abstract class Neighborhood(name:String = null) {
    */
   var _verbose: Int = 0
   def verbose: Int = _verbose
-  def verbose_=(i: Int) {
+  def verbose_=(i: Int): Unit = {
     _verbose = i
     additionalStringGenerator = null
   }
@@ -147,7 +147,7 @@ abstract class Neighborhood(name:String = null) {
    * sets the verbosity level with an additiojnal string generator that ins called eieher on eahc move (level = 1)
    *   or for each explored neighbor (level = 2)
    */
-  def verboseWithExtraInfo(verbosity: Int, additionalString: () => String) {
+  def verboseWithExtraInfo(verbosity: Int, additionalString: () => String): Unit = {
     verbose = verbosity
     additionalStringGenerator = additionalString
   }
@@ -396,7 +396,7 @@ abstract class EasyNeighborhood[M<:Move](best:Boolean = false, neighborhoodName:
    * every time you explore a neighbor, you must perform the calls to notifyMoveExplored or moveRequested(newObj) && submitFoundMove(myMove)){
    * as explained in the documentation of this class
    */
-  def exploreNeighborhood()
+  def exploreNeighborhood(): Unit
 
   def instantiateCurrentMove(newObj: Int): M
 
@@ -499,7 +499,7 @@ abstract class EasyNeighborhoodMultiLevel[M<:Move](neighborhoodName:String=null)
    * every time you explore a neighbor, you must perform the calls to notifyMoveExplored or moveRequested(newObj) && submitFoundMove(myMove)){
    * as explained in the documentation of this class
    */
-  def exploreNeighborhood()
+  def exploreNeighborhood(): Unit
 
   def instantiateCurrentMove(newObj: Int): M
 

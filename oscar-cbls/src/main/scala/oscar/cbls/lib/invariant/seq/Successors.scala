@@ -63,11 +63,11 @@ class Successors(sequence:ChangingSeqValue, successorValues:Array[CBLSSetVar])
 
   computeAllFromScratch(sequence.value)
 
-  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate) {
+  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate): Unit = {
     performUpdate(changes:SeqUpdate)
   }
 
-  private def performUpdate(changes:SeqUpdate){
+  private def performUpdate(changes:SeqUpdate): Unit ={
     computeImpactedValues(changes) match{
       case None =>
       computeAllFromScratch(changes.newValue)
@@ -130,13 +130,13 @@ class Successors(sequence:ChangingSeqValue, successorValues:Array[CBLSSetVar])
     }
   }
 
-  def computeForValues(seq:IntSequence, values:SortedSet[Int]){
+  def computeForValues(seq:IntSequence, values:SortedSet[Int]): Unit ={
     for(value <- values){
       successorValues(value) := SortedSet.empty[Int] ++ seq.positionsOfValue(value).flatMap(position => seq.successorPos2Val(position))
     }
   }
 
-  def computeAllFromScratch(seq:IntSequence){
+  def computeAllFromScratch(seq:IntSequence): Unit ={
     val emptySet = SortedSet.empty[Int]
     successorValues.foreach(node => node := emptySet)
 
@@ -173,7 +173,7 @@ class Successors(sequence:ChangingSeqValue, successorValues:Array[CBLSSetVar])
     successorValues
   }
 
-  override def checkInternals(c : Checker){
+  override def checkInternals(c : Checker): Unit ={
     val fromScratch = computeAllFromScratchNoAffect(sequence.value)
     for(node <- 0 to sequence.maxValue){  //TODO: sequence .value.size, and we can have redundant values in the equence!!!
       c.check(

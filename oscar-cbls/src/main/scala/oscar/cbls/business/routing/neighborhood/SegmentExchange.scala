@@ -60,7 +60,7 @@ case class SegmentExchange(val vrp: VRP,
 
   val n = vrp.n
 
-  override def exploreNeighborhood() {
+  override def exploreNeighborhood(): Unit = {
 
     val seqValue = seq.defineCurrentValueAsCheckpoint(true)
 
@@ -184,7 +184,7 @@ case class SegmentExchange(val vrp: VRP,
   }
 
   def doMove(firstSegmentStartPosition:Int, firstSegmentEndPosition:Int, flipFirstSegment:Boolean,
-             secondSegmentStartPosition: Int, secondSegmentEndPosition: Int, flipSecondSegment:Boolean){
+             secondSegmentStartPosition: Int, secondSegmentEndPosition: Int, flipSecondSegment:Boolean): Unit ={
     seq.swapSegments(firstSegmentStartPosition,
       firstSegmentEndPosition,
       flipFirstSegment,
@@ -311,7 +311,7 @@ case class SegmentExchangeOnSegments(vrp: VRP,
   }
 
   def doMove(firstSegmentStartPosition:Int, firstSegmentEndPosition:Int, flipFirstSegment: Boolean,
-             secondSegmentStartPosition: Int, secondSegmentEndPosition: Int, flipSecondSegment: Boolean){
+             secondSegmentStartPosition: Int, secondSegmentEndPosition: Int, flipSecondSegment: Boolean): Unit ={
     seq.swapSegments(firstSegmentStartPosition,
       firstSegmentEndPosition,
       flipFirstSegment,
@@ -335,7 +335,7 @@ case class SegmentExchangeOnSegmentsMove(firstSegmentStartPosition:Int,
     neighborhood.vrp.routes.value.valuesBetweenPositionsQList(firstSegmentStartPosition,firstSegmentEndPosition) ++
       neighborhood.vrp.routes.value.valuesBetweenPositionsQList(secondSegmentStartPosition,secondSegmentEndPosition)
 
-  override def commit() {
+  override def commit(): Unit = {
     neighborhood.doMove(
       firstSegmentStartPosition,firstSegmentEndPosition, flipFirstSegment,
       secondSegmentStartPosition, secondSegmentEndPosition, flipSecondSegment)
@@ -361,7 +361,7 @@ case class SegmentExchangeMove(firstSegmentStartPosition:Int,
     neighborhood.vrp.routes.value.valuesBetweenPositionsQList(firstSegmentStartPosition,firstSegmentEndPosition) ++
       neighborhood.vrp.routes.value.valuesBetweenPositionsQList(secondSegmentStartPosition,secondSegmentEndPosition)
 
-  override def commit() {
+  override def commit(): Unit = {
     neighborhood.doMove(
       firstSegmentStartPosition,firstSegmentEndPosition, flipFirstSegment,
       secondSegmentStartPosition, secondSegmentEndPosition, flipSecondSegment)

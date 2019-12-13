@@ -99,7 +99,7 @@ class MagicBoolArray(val length:Int,initVal:Boolean = false){
   def all:Boolean = ???
 
   @inline
-  private [this] def resetArray(){
+  private [this] def resetArray(): Unit ={
     var i = internalArray.length
     while(i > 0){
       i -= 1

@@ -43,12 +43,12 @@ case class DoOnFirstMove(a: Neighborhood, proc: () => Unit) extends Neighborhood
   }
 
   //this resets the internal state of the move combinators
-  override def reset() {
+  override def reset(): Unit = {
     isFirstMove = true
     super.reset()
   }
 
-  private def notifyMoveTaken() {
+  private def notifyMoveTaken(): Unit = {
     proc()
     isFirstMove = false
   }
@@ -76,11 +76,11 @@ case class DoOnMove(a: Neighborhood,
     }
   }
 
-  def callBackBeforeMove(m: Move)() {
+  def callBackBeforeMove(m: Move)(): Unit = {
     if (procBeforeMove != null) procBeforeMove(m)
   }
 
-  def callBackAfterMove(m: Move)() {
+  def callBackAfterMove(m: Move)(): Unit = {
     if (procAfterMove != null) procAfterMove(m)
   }
 }

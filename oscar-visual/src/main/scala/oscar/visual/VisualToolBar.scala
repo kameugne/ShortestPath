@@ -25,7 +25,7 @@ class VisualToolBar() extends JToolBar {
   def addButton(label:String,actionOnClick : => Unit): Unit ={
     val button = new JButton(label)
     button.addActionListener( new ActionListener() {
-		override def actionPerformed(e:ActionEvent) { actionOnClick }
+		override def actionPerformed(e:ActionEvent): Unit = { actionOnClick }
 		})
 		add(button)
   }
@@ -43,7 +43,7 @@ class VisualToolBar() extends JToolBar {
 
 object VisualToolBar{
   	
-  def main(args : Array[String]) {
+  def main(args : Array[String]): Unit = {
 		val f = VisualFrame("toto");
 		val tb = f.createToolBar()
 		val d = VisualDrawing(false);

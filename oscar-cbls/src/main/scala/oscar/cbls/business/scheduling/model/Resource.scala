@@ -45,7 +45,7 @@ abstract class Resource(planning: Planning, n: String) {
    * this method is called by the framework before starting the scheduling
    * put anything that needs to be done after instantiation here
    */
-  def close()
+  def close(): Unit
 
   /**
    * the first violation of the resource in time

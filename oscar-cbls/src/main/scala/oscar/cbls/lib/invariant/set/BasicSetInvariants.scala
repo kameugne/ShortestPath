@@ -52,13 +52,13 @@ case class Union(left: SetValue, right: SetValue)
   }
 
   @inline
-  def notifyInsertOn(v: ChangingSetValue, value: Int) {
+  def notifyInsertOn(v: ChangingSetValue, value: Int): Unit = {
     assert(left == v || right == v)
     this.insertValue(value)
   }
 
   @inline
-  def notifyDeleteOn(v: ChangingSetValue, value: Int) {
+  def notifyDeleteOn(v: ChangingSetValue, value: Int): Unit = {
     assert(left == v || right == v)
     if (v == left) {
       if (!right.value.contains(value)) {
@@ -73,7 +73,7 @@ case class Union(left: SetValue, right: SetValue)
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value.intersect(left.value.union(right.value)).size == this.value.size,
       Some("this.value.intersect(left.value.union(right.value)).size == this.value.size"))
   }
@@ -108,7 +108,7 @@ case class UnionAll(sets: Iterable[SetValue])
   }
 
   @inline
-  def notifyInsertOn(v: ChangingSetValue, value: Int) {
+  def notifyInsertOn(v: ChangingSetValue, value: Int): Unit = {
     assert(sets.exists(_ == v))
 
     val i = value + offset
@@ -120,7 +120,7 @@ case class UnionAll(sets: Iterable[SetValue])
   }
 
   @inline
-  def notifyDeleteOn(v: ChangingSetValue, value: Int) {
+  def notifyDeleteOn(v: ChangingSetValue, value: Int): Unit = {
     assert(sets.exists(_ == v))
 
     val i = value + offset
@@ -130,7 +130,7 @@ case class UnionAll(sets: Iterable[SetValue])
     count(i) = count(i) - 1
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     this.min to this.max foreach {
       value =>
         c.check(this.value.iterator.contains(value) == (count(value - offset) > 0),
@@ -161,7 +161,7 @@ case class Inter(left: SetValue, right: SetValue)
   }
 
   @inline
-  def notifyInsertOn(v: ChangingSetValue, value: Int) {
+  def notifyInsertOn(v: ChangingSetValue, value: Int): Unit = {
     if (v == left) {
       if (right.value.contains(value)) {
         this.insertValue(value)
@@ -176,12 +176,12 @@ case class Inter(left: SetValue, right: SetValue)
   }
 
   @inline
-  def notifyDeleteOn(v: ChangingSetValue, value: Int) {
+  def notifyDeleteOn(v: ChangingSetValue, value: Int): Unit = {
     assert(left == v || right == v)
     this.deleteValue(value)
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value.intersect(left.value.intersect(right.value)).size == this.value.size,
       Some("this.value.intersect(left.value.intersect(right.value)).size == this.value.size"))
   }
@@ -212,7 +212,7 @@ case class SetMap(a: SetValue, fun: Int => Int,
   }
 
   @inline
-  def notifyInsertOn(v: ChangingSetValue, value: Int) {
+  def notifyInsertOn(v: ChangingSetValue, value: Int): Unit = {
     val mappedV = fun(value)
     val oldCount = outputCount.getOrElse(mappedV, 0)
     if (oldCount == 0) {
@@ -222,7 +222,7 @@ case class SetMap(a: SetValue, fun: Int => Int,
   }
 
   @inline
-  def notifyDeleteOn(v: ChangingSetValue, value: Int) {
+  def notifyDeleteOn(v: ChangingSetValue, value: Int): Unit = {
     val mappedV = fun(value)
     val oldCount = outputCount.getOrElse(mappedV, 0)
     if (oldCount == 1) {
@@ -231,7 +231,7 @@ case class SetMap(a: SetValue, fun: Int => Int,
     outputCount += ((mappedV, oldCount - 1))
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value.intersect(a.value.map(fun)).size == this.value.size)
   }
 }
@@ -268,7 +268,7 @@ case class Diff(left: SetValue, right: SetValue)
   }
 
   @inline
-  private def notifyInsertOn(v: ChangingSetValue, value: Int) {
+  private def notifyInsertOn(v: ChangingSetValue, value: Int): Unit = {
     if (v == left) {
       if (!right.value.contains(value)) {
         this.insertValue(value)
@@ -283,7 +283,7 @@ case class Diff(left: SetValue, right: SetValue)
   }
 
   @inline
-  private def notifyDeleteOn(v: ChangingSetValue, value: Int) {
+  private def notifyDeleteOn(v: ChangingSetValue, value: Int): Unit = {
     if (v == left) {
       if (!right.value.contains(value)) {
         this.deleteValue(value)
@@ -297,7 +297,7 @@ case class Diff(left: SetValue, right: SetValue)
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value equals (left.value diff (right.value)),
       Some("Diff error! out:" + this.value.toList + " left:" + left.value.toList + " right:" + right.value.toList + " computed diff:" + (left.value diff(right.value))))
   }
@@ -319,7 +319,7 @@ case class Cardinality(v: SetValue)
     this := newValue.size
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value == v.value.size, Some("this.value == v.value.size"))
   }
 }
@@ -341,7 +341,7 @@ case class MakeSet(on: SortedSet[IntValue])
   this := SortedSet.empty[Int] ++ counts.keySet
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     assert(on.contains(v), "MakeSet notified for non interesting var :" + on.toList.exists(_ == v) + " " + on.toList)
 
     assert(OldVal != NewVal)
@@ -361,7 +361,7 @@ case class MakeSet(on: SortedSet[IntValue])
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value.size <= on.size,
       Some("this.value.size (" + this.value.size
         + ") <= on.size (" + on.size + ")"))
@@ -398,7 +398,7 @@ case class Interval(lb: IntValue, ub: IntValue)
     for (i <- lb.value to ub.value) this.insertValue(i)
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     if (v == lb) {
       if (OldVal < NewVal) {
         //intervale reduit
@@ -422,7 +422,7 @@ case class Interval(lb: IntValue, ub: IntValue)
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value.size == 0.max(ub.value - lb.value + 1),
       Some("this.value.size (" + this.value.size
         + ") == 0.max(ub.value (" + ub.value
@@ -477,7 +477,7 @@ case class TakeAny(from: SetValue, default: Int)
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     if (from.value.isEmpty) {
       c.check(this.value == default,
         Some("this.value (" + this.value
@@ -500,12 +500,12 @@ case class Singleton(v: IntValue)
   registerStaticAndDynamicDependency(v)
   finishInitialization()
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     assert(this.value.size == 1)
     assert(this.value.head == v.value)
   }
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     assert(v == this.v)
     //ici, on propage tout de suite, c'est les variables qui font le stop and go.
     this.deleteValue(OldVal)
@@ -553,7 +553,7 @@ case class TakeAnyToSet(from: SetValue)
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     if (from.value.isEmpty) {
       c.check(this.value.isEmpty,
         Some("output.value (" + this.value
@@ -580,7 +580,7 @@ case class BelongsTo(v: IntValue, set: SetValue)
   registerStaticAndDynamicDependenciesNoID(v, set)
   finishInitialization()
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     this := (if (set.value.contains(NewVal)) 1 else 0)
   }
 
@@ -591,7 +591,7 @@ case class BelongsTo(v: IntValue, set: SetValue)
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value == (if (set.value.contains(v.value)) 1 else 0))
   }
 }

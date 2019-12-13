@@ -109,7 +109,7 @@ abstract class FunctionGraphic() extends VisualDrawing(false,false) with StopWat
   removeMouseListener(getMouseListeners.head)
   removeMouseMotionListener(getMouseMotionListeners.head)
 
-  def notifyNewObjectiveValue(objValue:Int, objTime:Long)
+  def notifyNewObjectiveValue(objValue:Int, objTime:Long): Unit
 
   def clear(): Unit ={
     super.clear()
@@ -123,9 +123,9 @@ abstract class FunctionGraphic() extends VisualDrawing(false,false) with StopWat
     //repaint()
   }
 
-  def setTimeBorders(position:Int){}
+  def setTimeBorders(position:Int): Unit ={}
 
-  def setMaxNumberOfObject(percentage:scala.Double){}
+  def setMaxNumberOfObject(percentage:scala.Double): Unit ={}
 }
 
 /** This class has the purpose to draw the objective function curve.

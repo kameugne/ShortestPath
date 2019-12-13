@@ -33,11 +33,11 @@ case class Length(v: SeqValue,maxSequenceLength:Int = Int.MaxValue)
   registerStaticAndDynamicDependency(v)
   finishInitialization()
 
-  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate) {
+  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes: SeqUpdate): Unit = {
     this := changes.newValue.size
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value == v.value.size, Some("this.value == v.value.size"))
   }
 }

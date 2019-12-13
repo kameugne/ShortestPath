@@ -56,7 +56,7 @@ class CumulativeResource(planning: Planning, val maxAmount: Int = 1, name: Strin
   def worseOverShootTime: Int = HighestUsePositions.value.firstKey
 
   /**called by activities to register itself to the resource*/
-  def notifyUsedBy(j: Activity, amount: IntValue) {
+  def notifyUsedBy(j: Activity, amount: IntValue): Unit = {
     if (activitiesAndUse.isDefinedAt(j)) {
       activitiesAndUse += ((j, activitiesAndUse.get(j).get + amount))
     } else {
@@ -88,7 +88,7 @@ class CumulativeResource(planning: Planning, val maxAmount: Int = 1, name: Strin
     conflictSet.map(_._1)
   }
 
-  def close() {
+  def close(): Unit = {
 
     val tasks: Array[Activity] = activitiesAndUse.keys.toArray
 
@@ -182,7 +182,7 @@ case class VariableResource(planning: Planning with VariableResources,
      * Extends the merging period starting at given time,
      * i.e. increments period's duration.
      */
-    def extendPeriod(startDate: Int) {
+    def extendPeriod(startDate: Int): Unit = {
       val period = merging(startDate)
       merging(startDate) = (period._1 + 1, period._2)
     }
@@ -264,7 +264,7 @@ case class VariableResource(planning: Planning with VariableResources,
            * - adds period (startDate, duration + 1, amount - diff) to merging periods
            * - sets remaining amount difference to zero
            */
-          def dividePeriod(startDate: Int) {
+          def dividePeriod(startDate: Int): Unit = {
             val period = merging(startDate)
             merged(startDate) = (period._1, diff) :: merged(startDate)
             merging(startDate) = (period._1 + 1, period._2 - diff)
@@ -313,7 +313,7 @@ case class VariableResource(planning: Planning with VariableResources,
    * @author yoann.guyot@cetic.be
    */
   private def applyRestrictionAt(time: Int,
-                                 restriction: (Int, Int)) {
+                                 restriction: (Int, Int)): Unit = {
     var (duration, occupation) = restriction
 
     /**

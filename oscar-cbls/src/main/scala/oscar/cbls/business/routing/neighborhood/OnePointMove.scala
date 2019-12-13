@@ -54,7 +54,7 @@ case class OnePointMove(nodesToMove: () => Iterable[Int],
   //the indice to start with for the exploration
   var startIndice: Int = 0
 
-  override def exploreNeighborhood() {
+  override def exploreNeighborhood(): Unit = {
 
     val iterationSchemeOnZone =
       if (hotRestart) HotRestart(nodesToMove(), startIndice)
@@ -121,7 +121,7 @@ case class OnePointMove(nodesToMove: () => Iterable[Int],
     startIndice = 0
   }
 
-  def doMove(positionOfMovedPoint:Int, positionOfNewPredecessor:Int) {
+  def doMove(positionOfMovedPoint:Int, positionOfNewPredecessor:Int): Unit = {
     seq.move(positionOfMovedPoint,positionOfMovedPoint,positionOfNewPredecessor,false)
   }
 }
@@ -144,7 +144,7 @@ case class OnePointMoveMove(movedPoint: Int,movedPointPosition:Int,
 
   override def impactedPoints: Iterable[Int] = List(movedPoint,newPredecessor)
 
-  override def commit() {
+  override def commit(): Unit = {
     neighborhood.doMove(movedPointPosition, newPredecessorPosition)
   }
 

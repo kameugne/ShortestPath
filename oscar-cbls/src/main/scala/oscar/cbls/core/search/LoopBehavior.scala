@@ -58,7 +58,7 @@ case class First(maxNeighbors:() => Int = () => Int.MaxValue) extends LoopBehavi
       }
     }
 
-    def notifyFound(){
+    def notifyFound(): Unit ={
       iterable.foundMove = true
     }
 
@@ -80,7 +80,7 @@ case class Best(maxNeighbors:() => Int = () => Int.MaxValue) extends LoopBehavio
       }
     }
 
-    def notifyFound(){}
+    def notifyFound(): Unit ={}
     (iterable,notifyFound _)
   }
 }

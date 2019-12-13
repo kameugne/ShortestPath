@@ -68,7 +68,7 @@ case class DisjunctiveConstDuration(start: Array[IntValue],
   private val oldstarts = start.map(v => v.value)
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, index: Int, oldstart: Int, newstart: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, index: Int, oldstart: Int, newstart: Int): Unit = {
     //TODO: This is not completely incremental (but still linear instead of quadratic)!
     val dur = duration(index)
     val oldend = oldstart + dur
@@ -94,7 +94,7 @@ case class DisjunctiveConstDuration(start: Array[IntValue],
     Violations(v.asInstanceOf[IntValue])
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     //TODO
   }
 }
@@ -164,7 +164,7 @@ case class Disjunctive(start: Array[IntValue],
   }
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, index: Int, oldValue: Int, newValue: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, index: Int, oldValue: Int, newValue: Int): Unit = {
     if(index <0){
       //a duration has changed
       notifyDurChanged(index + nbTask,oldValue, newValue)
@@ -174,7 +174,7 @@ case class Disjunctive(start: Array[IntValue],
     }
   }
 
-  private def notifyStartChanged(taskID:Int,oldStart:Int,newStart:Int) {
+  private def notifyStartChanged(taskID:Int,oldStart:Int,newStart:Int): Unit = {
     val dur = duration(taskID).value
     if (dur == 0) return
 
@@ -184,7 +184,7 @@ case class Disjunctive(start: Array[IntValue],
     updateTask(taskID,oldStart,newStart,oldEnd,newEnd)
   }
 
-  private def notifyDurChanged(taskID:Int,oldDur:Int,newDur:Int){
+  private def notifyDurChanged(taskID:Int,oldDur:Int,newDur:Int): Unit ={
     if(oldDur == 0 && newDur !=0){
       nonZeroTasks = nonZeroTasks + taskID
     }else if (oldDur !=0 && newDur == 0){
@@ -198,7 +198,7 @@ case class Disjunctive(start: Array[IntValue],
     updateTask(taskID,startTask,startTask,oldEnd,newEnd)
   }
 
-  def updateTask(taskID:Int,oldStart:Int,newStart:Int,oldEnd:Int,newEnd:Int){
+  def updateTask(taskID:Int,oldStart:Int,newStart:Int,oldEnd:Int,newEnd:Int): Unit ={
     //TODO: This is not completely incremental (but still linear instead of quadratic)!
     //We cannot break symmetries here because they are already broken since this method is called with one task set
     for(otherTaskID <- nonZeroTasks if taskID != otherTaskID){
@@ -222,7 +222,7 @@ case class Disjunctive(start: Array[IntValue],
     violationsVarsMap(v.asInstanceOf[IntValue])
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
 
     var violationFromScratch = 0
     val violationArrayFromScratch = Array.fill(nbTask)(0)

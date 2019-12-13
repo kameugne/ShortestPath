@@ -52,7 +52,7 @@ class PDPConstraints(vrp: VRP, fastConstraints: ConstraintSystem, slowConstraint
     * Add the precedences constraints.
     * Typically, we want to keep the order of the nodes of each chain
     */
-  private def addPrecedencesConstraints(precedences: Precedence) {
+  private def addPrecedencesConstraints(precedences: Precedence): Unit = {
     val vehicleOfNodes = vrp.vehicleOfNode
     for(start <- precedences.nodesStartingAPrecedence)
       fastConstraints.add(EQ(vehicleOfNodes(start),vehicleOfNodes(precedences.nodesEndingAPrecedenceStartedAt(start).head)))

@@ -6,7 +6,7 @@ import org.xcsp.checker.SolutionChecker
 import org.xcsp.parser.entries.XConstraints.XCtr
 import org.xcsp.parser.entries.XObjectives.XObj
 
-import scala.collection.JavaConversions._
+import scala.jdk.CollectionConverters._
 
 /**
   * A "library-friendly" version of SolutionChecker

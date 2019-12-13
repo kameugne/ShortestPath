@@ -25,7 +25,7 @@ class DisjointSets[A](min: Int, max: Int) {
 
   val all = Array.tabulate(max - min + 1)(i => makeSet(min + i))
 
-  def reset() {
+  def reset(): Unit = {
     var i = 0
     while (i < all.size) {
       all(i).reset
@@ -36,7 +36,7 @@ class DisjointSets[A](min: Int, max: Int) {
   /**
     * for each value in min..max, store some initial data(i) in the sets
     */
-  def resetAndSetData(data: Int => A) {
+  def resetAndSetData(data: Int => A): Unit = {
     var i = 0
     while (i < all.size) {
       all(i).reset
@@ -45,11 +45,11 @@ class DisjointSets[A](min: Int, max: Int) {
     }
   }
 
-  def union(v1: Int, v2: Int, data: A) {
+  def union(v1: Int, v2: Int, data: A): Unit = {
     union(all(v1 - min), all(v2 - min), Some(data))
   }
 
-  def union(v1: Int, v2: Int) {
+  def union(v1: Int, v2: Int): Unit = {
     union(all(v1 - min), all(v2 - min), None)
   }
 
@@ -68,7 +68,7 @@ class DisjointSets[A](min: Int, max: Int) {
     var parent: Set = this
     var data: Option[A] = None
 
-    def reset() {
+    def reset(): Unit = {
       max = elem
       min = elem
       rank = 0
@@ -78,11 +78,11 @@ class DisjointSets[A](min: Int, max: Int) {
 
   }
 
-  def union(x: Set, y: Set, data: Option[A]) {
+  def union(x: Set, y: Set, data: Option[A]): Unit = {
     link(findSet(x), findSet(y), data)
   }
 
-  private def link(x: Set, y: Set, data: Option[A]) {
+  private def link(x: Set, y: Set, data: Option[A]): Unit = {
     if (x == y) return
     if (x.rank > y.rank) {
       y.parent = x

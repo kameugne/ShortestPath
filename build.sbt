@@ -155,11 +155,9 @@ lazy val oscarVisual = (project in file("oscar-visual"))
   .settings(libraryDependencies ++= Dependencies.testDeps :+ Dependencies.jfreechart :+ Dependencies.swingx :+ Dependencies.swingxWs :+ Dependencies.scalaXml)
   .dependsOn(oscarUtil)
 
-
-
-
-
-
+scalafixDependencies in ThisBuild += "org.scala-lang.modules" %% "scala-collection-migrations" % "2.1.3"
+addCompilerPlugin(scalafixSemanticdb)
+scalacOptions ++= List("-Yrangepos", "-P:semanticdb:synthetics:on")
 
 
 

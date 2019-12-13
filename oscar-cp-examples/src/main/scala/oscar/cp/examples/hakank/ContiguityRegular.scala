@@ -17,7 +17,7 @@ package oscar.cp.examples.hakank
 import oscar.cp._
 import oscar.cp.constraints._
 import collection.mutable._
-import scala.collection.JavaConversions._
+import scala.jdk.CollectionConverters._
 /**
  * Global constraint Contiguity using regular in Oscar.
  * Global constraint contiguity using Transition

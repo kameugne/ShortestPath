@@ -64,7 +64,7 @@ class CPStore(final val propagStrength: CPPropagStrength) extends DFSearchNode w
   // Number of times an L1 filtering is called during the fix point
   private[this] var nCallsL2 = 0L   
   
-  override def resetStats() {
+  override def resetStats(): Unit = {
     super.resetStats()
     timeInFixedPoint = 0
     nCallsL1 = 0
@@ -133,7 +133,7 @@ class CPStore(final val propagStrength: CPPropagStrength) extends DFSearchNode w
 
   // set variable
 
-  def notifyRequired(constraints: PropagEventQueueVarSet, x: CPSetVar, v: Int) {
+  def notifyRequired(constraints: PropagEventQueueVarSet, x: CPSetVar, v: Int): Unit = {
     var q = constraints
     while (q != null) {
       val c = q.cons
@@ -146,7 +146,7 @@ class CPStore(final val propagStrength: CPPropagStrength) extends DFSearchNode w
     }
   }
 
-  def notifyRequiredIdx(constraints: PropagEventQueueVarSet, x: CPSetVar, v: Int) {
+  def notifyRequiredIdx(constraints: PropagEventQueueVarSet, x: CPSetVar, v: Int): Unit = {
     var q = constraints
     while (q != null) {
       val c = q.cons
@@ -159,7 +159,7 @@ class CPStore(final val propagStrength: CPPropagStrength) extends DFSearchNode w
     }
   }
 
-  def notifyExcluded(constraints: PropagEventQueueVarSet, x: CPSetVar, v: Int) {
+  def notifyExcluded(constraints: PropagEventQueueVarSet, x: CPSetVar, v: Int): Unit = {
     var q = constraints
     while (q != null) {
       val c = q.cons
@@ -172,7 +172,7 @@ class CPStore(final val propagStrength: CPPropagStrength) extends DFSearchNode w
     }
   }
 
-  def notifyExcludedIdx(constraints: PropagEventQueueVarSet, x: CPSetVar, v: Int) {
+  def notifyExcludedIdx(constraints: PropagEventQueueVarSet, x: CPSetVar, v: Int): Unit = {
     var q = constraints
     while (q != null) {
       val c = q.cons

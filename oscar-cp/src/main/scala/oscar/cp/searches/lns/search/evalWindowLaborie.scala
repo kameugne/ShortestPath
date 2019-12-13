@@ -130,7 +130,7 @@ class EvalWindowLaborie(solver: CPSolver, decisionVars: Array[CPIntVar], auxilia
       val now = timeInSearch
       val tWindowStart = if (solsFound.nonEmpty) solsFound.last.time - evalWindow else 0L
       val opLocalEfficiency = Metrics.efficiencySince(op, tWindowStart)
-      val searchEfficiency = Metrics.searchEfficiencySince(iterStartState, tWindowStart, now, currentSol.get.objective)
+      val searchEfficiency = Metrics.searchEfficiencySince(iterStartState.toSeq, tWindowStart, now, currentSol.get.objective)
 
       //Computing score:
       val totEfficiency = totalEfficiency
@@ -158,7 +158,7 @@ class EvalWindowLaborie(solver: CPSolver, decisionVars: Array[CPIntVar], auxilia
       val now = timeInSearch
       val tWindowStart = if (solsFound.nonEmpty) solsFound.last.time - evalWindow else 0L
       val opEfficiency = Metrics.efficiencySince(op, tWindowStart)
-      val searchEfficiency = Metrics.searchEfficiencySince(iterStartState, tWindowStart, now, currentSol.get.objective)
+      val searchEfficiency = Metrics.searchEfficiencySince(iterStartState.toSeq, tWindowStart, now, currentSol.get.objective)
 
       if (!solver.silent) {
         println("Search efficiency is " + searchEfficiency)

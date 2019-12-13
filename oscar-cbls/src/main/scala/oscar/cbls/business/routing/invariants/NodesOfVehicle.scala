@@ -74,7 +74,7 @@ class NodesOfVehicle(routes:ChangingSeqValue,
 
   affect(computeValueFromScratch(routes.value))
 
-  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes:SeqUpdate){
+  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes:SeqUpdate): Unit ={
     if(!digestUpdates(changes)) {
       dropCheckpoint()
       affect(computeValueFromScratch(changes.newValue))
@@ -157,11 +157,11 @@ class NodesOfVehicle(routes:ChangingSeqValue,
     }
   }
 
-  private def dropCheckpoint(){
+  private def dropCheckpoint(): Unit ={
     saveCurrentCheckpoint(null)
   }
 
-  private def saveCurrentCheckpoint(s:IntSequence){
+  private def saveCurrentCheckpoint(s:IntSequence): Unit ={
     savedCheckpoint = s
     while (movedNodesSinceCheckpointList!= null) {
       movedNodesSinceCheckpointArray(movedNodesSinceCheckpointList.head) = false
@@ -169,7 +169,7 @@ class NodesOfVehicle(routes:ChangingSeqValue,
     }
   }
 
-  private def restoreCheckpoint(){
+  private def restoreCheckpoint(): Unit ={
     while (movedNodesSinceCheckpointList!= null) {
       val node= movedNodesSinceCheckpointList.head
       movedNodesSinceCheckpointArray(movedNodesSinceCheckpointList.head) = false
@@ -179,7 +179,7 @@ class NodesOfVehicle(routes:ChangingSeqValue,
     }
   }
 
-  private def recordMovedPoint(node:Int, oldVehicle:Int, newVehicle:Int){
+  private def recordMovedPoint(node:Int, oldVehicle:Int, newVehicle:Int): Unit ={
     require(oldVehicle != newVehicle)
     if(savedCheckpoint!= null) {
       if (!movedNodesSinceCheckpointArray(node)) {
@@ -191,7 +191,7 @@ class NodesOfVehicle(routes:ChangingSeqValue,
     }
   }
 
-  private def affect(value:Array[SortedSet[Int]]){
+  private def affect(value:Array[SortedSet[Int]]): Unit ={
     var currentV = 0
     while(currentV <= v){
       nodesOfVehicleOrUnrouted(currentV) := value(currentV)

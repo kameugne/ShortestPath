@@ -227,7 +227,7 @@ case class WideningFlipNeighborhood(vars:Array[CBLSIntVar],
 
 
 object FlipMove{
-  def doFlip(fromPosition:Int,toPosition:Int,variables:Array[CBLSIntVar]){
+  def doFlip(fromPosition:Int,toPosition:Int,variables:Array[CBLSIntVar]): Unit ={
     if(fromPosition < toPosition){
       variables(fromPosition) :=: variables(toPosition)
       doFlip(fromPosition+1,toPosition-1,variables)

@@ -183,12 +183,12 @@ case class Profile(a:Neighborhood,ignoreInitialObj:Boolean = false) extends Neig
 
   def totalTimeSpent = totalTimeSpentMoveFound + totalTimeSpentNoMoveFound
 
-  override def resetStatistics(){
+  override def resetStatistics(): Unit ={
     resetThisStatistics()
     super.resetStatistics()
   }
 
-  def resetThisStatistics() {
+  def resetThisStatistics(): Unit = {
     nbCalls = 0
     nbFound = 0
     totalGain = 0
@@ -281,7 +281,7 @@ case class NoReset(a: Neighborhood) extends NeighborhoodCombinator(a) {
     a.getMove(obj, initialObj:Int, acceptanceCriteria)
 
   //this resets the internal state of the move combinators
-  override def reset() {}
+  override def reset(): Unit = {}
 }
 
 

@@ -27,7 +27,7 @@ class NoGoodRecorder(nMachine: Int, nActivityByMachine: Int, pgs: Array[Preceden
           else {
             delta += new PrecedenceLiteralWatcher(decision.machineIndex, decision.secondTask, decision.firstTask)
 //            if(delta.size >= 2) {
-              val noGood = new NoGoodWithWatchedLiterals(delta)
+              val noGood = new NoGoodWithWatchedLiterals(delta.toSeq)
               val l1 = noGood.watchedLiteral1
               val l2 = noGood.watchedLiteral2
               base.watchers(l1.machine)(l1.from)(l1.to).watch(noGood)

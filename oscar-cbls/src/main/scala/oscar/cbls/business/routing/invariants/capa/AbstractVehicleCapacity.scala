@@ -365,7 +365,7 @@ abstract class AbstractVehicleCapacity(n:Int,
 
   //this is a debug procedure
   def checkZonesToUpdate(zonesToUpdate: RedBlackTreeMap[List[(Int, Int)]],
-                         sequenceAfterMovesBeforeUpdates:IntSequence) {
+                         sequenceAfterMovesBeforeUpdates:IntSequence): Unit = {
 
     for (vehicle <- zonesToUpdate.keys) {
       val theZone = zonesToUpdate.get(vehicle).get
@@ -414,7 +414,7 @@ abstract class AbstractVehicleCapacity(n:Int,
 
 
 
-  def setNodesUnrouted(unroutedNodes:Iterable[Int])
+  def setNodesUnrouted(unroutedNodes:Iterable[Int]): Unit
 
   /**
    *
@@ -424,7 +424,7 @@ abstract class AbstractVehicleCapacity(n:Int,
    */
   def setVehicleContentAtNode(prevNode:Int, node: Int):Boolean
 
-  def setVehicleContentAtEnd(vehicle:Int, lastNode:Int)
+  def setVehicleContentAtEnd(vehicle:Int, lastNode:Int): Unit
 
   /**
    *
@@ -442,7 +442,7 @@ abstract class AbstractVehicleCapacity(n:Int,
    */
   protected def updateVehicleContentOnAllVehicle(s:IntSequence,
                                                  vehiclesToZonesToUpdate: RedBlackTreeMap[List[(Int, Int)]],
-                                                 vehicleLocationInSequence:VehicleLocation){
+                                                 vehicleLocationInSequence:VehicleLocation): Unit ={
 
     var tmpExplorer:Option[IntSequenceExplorer] = None
 

@@ -48,7 +48,7 @@ class MinConstArrayValueWise(constArray: Array[Int], condSet: SetValue, default:
                                 addedValues : Iterable[Int],
                                 removedValues : Iterable[Int],
                                 oldValue : SortedSet[Int],
-                                newValue : SortedSet[Int]){
+                                newValue : SortedSet[Int]): Unit ={
     //we start wit the added because we want to avoid exploring the values for nothing
     require(d == Int.MinValue)
 
@@ -94,7 +94,7 @@ class MinConstArrayValueWise(constArray: Array[Int], condSet: SetValue, default:
     IdToAddIntoTheScope
   }
 
-  private def removeValuesFromListenedUntilDiameterSmallerOrEqualToMaxDiameter(){
+  private def removeValuesFromListenedUntilDiameterSmallerOrEqualToMaxDiameter(): Unit ={
     while(heapOfConsideredPositions.size > maxDiameter) {
       require(nbListenedVals >0)
       val removedValue = idSortedByIncreasingValue(nbListenedVals-1)
@@ -104,7 +104,7 @@ class MinConstArrayValueWise(constArray: Array[Int], condSet: SetValue, default:
     }
   }
 
-  private def trimNotListenedTail(){
+  private def trimNotListenedTail(): Unit ={
     while(true) {
       val removedValue = idSortedByIncreasingValue(nbListenedVals-1)
       if(heapOfConsideredPositions.contains(removedValue)) return
@@ -114,7 +114,7 @@ class MinConstArrayValueWise(constArray: Array[Int], condSet: SetValue, default:
     }
   }
 
-  private def addValuesIntoListenedUntilDiameterIsStrictlyBiggerThanZeroOrFullScope(condValue:SortedSet[Int]){
+  private def addValuesIntoListenedUntilDiameterIsStrictlyBiggerThanZeroOrFullScope(condValue:SortedSet[Int]): Unit ={
     while(heapOfConsideredPositions.size == 0 && nbListenedVals < n) {
       val addedValue = addOneMoveValueIntoScope()
       if(condValue contains addedValue) {
@@ -123,7 +123,7 @@ class MinConstArrayValueWise(constArray: Array[Int], condSet: SetValue, default:
     }
   }
 
-  override def checkInternals(c : Checker) {
+  override def checkInternals(c : Checker): Unit = {
     if (condSet.value.isEmpty) c.check(value == default)
     else c.check(value == constArray(condSet.value.minBy(constArray(_))))
     c.check(nbListenedVals >= heapOfConsideredPositions.size)

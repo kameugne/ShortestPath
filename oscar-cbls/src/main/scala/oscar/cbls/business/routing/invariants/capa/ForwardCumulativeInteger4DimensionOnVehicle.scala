@@ -123,7 +123,7 @@ class ForwardCumulativeInteger4DimensionOnVehicle(routes:ChangingSeqValue,
 
   for(i <- lastPointOfVehicle) i.setDefiningInvariant(this)
 
-  override def notifyIntChanged(v: ChangingIntValue, id: Int, OldVal: Int, NewVal: Int){
+  override def notifyIntChanged(v: ChangingIntValue, id: Int, OldVal: Int, NewVal: Int): Unit ={
     toUpdateZonesAndVehicleStartAfter match {
       case None => ;
       case Some((toUpdateZones,vehicleLocation)) =>
@@ -188,7 +188,7 @@ class ForwardCumulativeInteger4DimensionOnVehicle(routes:ChangingSeqValue,
     }
   }
 
-  override def setVehicleContentAtEnd(vehicle : Int, lastNode : Int){
+  override def setVehicleContentAtEnd(vehicle : Int, lastNode : Int): Unit ={
     lastPointOfVehicle(vehicle) := lastNode
     //(fromNode,toNode,content1AtFromNode,content2AtFromNode)=> (content1AtToNode,content2AtToNode)
     val (newValue1,newValue2,newValue3,newValue4) = op(lastNode,vehicle,
@@ -203,7 +203,7 @@ class ForwardCumulativeInteger4DimensionOnVehicle(routes:ChangingSeqValue,
     content4AtEnd(vehicle) := newValue4
   }
 
-  override def setNodesUnrouted(unroutedNodes : Iterable[Int]){
+  override def setNodesUnrouted(unroutedNodes : Iterable[Int]): Unit ={
     for(node <- unroutedNodes) {
       content1AtNode(node) := defaultVehicleContent1ForUnroutedNodes
       content2AtNode(node) := defaultVehicleContent2ForUnroutedNodes
@@ -215,7 +215,7 @@ class ForwardCumulativeInteger4DimensionOnVehicle(routes:ChangingSeqValue,
   override def checkInternals(c : Checker) : Unit = {
     check(c,routes.value)
   }
-  def check(c : Checker,s:IntSequence){
+  def check(c : Checker,s:IntSequence): Unit ={
 
     //(fromNode,toNode,content1AtFromNode,content2AtFromNode)=> (content1AtToNode,content2AtToNode)
     def op4(fromNode:Int,toNode:Int,content:(Int,Int,Int,Int)) = op(fromNode,toNode,content._1,content._2,content._3,content._4)

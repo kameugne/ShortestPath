@@ -79,7 +79,7 @@ case class ConstraintSystem(model:Store) extends Constraint with Objective{
     */
   def add(c:Constraint,weight:IntValue=null) = post(c,weight)
 
-  def addToViolation(i:ChangingIntValue){
+  def addToViolation(i:ChangingIntValue): Unit ={
     PostedInvariants = i :: PostedInvariants
   }
 
@@ -90,7 +90,7 @@ case class ConstraintSystem(model:Store) extends Constraint with Objective{
    * @param c is the posted constraint.
    * @param weight is the weight that is used in the weighted sum of the violation degrees.
    */
-  def post(c:Constraint,weight:IntValue=null){
+  def post(c:Constraint,weight:IntValue=null): Unit ={
 
     PostedConstraints = (c,weight) :: PostedConstraints
 
@@ -101,7 +101,7 @@ case class ConstraintSystem(model:Store) extends Constraint with Objective{
     }
   }
 
-  private def aggregateLocalViolations(){
+  private def aggregateLocalViolations(): Unit ={
     for (variable <- VarInConstraints){
       val ConstrAndWeightList:List[(Constraint,IntValue)] = variable.getStorageAt(IndexForLocalViolationINSU,null)
 
@@ -118,7 +118,7 @@ case class ConstraintSystem(model:Store) extends Constraint with Objective{
     }
   }
 
-  private def PropagateLocalToGlobalViolations(){
+  private def PropagateLocalToGlobalViolations(): Unit ={
     for(varWithLocalViol <- VarInConstraints){
       val localViol:IntValue = varWithLocalViol.getAndFreeStorageAt(IndexForLocalViolationINSU)
       val sources = model.sourceVariables(varWithLocalViol)
@@ -130,7 +130,7 @@ case class ConstraintSystem(model:Store) extends Constraint with Objective{
     }
   }
 
-  private def aggregateGlobalViolations(){
+  private def aggregateGlobalViolations(): Unit ={
     for (variable <- VarsWatchedForViolation){
       val ElementsAndViol:GlobalViolationDescriptor = variable.getStorageAt(IndexForGlobalViolationINSU)
       ElementsAndViol.Violation.addTerms(ElementsAndViol.AggregatedViolation)
@@ -143,7 +143,7 @@ case class ConstraintSystem(model:Store) extends Constraint with Objective{
    * no constraint can be added after this method has been called.
    * this method must also be called before closing the model.
    */
-  def close(){
+  def close(): Unit ={
     if(!isClosed){
       isClosed = true
       Violation = new Sum(PostedConstraints.map((constraintANDintvar) => {

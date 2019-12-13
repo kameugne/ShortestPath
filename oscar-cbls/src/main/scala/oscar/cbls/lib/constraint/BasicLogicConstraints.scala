@@ -53,7 +53,7 @@ protected class LEA(val left: IntValue, val right: IntValue) extends Constraint 
    */
   override def violation(v: Value): IntValue = { if (left == v || right == v) violation else 0 }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     val diff = left.value - right.value
     c.check(violation.value == (if (diff <= 0) 0 else diff),
       Some("Violation.value (" + violation.value
@@ -94,7 +94,7 @@ protected class LA(val left: IntValue, val right: IntValue) extends Constraint {
    */
   override def violation(v: Value): IntValue = { if (left == v || right == v) violation else 0 }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     val diff = left.value - right.value
     c.check(violation.value == (if (diff < 0) 0 else diff + 1),
       Some("Violation.value (" + violation.value
@@ -130,14 +130,14 @@ case class NE(left: IntValue, right: IntValue) extends Invariant with Constraint
   violation.setDefiningInvariant(this)
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     violation := (if (left.value == right.value) 1 else 0)
   }
 
   /** the violation is 1 if the variables are equal, 0 otherwise*/
   override def violation(v: Value): IntValue = { if (left == v || right == v) violation else 0 }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(violation.value == (if (left.value == right.value) 1 else 0),
       Some("Violation.value (" + violation.value
         + ") == (if (left.value (" + left.value + ") == right.value (" + right.value + ")) 1 else 0)"))
@@ -158,7 +158,7 @@ case class EQ(left: IntValue, right: IntValue) extends Constraint {
 
   override def violation(v: Value) = { if (left == v || right == v) violation else 0 }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     val myViolation = abs(left.value - right.value)
     c.check(violation.value == (if (left.value == right.value) 0 else myViolation),
       Some("Violation.value (" + violation.value
@@ -198,7 +198,7 @@ case class BoolEQInv(a: IntValue, b:IntValue)
   registerStaticAndDynamicDependency(b)
   finishInitialization()
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     val other = if(a==v) b else a
     if((NewVal>0 && other.value >0) || (NewVal==0 && other.value ==0)){
       this := 0

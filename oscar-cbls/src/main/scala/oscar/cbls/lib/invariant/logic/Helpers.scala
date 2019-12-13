@@ -46,7 +46,7 @@ class Int2Int(a:IntValue, fun:Int => Int, domain:Domain = fullRange,cached:Boole
   var cachedOut:Int = this.newValue
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     assert(v == a)
     if(cached){
       if(NewVal == cachedIn) {
@@ -64,7 +64,7 @@ class Int2Int(a:IntValue, fun:Int => Int, domain:Domain = fullRange,cached:Boole
     }
   }
 
-  override def checkInternals(c:Checker){
+  override def checkInternals(c:Checker): Unit ={
     c.check(this.value == fun(a.value), Some("output.value == fun(a.value)"))
   }
 }
@@ -86,11 +86,11 @@ class IntInt2Int(a:IntValue, b:IntValue, fun:((Int, Int) => Int), domain:Domain 
   finishInitialization()
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     this := fun(a.value,b.value)
   }
 
-  override def checkInternals(c:Checker){
+  override def checkInternals(c:Checker): Unit ={
     c.check(this.value == fun(a.value,b.value), Some("output.value == fun(a.value,b.value)"))
   }
 }
@@ -112,15 +112,15 @@ class LazyIntInt2Int(a:IntValue, b:IntValue, fun:((Int, Int) => Int), domain:Dom
   finishInitialization()
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     scheduleForPropagation()
   }
 
-  override def performInvariantPropagation(){
+  override def performInvariantPropagation(): Unit ={
     this := fun(a.value,b.value)
   }
 
-  override def checkInternals(c: Checker){
+  override def checkInternals(c: Checker): Unit ={
     c.check(this.value == fun(a.value,b.value), Some("checking output of LazyIntVarIntVar2IntVarFun"))
   }
 }

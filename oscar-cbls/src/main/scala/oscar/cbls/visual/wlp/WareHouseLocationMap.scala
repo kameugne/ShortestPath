@@ -17,7 +17,7 @@ class WareHouseLocationWindow(deliveryCoordinates:Array[(Int,Int)],
 
   val visual = new WareHouseLocationMap(deliveryCoordinates,wareHouseCoordinates,distanceCostD2W,warehouseCosts)
 
-  def redraw(openWarehouses:SortedSet[Int],boldChanges:Boolean=true,hideClosedWarehouses:Boolean = false){
+  def redraw(openWarehouses:SortedSet[Int],boldChanges:Boolean=true,hideClosedWarehouses:Boolean = false): Unit ={
     visual.redraw(openWarehouses,boldChanges,hideClosedWarehouses)
   }
   val frame = new JFrame()
@@ -48,7 +48,7 @@ class WareHouseLocationMap(deliveryCoordinates:Array[(Int,Int)],
 
   var prevOpenWarehouse:SortedSet[Int] = SortedSet.empty
   var prevNearestOpenWarehouse = Array.fill(d)(-1)
-  def redraw(openWarehouses:SortedSet[Int],boldChanges:Boolean=true,hideClosedWarehouses:Boolean = false){
+  def redraw(openWarehouses:SortedSet[Int],boldChanges:Boolean=true,hideClosedWarehouses:Boolean = false): Unit ={
     val closestWarehouses:Array[Int] = Array.tabulate(d)(nearestOpenWareHouse(openWarehouses,_))
     drawMap(closestWarehouses,openWarehouses,prevOpenWarehouse,prevNearestOpenWarehouse,boldChanges,hideClosedWarehouses)
     prevOpenWarehouse = openWarehouses
@@ -99,7 +99,7 @@ class WareHouseLocationMap(deliveryCoordinates:Array[(Int,Int)],
       }
     }
 
-    def drawWarehouse(warehouse:Int,color:Color,focus:Boolean){
+    def drawWarehouse(warehouse:Int,color:Color,focus:Boolean): Unit ={
       val tempPoint = new VisualRectangle(this, new Rectangle2D.Double(
         wareHouseCoordinates(warehouse)._1 * xMultiplier - 4,
         wareHouseCoordinates(warehouse)._2 * yMultiplier - 4,

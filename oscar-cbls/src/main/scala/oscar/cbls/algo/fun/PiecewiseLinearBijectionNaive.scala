@@ -49,7 +49,7 @@ class PiecewiseLinearBijectionNaive(val forward:PiecewiseLinearFun, givenBackwar
 
   def invert : PiecewiseLinearBijectionNaive = new PiecewiseLinearBijectionNaive(backward, forward)
 
-  def checkBijection() {
+  def checkBijection(): Unit = {
     var pivots = backward.pivots
     while (true) {
       pivots match {

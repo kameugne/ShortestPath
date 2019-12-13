@@ -91,10 +91,10 @@ class DelayedPermaFilteredDoublyLinkedList[T <: AnyRef] extends Iterable[T]{
   }
 
   /**adds an element to the data structure, cfr. method addElem*/
-  def +(elem:T){addElem(elem)}
+  def +(elem:T): Unit ={addElem(elem)}
 
   /**adds a bunch of items to the data structures*/
-  def ++(elems:Iterable[T]) {for(elem <- elems) addElem(elem)}
+  def ++(elems:Iterable[T]): Unit = {for(elem <- elems) addElem(elem)}
 
   override def isEmpty:Boolean = phantom.next == phantom
 
@@ -141,7 +141,7 @@ class DelayedPermaFilteredDoublyLinkedList[T <: AnyRef] extends Iterable[T]{
     toReturn
   }
 
-  override def foreach[U](f: (T) => U){
+  override def foreach[U](f: (T) => U): Unit ={
     var currentPos = headPhantom.next
     while(currentPos != headPhantom){
       f(currentPos.elem)
@@ -160,12 +160,12 @@ class DPFDLLStorageElement[T](val elem:T){
   var prev:DPFDLLStorageElement[T] = null
   var filtered: QList[DLLStorageElement[_]] = null
 
-  def setNext(d:DPFDLLStorageElement[T]){
+  def setNext(d:DPFDLLStorageElement[T]): Unit ={
     this.next = d
     d.prev = this
   }
 
-  def delete(){
+  def delete(): Unit ={
     prev.setNext(next)
     prev = null //this is checked by the delayed perma filter, so DO NOT REMOVE THIS SEEMIGNLY USELESS INSTRUCTION
     while(filtered != null) {

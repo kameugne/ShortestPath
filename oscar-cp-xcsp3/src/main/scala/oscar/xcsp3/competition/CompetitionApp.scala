@@ -56,7 +56,7 @@ abstract class CompetitionApp extends App{
 
   //Setting up shutdown hook:
   Runtime.getRuntime.addShutdownHook(new Thread{
-    override def run() {
+    override def run(): Unit = {
       if(!statusPrinted) printStatus()
     }
   })

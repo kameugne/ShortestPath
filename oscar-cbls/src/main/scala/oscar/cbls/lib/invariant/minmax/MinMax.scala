@@ -49,7 +49,7 @@ abstract class MiaxLin(vars: SortedSet[IntValue])
 
   def better(a: Int, b: Int): Boolean //true if a is strictly more in the direction of the invariant that b
 
-  private def LoadNewMiax() {
+  private def LoadNewMiax(): Unit = {
     var CurrentMiax: Int = vars.head.value
     MiaxCount = 1
     vars.foreach(v => {
@@ -65,7 +65,7 @@ abstract class MiaxLin(vars: SortedSet[IntValue])
 
   LoadNewMiax()
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     assert(vars.contains(v), this.toString + " notified for not interesting var")
     val MiaxVal = this.newValue
     if (OldVal == MiaxVal && better(MiaxVal, NewVal)) {
@@ -79,7 +79,7 @@ abstract class MiaxLin(vars: SortedSet[IntValue])
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     vars.foreach(v => c.check(better(this.value, v.value) || this.value == v.value,
       Some("better(output.value (" + this.value + "), " + v.value
         + ") || output.value == " + v.value)))
@@ -132,13 +132,13 @@ abstract class Miax(vars: SortedSet[IntValue])
 
   this := h.getFirst.value
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     assert(vars.contains(v), name + " notified for not interesting var")
     h.notifyChange(v)
     this := h.getFirst.value
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     vars.foreach(v => c.check(better(this.value, v.value)
       || this.value == v.value,
       Some("better(this.value (" + this.value + "), " + v.value

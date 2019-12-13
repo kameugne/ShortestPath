@@ -50,14 +50,14 @@ case class SparseCluster(values:Array[IntValue], Clusters:SortedMap[Int,CBLSSetV
   }
 
   @inline
-  override def notifyIntChanged(v:ChangingIntValue, index:Int, OldVal:Int,NewVal:Int){
+  override def notifyIntChanged(v:ChangingIntValue, index:Int, OldVal:Int,NewVal:Int): Unit ={
     val x:CBLSSetVar = Clusters.getOrElse(OldVal,null)
     if(x != null) x.deleteValue(index)
     val y:CBLSSetVar = Clusters.getOrElse(NewVal,null)
     if(y != null) y.insertValue(index)
   }
 
-  override def checkInternals(c:Checker){
+  override def checkInternals(c:Checker): Unit ={
     for(v <- values.indices){
       if (Clusters.isDefinedAt(values(v).value)) {
         c.check(Clusters(values(v).value).value.contains(v),
@@ -102,7 +102,7 @@ case class SparseCluster(values:Array[IntValue], Clusters:SortedMap[Int,CBLSSetV
 
   //This method is called by each IntVar that is registered to the dynamic dependency graph.
   //We update the output variables incrementally based on this update.
-  override def notifyIntChanged(v:ChangingIntValue,index:Int,OldVal:Int,NewVal:Int){
+  override def notifyIntChanged(v:ChangingIntValue,index:Int,OldVal:Int,NewVal:Int): Unit ={
     assert(values(index) == v)
     clusters(OldVal).deleteValue(index)
     clusters(NewVal).insertValue(index)
@@ -110,7 +110,7 @@ case class SparseCluster(values:Array[IntValue], Clusters:SortedMap[Int,CBLSSetV
 
   //This method is optional, it is called by the model when its debug mode is activated (see the constructor of model)
   //In this method, we check that the outputs are correct, based on non-incremental code
-  override def checkInternals(c:Checker){
+  override def checkInternals(c:Checker): Unit ={
     for(v <- values.indices){
       c.check(clusters(values(v).value).value.contains(v),
         Some("clusters(values(v (" + v + ")).value (" + values(v).value + ")).value.contains(v)"))
@@ -154,7 +154,7 @@ case class TranslatedDenseCluster(values:Array[CBLSIntVar],  indicesArray:Array[
 
   //This method is called by each IntVar that is registered to the dynamic dependency graph.
   //We update the output variables incrementally based on this update.
-  override def notifyIntChanged(v:ChangingIntValue,index:Int,OldVal:Int,NewVal:Int){
+  override def notifyIntChanged(v:ChangingIntValue,index:Int,OldVal:Int,NewVal:Int): Unit ={
     assert(values(index) == v)
     clusters(OldVal).deleteValue(indicesArray(index))
     clusters(NewVal).insertValue(indicesArray(index))
@@ -162,7 +162,7 @@ case class TranslatedDenseCluster(values:Array[CBLSIntVar],  indicesArray:Array[
 
   //This method is optional, it is called by the model when its debug mode is activated (see the constructor of model)
   //In this method, we check that the outputs are correct, based on non-incremental code
-  override def checkInternals(c:Checker){
+  override def checkInternals(c:Checker): Unit ={
     for(v <- values.indices){
       c.check(clusters(values(v).value).value.contains(indicesArray(v)),
         Some("clusters(values(v (" + v + ")).value (" + values(v).value + ")).value.contains(v)"))

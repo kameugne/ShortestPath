@@ -65,7 +65,7 @@ with SeqNotificationTarget{
 
   var checkpointStack = new SeqCheckpointedValueStack[IntSequence]()
 
-  def digestUdpate(changes : SeqUpdate) {
+  def digestUdpate(changes : SeqUpdate): Unit = {
     changes match {
       case SeqUpdateDefineCheckpoint(prev, isActive, checkpointLevel) =>
         digestUdpate(prev)
@@ -130,7 +130,7 @@ class MapThroughArray(seq:ChangingSeqValue,
     }
   }
 
-  def digestUdpate(changes : SeqUpdate) {
+  def digestUdpate(changes : SeqUpdate): Unit = {
     changes match {
       case SeqUpdateDefineCheckpoint(prev, isActive,chechpointLevel) =>
         digestUdpate(prev)

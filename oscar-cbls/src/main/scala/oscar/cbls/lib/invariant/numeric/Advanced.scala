@@ -47,7 +47,7 @@ case class SumConstants(vars: Array[Int], cond: SetValue)
     * this will be called for each invariant after propagation is performed.
     * It requires that the Model is instantiated with the variable debug set to true.
     */
-  override def checkInternals(c: Checker){
+  override def checkInternals(c: Checker): Unit ={
     c.check(this.value == cond.value.foldLeft(0)((acc, i) => acc + vars(i)),
       Some("output.value == cond.value.foldLeft(0)((acc, i) => acc + vars(i).value)"))
   }
@@ -81,7 +81,7 @@ case class SumElements(vars: Array[IntValue], cond: SetValue)
   finishInitialization()
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int): Unit = {
     //it is always a listened one, but we could check this here
     assert(vars(index)==v)
     assert(keyForRemoval(index)!=null)
@@ -94,7 +94,7 @@ case class SumElements(vars: Array[IntValue], cond: SetValue)
   }
 
   @inline
-  def notifyInsertOn(v: ChangingSetValue, value: Int) {
+  def notifyInsertOn(v: ChangingSetValue, value: Int): Unit = {
     assert(v == cond)
     assert(keyForRemoval(value) == null)
     keyForRemoval(value) = registerDynamicDependency(vars(value),value)
@@ -103,7 +103,7 @@ case class SumElements(vars: Array[IntValue], cond: SetValue)
   }
 
   @inline
-  def notifyDeleteOn(v: ChangingSetValue, value: Int) {
+  def notifyDeleteOn(v: ChangingSetValue, value: Int): Unit = {
     assert(v == cond)
     assert(keyForRemoval(value) != null)
     keyForRemoval(value).performRemove()
@@ -112,7 +112,7 @@ case class SumElements(vars: Array[IntValue], cond: SetValue)
     this :-= vars(value).value
   }
 
-  override def checkInternals(c:Checker) {
+  override def checkInternals(c:Checker): Unit = {
     c.check(this.value == cond.value.foldLeft(0)((acc, i) => acc + vars(i).value),
         Some("output.value == cond.value.foldLeft(0)((acc, i) => acc + vars(i).value)"))
   }
@@ -136,7 +136,7 @@ case class ProdConstants(vars: Array[Int], cond: SetValue)
   affectOutput()
 
   @inline
-  private def affectOutput(){
+  private def affectOutput(): Unit ={
     if (NullVarCount == 0){
       this := NonNullProd
     }else{
@@ -150,7 +150,7 @@ case class ProdConstants(vars: Array[Int], cond: SetValue)
   }
 
   @inline
-  def notifyInsertOn(v: ChangingSetValue, value: Int) {
+  def notifyInsertOn(v: ChangingSetValue, value: Int): Unit = {
     assert(v == cond)
 
     if(vars(value) == 0){
@@ -162,7 +162,7 @@ case class ProdConstants(vars: Array[Int], cond: SetValue)
   }
 
   @inline
-  def notifyDeleteOn(v: ChangingSetValue, value: Int) {
+  def notifyDeleteOn(v: ChangingSetValue, value: Int): Unit = {
 
     if(vars(value) == 0){
       NullVarCount -= 1
@@ -172,7 +172,7 @@ case class ProdConstants(vars: Array[Int], cond: SetValue)
     affectOutput()
   }
 
-  override def checkInternals(c:Checker) {
+  override def checkInternals(c:Checker): Unit = {
     c.check(this.value == cond.value.foldLeft(1)((acc, i) => acc * vars(i)),
       Some("output.value (" + this.value
         + ") == cond.value.foldLeft(1)((acc, i) => acc * vars(i).value) ("
@@ -213,7 +213,7 @@ case class ProdElements(vars: Array[IntValue], cond: SetValue)
   affectOutput()
 
   @inline
-  private def affectOutput(){
+  private def affectOutput(): Unit ={
     if (NullVarCount == 0){
       this := NonNullProd
     }else{
@@ -222,7 +222,7 @@ case class ProdElements(vars: Array[IntValue], cond: SetValue)
   }
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int): Unit = {
     //it is always a listened one, but we could check this here
     assert(vars(index) == v)
     assert(keyForRemoval(index)!=null)
@@ -245,7 +245,7 @@ case class ProdElements(vars: Array[IntValue], cond: SetValue)
   }
 
   @inline
-  def notifyInsertOn(v: ChangingSetValue, value: Int) {
+  def notifyInsertOn(v: ChangingSetValue, value: Int): Unit = {
     assert(v == cond)
     assert(keyForRemoval(value) == null)
     keyForRemoval(value) = registerDynamicDependency(vars(value),value)
@@ -259,7 +259,7 @@ case class ProdElements(vars: Array[IntValue], cond: SetValue)
   }
 
   @inline
-  def notifyDeleteOn(v: ChangingSetValue, value: Int) {
+  def notifyDeleteOn(v: ChangingSetValue, value: Int): Unit = {
     assert(v == cond)
     assert(keyForRemoval(value) != null)
 
@@ -274,7 +274,7 @@ case class ProdElements(vars: Array[IntValue], cond: SetValue)
     affectOutput()
   }
 
-  override def checkInternals(c:Checker) {
+  override def checkInternals(c:Checker): Unit = {
     c.check(this.value == cond.value.foldLeft(1)((acc, i) => acc * vars(i).value),
         Some("output.value (" + this.value
             + ") == cond.value.foldLeft(1)((acc, i) => acc * vars(i).value) ("

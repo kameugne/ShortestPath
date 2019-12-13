@@ -47,12 +47,12 @@ class VisualLabelledPoint(d:VisualDrawing, s:Ellipse2D.Double, label: String, an
   
   def yText: Int = ((point.getY() + radius + distFromPoint) * math.sin(angle)).toInt
   
-  def move(x: Double, y: Double) {
+  def move(x: Double, y: Double): Unit = {
     point.setFrame(x, y, radius, radius)
 	drawing.repaint()
   }
   
-  override def draw(g: Graphics2D) {
+  override def draw(g: Graphics2D): Unit = {
 	g.draw(point);
 	println(xText + " " + yText)
     g.drawString(label, xText, yText);
@@ -61,7 +61,7 @@ class VisualLabelledPoint(d:VisualDrawing, s:Ellipse2D.Double, label: String, an
 
 object VisualLabelledPoint {
   	
-  def main(args : Array[String]) {
+  def main(args : Array[String]): Unit = {
 	val f = VisualFrame("toto");
 	val d = VisualDrawing(true);
 	val inf = f.createFrame("Drawing");

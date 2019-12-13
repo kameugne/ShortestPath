@@ -26,8 +26,8 @@ package oscar.cbls.algo.heap
  * @tparam T
  */
 abstract class AbstractHeap[T] extends Iterable[T] {
-  def dropAll()
-  def insert(elem:T)
+  def dropAll(): Unit
+  def insert(elem:T): Unit
   def getFirsts:List[T]
   def popFirsts:List[T]
   def getFirst:T

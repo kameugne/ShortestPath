@@ -149,7 +149,7 @@ object SPEA2 {
     
   var onArchChan: (ParetoFront[_, _]) => Unit = {newArchive: ParetoFront[_, _] => }
   
-  def onArchiveChanged(newFun: ParetoFront[_, _] => Unit) {
+  def onArchiveChanged(newFun: ParetoFront[_, _] => Unit): Unit = {
 	onArchChan = newFun
   }
   

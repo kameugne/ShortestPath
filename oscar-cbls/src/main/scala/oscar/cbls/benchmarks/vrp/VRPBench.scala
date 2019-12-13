@@ -27,11 +27,11 @@ import scala.io.Source
 
 object TSProutePoints extends App {
 
-  def printMatrix(m:Array[Array[Int]]){
+  def printMatrix(m:Array[Array[Int]]): Unit ={
     println(m.map(l => l.mkString(" ")).mkString("\n"))
   }
 
-  def benchmarkOnProblem(fileName:String){
+  def benchmarkOnProblem(fileName:String): Unit ={
     warmUp(1000)
     val matrix = loadMatrixFromFile(fileName:String)
     val n = matrix.length
@@ -43,7 +43,7 @@ object TSProutePoints extends App {
     new TSPRoutePointsS(n, v, percent, 0, matrix)
   }
 
-  def warmUp(n:Int = 10000){
+  def warmUp(n:Int = 10000): Unit ={
     val verbose = 1
     val maxPivotPerValuePercent = 4
     val v = 100
@@ -52,7 +52,7 @@ object TSProutePoints extends App {
     System.gc()
   }
 
-  def performRandomBenchmark() {
+  def performRandomBenchmark(): Unit = {
 
     println("performing warm up")
     warmUp()
@@ -100,7 +100,7 @@ object TSProutePoints extends App {
     matrix
   }
 
-  def writeMatrix(writer:PrintWriter,matrix:Array[Array[Int]]){
+  def writeMatrix(writer:PrintWriter,matrix:Array[Array[Int]]): Unit ={
     val n = matrix.length
     for(i <- 0 until n){
       for(j <- 0 until n){
@@ -110,14 +110,14 @@ object TSProutePoints extends App {
     }
   }
 
-  def saveMatrixToFile(fileName:String,matrix:Array[Array[Int]]){
+  def saveMatrixToFile(fileName:String,matrix:Array[Array[Int]]): Unit ={
     val writer = new PrintWriter(new File(fileName))
     writer.write(matrix.length + "\n")
     writeMatrix(writer,matrix)
     writer.close()
   }
 
-  def saveMatrixToLocalSolverFile(fileName:String,matrix:Array[Array[Int]]){
+  def saveMatrixToLocalSolverFile(fileName:String,matrix:Array[Array[Int]]): Unit ={
     val writer = new PrintWriter(new File(fileName))
     val n = matrix.length
     writer.write("NAME: RANDOM" + fileName + "\n")
@@ -132,7 +132,7 @@ object TSProutePoints extends App {
     writer.close()
   }
 
-  def generateAllBenchmarks(){
+  def generateAllBenchmarks(): Unit ={
     for(n <- benchmarkSizes){
       println("generating TSP n:" + n + " to file:" + fileName)
       val symmetricDistanceMatrix = RoutingMatrixGenerator(n)._1
@@ -141,7 +141,7 @@ object TSProutePoints extends App {
     }
   }
 
-  def runAllBenchmarks(){
+  def runAllBenchmarks(): Unit ={
     warmUp(200)
     println()
     print("balise\tn\ttime\tobj")
@@ -156,7 +156,7 @@ object TSProutePoints extends App {
     }
   }
 
-  def runBenchmark(fileName:String,n:Int){
+  def runBenchmark(fileName:String,n:Int): Unit ={
     new TSPRoutePointsS(1000, 100, 3, 0, RoutingMatrixGenerator(1000)._1)
 
     println()

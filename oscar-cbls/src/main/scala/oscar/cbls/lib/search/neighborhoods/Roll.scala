@@ -52,7 +52,7 @@ case class RollNeighborhood(vars:Array[CBLSIntVar],
   extends EasyNeighborhood[RollMove](best,name){
   //the indice to start with for the exploration
   var startIndice:Int = 0
-  override def exploreNeighborhood(){
+  override def exploreNeighborhood(): Unit ={
 
     val searchZoneObject = if(searchZone == null) null else searchZone()
     val currentSearchZone = if(searchZone == null) vars.indices else searchZoneObject
@@ -144,7 +144,7 @@ case class RollNeighborhood(vars:Array[CBLSIntVar],
     }
   }
 
-  def assignAll(vars:List[CBLSIntVar],vals:List[Int]){
+  def assignAll(vars:List[CBLSIntVar],vals:List[Int]): Unit ={
     (vars, vals) match {
       case (hVar :: t1, hVal :: t2) =>
         hVar := hVal
@@ -167,7 +167,7 @@ case class RollNeighborhood(vars:Array[CBLSIntVar],
 case class RollMove(l:List[CBLSIntVar],offset:Int, override val objAfter:Int, override val neighborhoodName:String = null)
   extends Move(objAfter,neighborhoodName){
   /** to actually take the move */
-  override def commit(){
+  override def commit(): Unit ={
     val variables = l.toArray
     val initialValues:Array[Int] = variables.map(_.value)
     for(i <- variables.indices){

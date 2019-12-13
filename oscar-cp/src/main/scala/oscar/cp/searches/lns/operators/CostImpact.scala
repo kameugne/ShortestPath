@@ -22,7 +22,7 @@ class CostImpact(solver: CPSolver, vars: Iterable[CPIntVar], n: Int, alpha: Doub
     val objVar: CPIntVar = solver.objective.objs.head.objVar
     var objSize = objVar.size
     solver.pushState()
-    val permutation = Random.shuffle[Int, IndexedSeq](variables.indices).sortBy(-costImpacts(_))
+    val permutation = Random.shuffle[Int, IndexedSeq[Int]](variables.indices.toArray).sortBy(-costImpacts(_))
     var i = 0
     while(i < permutation.length && !objVar.isBound){
       val x = permutation(i)

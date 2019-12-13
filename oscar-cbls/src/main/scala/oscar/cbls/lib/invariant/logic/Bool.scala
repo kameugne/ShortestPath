@@ -45,11 +45,11 @@ case class And(vars: Iterable[IntValue])
   for (v <- vars) registerStaticAndDynamicDependency(v)
   finishInitialization()
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     this :+= NewVal - OldVal
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value == vars.foldLeft(0)((acc, intvar) => acc + intvar.value),
             Some("output.value == vars.foldLeft(0)((acc,intvar) => acc+intvar.value)"))
   }
@@ -99,7 +99,7 @@ case class Or(vars: Array[IntValue])
   for (v <- vars) registerStaticAndDynamicDependency(v)
   finishInitialization()
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     if(vars.exists(_.value == 0)) {
       this := 0
     }else{
@@ -107,7 +107,7 @@ case class Or(vars: Array[IntValue])
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value == vars.foldLeft(0)((acc, intvar) => acc + intvar.value),
             Some("output.value == vars.foldLeft(0)((acc,intvar) => acc+intvar.value)"))
   }
@@ -131,7 +131,7 @@ case class Bool2Int(v: IntValue)
   registerStaticAndDynamicDependency(v)
   finishInitialization()
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     this := (if(NewVal == 0) 1 else 0)
   }
 }
@@ -155,7 +155,7 @@ case class BoolLEInv(a: IntValue, b:IntValue)
   registerStaticAndDynamicDependency(b)
   finishInitialization()
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     this :=
       (if(v == a){
         if(NewVal > 0 && b.value == 0){
@@ -191,7 +191,7 @@ case class BoolLTInv(a: IntValue, b:IntValue)
   registerStaticAndDynamicDependency(b)
   finishInitialization()
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     this :=
       (if(v == a){
         if(NewVal == 0 && b.value>0)
@@ -227,7 +227,7 @@ case class XOR(a: IntValue, b:IntValue)
   registerStaticAndDynamicDependency(b)
   finishInitialization()
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     if((NewVal > 0 && OldVal == 0) || (NewVal == 0 && OldVal > 0)){
       if(this.value > 0){
         this := 0
@@ -259,7 +259,7 @@ case class XORArray(vars: Array[IntValue])
   registerStaticAndDynamicDependencyArrayIndex(vars)
   finishInitialization()
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     if((NewVal > 0 && OldVal == 0) || (NewVal == 0 && OldVal > 0)){
       if(this.value > 0){
         this := 0
@@ -295,7 +295,7 @@ case class Not(a: IntValue)
   registerStaticAndDynamicDependency(a)
   finishInitialization()
 
-  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, id:Int, OldVal: Int, NewVal: Int): Unit = {
     this := (if(NewVal > 0) 0 else 1)
   }
 }

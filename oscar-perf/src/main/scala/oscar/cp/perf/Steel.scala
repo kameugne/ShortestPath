@@ -66,7 +66,7 @@ object Steel {
     (capa toArray, weight, col)
   }
 
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     val (capa, weight, col) = readData()
     val (nbCapa, nbSlab, nbCol) = (capa.length, weight.length, col.max + 1)
     val Slabs = 0 until nbSlab

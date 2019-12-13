@@ -52,7 +52,7 @@ class VisualFrame(title: String, val nbLines: Int = 1, val nbCols: Int = 1, inte
   }
 
   addWindowListener(new WindowAdapter() {
-    override def windowClosing(event: WindowEvent) {
+    override def windowClosing(event: WindowEvent): Unit = {
       onWindowClosing()
     }
   })
@@ -65,7 +65,7 @@ class VisualFrame(title: String, val nbLines: Int = 1, val nbCols: Int = 1, inte
     menuItem.setMnemonic(KeyEvent.VK_N)
     menuItem.addActionListener(new ActionListener() {
 
-      override def actionPerformed(e: ActionEvent) {
+      override def actionPerformed(e: ActionEvent): Unit = {
         createFrame("sub frame")
       }
     })

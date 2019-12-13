@@ -26,7 +26,7 @@ import oscar.cp.core.Constraint;
 import oscar.cp.core.CPStore;
 import oscar.cp.core.variables.CPVar;
 import scala.collection.Iterable;
-import scala.collection.JavaConversions;
+import scala.jdk.javaapi.CollectionConverters;
 
 
 /**
@@ -156,7 +156,7 @@ public class GCCBinPacking extends Constraint {
         List<CPVar> vars = new LinkedList<>(Arrays.asList(x));
         vars.addAll(Arrays.asList(l));
         vars.addAll(Arrays.asList(o));
-        return JavaConversions.iterableAsScalaIterable(vars);
+        return CollectionConverters.asScala(vars);
     }
 
 

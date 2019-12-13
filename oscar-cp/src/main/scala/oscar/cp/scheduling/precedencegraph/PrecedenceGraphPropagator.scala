@@ -36,7 +36,7 @@ class PrecedenceGraphPropagator(starts: Array[CPIntVar], durations: Array[CPIntV
     propagate()
   }
 
-  override def propagate() {
+  override def propagate(): Unit = {
     updateInputs()
     val topologicalOrder = pg.topologicalOrder() //TODO: would be nice to compute this incrementally
 

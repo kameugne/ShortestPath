@@ -38,7 +38,7 @@ class Tarjan[T]( implicit A:Ordering[T]){ // <: Ordered[T]]{
     var Components:List[SortedSet[T]]= List.empty
     var InOneComponent:SortedSet[T] = SortedSet.empty
 
-    def visit(v:T){
+    def visit(v:T): Unit ={
       Index += ((v,index))
       LowLink+=((v,index))
       index +=1

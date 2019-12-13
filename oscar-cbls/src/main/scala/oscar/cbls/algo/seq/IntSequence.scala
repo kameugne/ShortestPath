@@ -219,7 +219,7 @@ abstract class IntSequence(protected[cbls] val token: Token = Token()) {
   def regularize(targetToken:Token = this.token):ConcreteIntSequence
   def commitPendingMoves:IntSequence
 
-  def check{}
+  def check: Unit ={}
 
   def quickEquals(that:IntSequence):Boolean = that != null && this.token == that.token
   def equals(that:IntSequence):Boolean = {
@@ -257,7 +257,7 @@ class ConcreteIntSequence(private[seq] val internalPositionToValue:RedBlackTreeM
     "ConcreteIntSequence(size:" + size + ")" + descriptorString
   }
 
-  override def check {
+  override def check: Unit = {
     externalToInternalPosition.checkBijection()
     require(internalPositionToValue.content.sortBy(_._1) equals valueToInternalPositions.content.flatMap({case (a, b) => b.keys.map(x => (x, a))}).sortBy(_._1),
       "internalPositionToValue:" + internalPositionToValue.content.sortBy(_._1) + " valueToInternalPositions:" + valueToInternalPositions.content.flatMap({case (a, b) => b.keys.map(x => (x, a))}).sortBy(_._1)

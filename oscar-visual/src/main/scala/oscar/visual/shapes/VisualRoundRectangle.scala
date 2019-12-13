@@ -27,7 +27,7 @@ class VisualRoundRectangle(d: VisualDrawing, s: RoundRectangle2D.Double) extends
     drawing.repaint()
   }
   
-  def move(x: Double, y: Double) {
+  def move(x: Double, y: Double): Unit = {
     shape.setRoundRect(x, y, width, height, arcWidth, arcHeight)
   }
 }

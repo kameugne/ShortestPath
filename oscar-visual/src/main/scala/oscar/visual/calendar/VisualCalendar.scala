@@ -104,18 +104,18 @@ class VisualCalendar(startDate: GregorianCalendar, nMonthsToDisplay: Int) extend
     })
   })
   
-  def colorDay(col: Color, date: GregorianCalendar) {
+  def colorDay(col: Color, date: GregorianCalendar): Unit = {
     var monthIndex = getMonthDifference(firstDate, date)
     colorDay(col, monthIndex, date.get(Calendar.DAY_OF_MONTH) - 1)
   }
   
-  def colorDay(col: Color, monthIndex: Int, dayIndex: Int) {
+  def colorDay(col: Color, monthIndex: Int, dayIndex: Int): Unit = {
     daysRectangle(monthIndex)(dayIndex).innerCol = col
   }
   
-  def update {
+  def update: Unit = {
     SwingUtilities.invokeLater(new Runnable() {
-      def run() {
+      def run(): Unit = {
         repaint()
       }
     })
@@ -132,7 +132,7 @@ class VisualCalendar(startDate: GregorianCalendar, nMonthsToDisplay: Int) extend
 object VisualCalendar {
   def apply(startDate: GregorianCalendar, nMonthsToDisplay: Int) = new VisualCalendar(startDate, nMonthsToDisplay)
   
-  def main(args : Array[String]) {
+  def main(args : Array[String]): Unit = {
 	val f = VisualFrame("toto");
 	val inf = f.createFrame("Drawing");
 	

@@ -79,7 +79,7 @@ class Planning(val model: Store, val maxDuration: Int) {
    * this is to close the planning when you are done with declaring tasks, precedence  and resource
    * notice that you do not need to explicitly call this, as the model will call it automatically on close.
    */
-  def close() {
+  def close(): Unit = {
     if (isClosed) return
     isClosed = true
     val activitiesNoSentinel = activities
@@ -285,7 +285,7 @@ class Planning(val model: Store, val maxDuration: Int) {
   /**
    * removes all additional Activity precedences that are not tight
    */
-  def clean() {
+  def clean(): Unit = {
     for (t: Activity <- activityArray) {
       t.removeNonTightAdditionalPredecessors()
     }
@@ -293,17 +293,17 @@ class Planning(val model: Store, val maxDuration: Int) {
 }
 
 abstract class PrecedenceCleaner(val canBeKilled: Boolean) {
-  def killDependencies(Verbose: Boolean = false) { throw new Exception("cannot kill dependencies") }
+  def killDependencies(Verbose: Boolean = false): Unit = { throw new Exception("cannot kill dependencies") }
 }
 case class HardPrecedence() extends PrecedenceCleaner(false)
 
 case class PrecedencesCanBeKilled(d: List[(Activity, Activity)]) extends PrecedenceCleaner(true) {
-  override def killDependencies(Verbose: Boolean = false) {
+  override def killDependencies(Verbose: Boolean = false): Unit = {
     for ((a, b) <- d) {
       b.removeDynamicPredecessor(a, Verbose)
     }
   }
-  def restoreDependencies() {
+  def restoreDependencies(): Unit = {
     for ((a, b) <- d) {
       b.addDynamicPredecessor(a)
     }
@@ -324,7 +324,7 @@ trait EarliestStartDate extends Planning {
    * saves scheduling engine performances.
    */
   def addEarliestStartDate(task: Activity, earliestStartDate: Int,
-                           nameOfOwner: String = "") {
+                           nameOfOwner: String = ""): Unit = {
     if (earliestStartDate > 0) {
       val esdTaskName = "ESD_task_of_" + nameOfOwner
       val esdTask = new Activity(earliestStartDate, this, esdTaskName)
@@ -344,11 +344,11 @@ trait Deadlines extends Planning {
 
   model.addToCallBeforeClose(() => closeDeadlines())
 
-  private def closeDeadlines() {
+  private def closeDeadlines(): Unit = {
     totalTardiness <== Sum(activitiesWithDeadlines.toArray.map(_.tardiness))
   }
 
-  def addActivityWithDeadline(activity: ActivityWithDeadline) {
+  def addActivityWithDeadline(activity: ActivityWithDeadline): Unit = {
     activitiesWithDeadlines = activity :: activitiesWithDeadlines
   }
 }

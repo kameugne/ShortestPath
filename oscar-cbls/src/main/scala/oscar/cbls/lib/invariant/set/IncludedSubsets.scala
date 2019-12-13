@@ -60,7 +60,7 @@ case class IncludedSubsets(s: SetValue, subsetToMonitorAndMaxValues:Iterable[(It
   }
 
   @inline
-  private def notifyInsert(value: Int) {
+  private def notifyInsert(value: Int): Unit = {
     for(subset <- QList.toIterable(valueToSubsetID(value))){
       subsetToNbPresent(subset) = subsetToNbPresent(subset) + 1
       if(subsetToNbPresent(subset) == subsetAndMaxAndWeightArray(subset)._2 + 1) {
@@ -70,7 +70,7 @@ case class IncludedSubsets(s: SetValue, subsetToMonitorAndMaxValues:Iterable[(It
   }
 
   @inline
-  private def notifyDelete(value: Int) {
+  private def notifyDelete(value: Int): Unit = {
     for(subset <- QList.toIterable(valueToSubsetID(value))){
       subsetToNbPresent(subset) = subsetToNbPresent(subset) - 1
       if(subsetToNbPresent(subset) == subsetAndMaxAndWeightArray(subset)._2){
@@ -79,7 +79,7 @@ case class IncludedSubsets(s: SetValue, subsetToMonitorAndMaxValues:Iterable[(It
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     val violation = subsetToMonitorAndMaxValues.map({case (values,maxValue,weight) => if(values.count(v => s.value.contains(v)) > maxValue) weight else 0}).sum
     c.check(this.value == violation,Some("included subset Error value=" + this.value  + " should be:" + violation))
   }
@@ -131,7 +131,7 @@ case class ValuesInViolatedClauses(s: SetValue, clauseAndMaxOccList:Iterable[(It
   }
 
   @inline
-  private def setClauseViolated(clauseNumber:Int){
+  private def setClauseViolated(clauseNumber:Int): Unit ={
     for(number <- clauseAndMaxOccArray(clauseNumber)._1){
       val oldCount = valToNumberOfViolatedClauses(number)
       valToNumberOfViolatedClauses(number) = oldCount + 1
@@ -142,7 +142,7 @@ case class ValuesInViolatedClauses(s: SetValue, clauseAndMaxOccList:Iterable[(It
   }
 
   @inline
-  private def setClauseNonViolated(clauseNumber:Int){
+  private def setClauseNonViolated(clauseNumber:Int): Unit ={
     for(number <- clauseAndMaxOccArray(clauseNumber)._1){
       val oldCount = valToNumberOfViolatedClauses(number)
       valToNumberOfViolatedClauses(number) = oldCount - 1
@@ -153,7 +153,7 @@ case class ValuesInViolatedClauses(s: SetValue, clauseAndMaxOccList:Iterable[(It
   }
 
   @inline
-  private def notifyInsert(value: Int) {
+  private def notifyInsert(value: Int): Unit = {
     for(clauseNumber <- QList.toIterable(valueToClauseIDs(value))){
       val oldNbPresent = clauseToNbPresent(clauseNumber)
       clauseToNbPresent(clauseNumber) = oldNbPresent + 1
@@ -164,7 +164,7 @@ case class ValuesInViolatedClauses(s: SetValue, clauseAndMaxOccList:Iterable[(It
   }
 
   @inline
-  private def notifyDelete(value: Int) {
+  private def notifyDelete(value: Int): Unit = {
     for(clauseNumber <- QList.toIterable(valueToClauseIDs(value))){
       val oldNbPresent = clauseToNbPresent(clauseNumber)
       clauseToNbPresent(clauseNumber) = oldNbPresent - 1
@@ -179,7 +179,7 @@ case class ValuesInViolatedClauses(s: SetValue, clauseAndMaxOccList:Iterable[(It
     SortedSet.empty[Int] ++ violatedClauses.flatMap({case (clause,maxOcc) => clause})
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     c.check(this.value equals computeFromScratch(s.value) ,Some("included subset Error value=" + this.value  + " should be:" + computeFromScratch(s.value)))
   }
 }

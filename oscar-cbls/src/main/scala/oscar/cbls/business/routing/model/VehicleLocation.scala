@@ -32,7 +32,7 @@ object VehicleLocation{
  */
 abstract class VehicleLocation(val v : Int, val level:Int){
 
-  def checkOnSequence(s:IntSequence){
+  def checkOnSequence(s:IntSequence): Unit ={
     for(vehicle <- 0 until v){
       require(s.positionOfAnyOccurrence(vehicle).get == startPosOfVehicle(vehicle),vehicle)
     }

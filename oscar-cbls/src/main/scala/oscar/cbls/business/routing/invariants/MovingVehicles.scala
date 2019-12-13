@@ -22,7 +22,7 @@ case class MovingVehicles(routes:ChangingSeqValue, v:Int)
 
   this := computeValueFromScratch(routes.value)
 
-  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes:SeqUpdate){
+  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes:SeqUpdate): Unit ={
     if(!digestUpdates(changes)) {
       this := computeValueFromScratch(changes.newValue)
     }

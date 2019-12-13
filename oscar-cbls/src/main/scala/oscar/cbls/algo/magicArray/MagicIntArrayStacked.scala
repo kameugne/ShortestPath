@@ -24,7 +24,7 @@ class MagicIntArrayStacked(maxLevel:Int, initVal:(Int => Int), size:Int) extends
 
   def level:Int = currentLevel - 1
 
-  def update(indice:Int,value:Int){
+  def update(indice:Int,value:Int): Unit ={
     levelToArray(currentLevel)(indice) = value
     if(currentLevel!=0)levelToIsValueChangedAtNextLevel(currentLevel-1)(indice) = true
   }
@@ -42,13 +42,13 @@ class MagicIntArrayStacked(maxLevel:Int, initVal:(Int => Int), size:Int) extends
     levelToArray(0)(indice)
   }
 
-  def pushLevel(){
+  def pushLevel(): Unit ={
     require(currentLevel < maxLevel,"MagicIntArrayStacked was declaring with max " + maxLevel + " levels; trying to push more")
     levelToIsValueChangedAtNextLevel(currentLevel).all = false
     currentLevel += 1
   }
 
-  def popLevel(dropChanges:Boolean){
+  def popLevel(dropChanges:Boolean): Unit ={
     require(currentLevel > 0,"trying to pop level zero")
     if(dropChanges){
       currentLevel -= 1

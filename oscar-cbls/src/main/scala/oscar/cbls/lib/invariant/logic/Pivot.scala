@@ -59,7 +59,7 @@ case class SelectLEHeapHeap(values: Array[IntValue], boundary: IntValue)
 
   //pomper des elements de Above et les mettre dans Below et dans output
   @inline
-  def TransferToBelow() {
+  def TransferToBelow(): Unit = {
     while (!HeapAbove.isEmpty && values(HeapAbove.getFirst).value <= boundary.value) {
       val v = HeapAbove.removeFirst()
       HeapBelowOrEqual.insert(v)
@@ -69,7 +69,7 @@ case class SelectLEHeapHeap(values: Array[IntValue], boundary: IntValue)
 
   //pomper des elements de Above et les mettre dans Below et dans output
   @inline
-  def TransferToAbove() {
+  def TransferToAbove(): Unit = {
     //pomper des elements de beloworequal et les mettre dans above
     while (!HeapBelowOrEqual.isEmpty && values(HeapBelowOrEqual.getFirst).value > boundary.value) {
       val v = HeapBelowOrEqual.removeFirst()
@@ -79,7 +79,7 @@ case class SelectLEHeapHeap(values: Array[IntValue], boundary: IntValue)
   }
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, i: Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, i: Int, OldVal: Int, NewVal: Int): Unit = {
     if (v == boundary) {
       //c'est le boundary
       if (NewVal > OldVal) {
@@ -97,7 +97,7 @@ case class SelectLEHeapHeap(values: Array[IntValue], boundary: IntValue)
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     for (v <- this.value) {
       c.check(values(v).value <= boundary.value,
         Some("values(" + v + ").value (" + values(v).value
@@ -151,7 +151,7 @@ case class SelectLESetQueue[X<:IntValue](values: Array[X], boundary: IntValue)
   }
 
   @inline
-  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int) {
+  override def notifyIntChanged(v: ChangingIntValue, index: Int, OldVal: Int, NewVal: Int): Unit = {
     if (v == boundary) {
       //c'est le boundary
       assert(NewVal > OldVal, "SelectLESetQueue does not allow boundary to decrease")
@@ -168,7 +168,7 @@ case class SelectLESetQueue[X<:IntValue](values: Array[X], boundary: IntValue)
     }
   }
 
-  override def checkInternals(c: Checker) {
+  override def checkInternals(c: Checker): Unit = {
     var count: Int = 0
     for (i <- values.indices) {
       if (values(i).value <= boundary.value) {

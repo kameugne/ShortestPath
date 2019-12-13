@@ -65,7 +65,7 @@ class VehicleOfNodes(routes:ChangingSeqValue,
 
   computeAndAffectValueFromScratch(routes.value)
 
-  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes:SeqUpdate){
+  override def notifySeqChanges(v: ChangingSeqValue, d: Int, changes:SeqUpdate): Unit ={
     if(!digestUpdates(changes)) {
       dropCheckpoint()
       computeAndAffectValueFromScratch(changes.newValue)
@@ -144,10 +144,10 @@ class VehicleOfNodes(routes:ChangingSeqValue,
     }
   }
 
-  private def dropCheckpoint(){
+  private def dropCheckpoint(): Unit ={
     saveCurrentCheckpoint(null)
   }
-  private def saveCurrentCheckpoint(s:IntSequence){
+  private def saveCurrentCheckpoint(s:IntSequence): Unit ={
     savedCheckpoint = s
     while (movedNodesSinceCheckpointList!= null) {
       movedNodesSinceCheckpointArray(movedNodesSinceCheckpointList.head) = false
@@ -155,7 +155,7 @@ class VehicleOfNodes(routes:ChangingSeqValue,
     }
   }
 
-  private def restoreCheckpoint(){
+  private def restoreCheckpoint(): Unit ={
     while (movedNodesSinceCheckpointList!= null) {
       val node= movedNodesSinceCheckpointList.head
       movedNodesSinceCheckpointArray(movedNodesSinceCheckpointList.head) = false
@@ -164,7 +164,7 @@ class VehicleOfNodes(routes:ChangingSeqValue,
     }
   }
 
-  private def recordMovedPoint(node:Int, oldVehicle:Int){
+  private def recordMovedPoint(node:Int, oldVehicle:Int): Unit ={
     if(savedCheckpoint!= null) {
       if (!movedNodesSinceCheckpointArray(node)) {
         movedNodesSinceCheckpointList = QList(node, movedNodesSinceCheckpointList)
@@ -174,7 +174,7 @@ class VehicleOfNodes(routes:ChangingSeqValue,
     }
   }
 
-  private def computeAndAffectValueFromScratch(s:IntSequence){
+  private def computeAndAffectValueFromScratch(s:IntSequence): Unit ={
     vehicleOrUnroutedOfNode.foreach(_:=v) //unrouted
 
     val it = s.iterator
