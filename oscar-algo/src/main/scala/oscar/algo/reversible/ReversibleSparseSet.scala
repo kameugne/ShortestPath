@@ -326,4 +326,15 @@ class ReversibleSparseSet(s: ReversibleContext, val minValue: Int, val maxValue:
     }
   }
 
+  /**
+   * You can safely remove the current value while iterating using this function.
+   * If you remove any other value, you may encounter the same value multiple times.
+   */
+  @inline final override def foreach[U](f: Int => U): Unit = {
+    var i = _size.value
+    while (i != 0) {
+      i -= 1
+      f(values(i) + offset)
+    }
+  }
 }

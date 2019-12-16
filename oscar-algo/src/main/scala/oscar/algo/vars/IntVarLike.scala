@@ -113,7 +113,7 @@ trait IntVarLike extends Iterable[Int] {
 
   def iterator: Iterator[Int]
 
-  def foreach[@specialized(Int) U](f: Int => U): Unit
+  def foreach[U](f: Int => U): Unit
 
   /**
    * @return an (not sorted) array representation of the domain.
