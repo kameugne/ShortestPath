@@ -330,6 +330,10 @@ class CPBoolVarImpl private(final override val store: CPStore, initDomain: Int, 
     fillDeltaArray(oldMin, oldMax, oldSize, newarray)
     newarray.iterator
   }
+
+  @inline override def _foreach[U](f: Int => U): Unit = {
+    throw new RuntimeException("This should never be called, as it is implemented in CPIntVar")
+  }
 }
 
 object CPBoolVarImpl {

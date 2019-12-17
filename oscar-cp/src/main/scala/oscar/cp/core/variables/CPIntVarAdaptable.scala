@@ -15,6 +15,8 @@
 
 package oscar.cp.core.variables
 
+import java.util.ConcurrentModificationException
+
 import oscar.algo.Inconsistency
 
 import scala.util.Random
@@ -44,7 +46,7 @@ class CPIntVarAdaptableDomainSparse(variable: CPIntVarAdaptable, min: Int, max: 
   final override def restore(): Unit = variable.restoreSparse(min, max, size)
 }
 
-final class CPIntVarAdaptable( final override val store: CPStore, minValue: Int, maxValue: Int, continuous: Boolean, final override val name: String = "") extends CPIntVar {
+final class CPIntVarAdaptable( final override val store: CPStore, minValue: Int, maxValue: Int, origContinuous: Boolean, final override val name: String = "") extends CPIntVar {
 
   final override val context = store
 
@@ -61,16 +63,16 @@ final class CPIntVarAdaptable( final override val store: CPStore, minValue: Int,
   private[this] val degree = new ReversibleInt(store, 0) // should not change often
 
   // Domain representation
-  private[this] var values: Array[Int] = null
-  private[this] var positions: Array[Int] = null
-  private[this] var offset = minValue
-  private[this] var _continuous = continuous // can be true with a sparse representation
-  private[this] var _min = minValue
-  private[this] var _max = maxValue
-  private[this] var _size = maxValue - minValue + 1
+  private[variables] var values: Array[Int] = null
+  private[variables] var positions: Array[Int] = null
+  private[variables] var offset = minValue
+  private[variables] var _continuous = origContinuous // can be true with a sparse representation
+  private[variables] var _min = minValue
+  private[variables] var _max = maxValue
+  private[variables] var _size = maxValue - minValue + 1
 
   // Switch to a sparse set if necessacry
-  if (!continuous) buildSparse()
+  if (!origContinuous) buildSparse()
 
   // Used to trail changes in the domain
   private[this] var lastMagic: Long = -1L
@@ -805,5 +807,9 @@ final class CPIntVarAdaptable( final override val store: CPStore, minValue: Int,
       }
     }
     i
+  }
+
+  def _foreach[U](f: Int => U): Unit = {
+    throw new RuntimeException("This should never be called, as it is implemented in CPIntVar")
   }
 }
