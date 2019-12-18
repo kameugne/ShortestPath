@@ -9,9 +9,8 @@ import scala.collection.mutable
 import scala.util.Random
 
 /**
-  * This class keeps track of the closeness relationship between variables. The closeness is defined as the average
-  * volume of propagation that is involved on one variable when another is instantiated.
-  */
+ * Performs a Propagation Guided Relaxation (see Propagation Guided Large Neighborhood Search - Perron 2004)
+ */
 class PropagationGuidedRelax(variables: Seq[CPIntVar]){
   val nVars: Int = variables.length
 
@@ -20,15 +19,12 @@ class PropagationGuidedRelax(variables: Seq[CPIntVar]){
   val prevDomainSize: Array[ReversibleInt] = Array.tabulate(nVars)(i => ReversibleInt(variables(i).size)(variables(i).store))
 
   //Data structure to keep track of closeness:
-  //TODO: If too much variables, these arrays are way to big! => Use better structure
-  val nImpacted: Array[Array[Int]] = Array.fill(nVars, nVars)(0)
-  val closeness: Array[Array[Double]] = Array.tabulate(nVars, nVars){ (i, j) => if(i == j) 1.0 else 0.0}
+  val clStore: ClosenessStore = if(variables.length > 1000000) new MapClosenessStore else new ArrayClosenessStore(variables.length)
 
   /**
     * Updates the closeness store with the propagation given an instantiated variable.
     * @param instantiated the var that has been instantiated.
     */
-  //TODO: automatically call this when assigning var in search (use listener?)
   def updateCloseness(instantiated: Int): Unit ={
     for(i <- variables.indices) if(i != instantiated){
       val currentDomSize = variables(i).size
@@ -38,13 +34,14 @@ class PropagationGuidedRelax(variables: Seq[CPIntVar]){
         val impact = (prevDomainSize(i) - currentDomSize).toDouble / startDomainSize(i)
 
         //Updating closeness:
-        closeness(instantiated)(i) = (closeness(instantiated)(i) * nImpacted(instantiated)(i) + impact) / (nImpacted(instantiated)(i) + 1)
-        nImpacted(instantiated)(i) +=1
+        val oldCloseness = clStore.getCloseness(instantiated)(i)
+        val oldImpact = clStore.nImpacted(instantiated)(i)
+        clStore.updateEdge(instantiated, i, oldImpact + 1, (oldCloseness * oldImpact + impact) / (oldImpact + 1))
 
         prevDomainSize(i).setValue(currentDomSize)
       }
     }
-//    println("closeness:\n" + closeness.map(_.mkString(", ")).mkString("\n"))
+//    println("closeness:\n" + clStore.toString)
   }
 
   /**
@@ -64,8 +61,9 @@ class PropagationGuidedRelax(variables: Seq[CPIntVar]){
         val impact = (prevDomainSize(i) - currentDomSize).toDouble / startDomainSize(i)
 
         //Updating closeness:
-        closeness(instantiated)(i) = (closeness(instantiated)(i) * nImpacted(instantiated)(i) + impact) / (nImpacted(instantiated)(i) + 1)
-        nImpacted(instantiated)(i) +=1
+        val oldCloseness = clStore.getCloseness(instantiated)(i)
+        val oldImpact = clStore.nImpacted(instantiated)(i)
+        clStore.updateEdge(instantiated, i, oldImpact + 1, (oldCloseness * oldImpact + impact) / (oldImpact + 1))
 
         //Checking impact:
         if(!variables(i).isBound && impact > maxImpact){
@@ -76,30 +74,16 @@ class PropagationGuidedRelax(variables: Seq[CPIntVar]){
         prevDomainSize(i).setValue(currentDomSize)
       }
     }
-//    println("closeness:\n" + closeness.map(_.mkString(", ")).mkString("\n"))
+//    println("closeness:\n" + clStore.toString)
 
     mostImpacted
   }
 
   /**
-    * Get the closeness between vars i and j.
-    * @return the closeness between i and j or 0.0 if i or j are not valid indices.
-    */
-  def getCloseness(i:Int, j:Int): Double = if(i < nVars && j < nVars) closeness(i)(j) else 0.0
-
-  /**
     * Get the close vars (closeness > 0) of i.
     * @return a list of the close vars of i (empty if no var is close or i is not a valid index).
     */
-  def getClose(i: Int): Iterable[Int] ={
-    var closeSet = new mutable.ListBuffer[Int]
-    if(i >= nVars) return closeSet
-
-    for(v <- closeness(i).indices) if(v != i && closeness(i)(v) > 0.0)
-      closeSet += v
-
-    closeSet
-  }
+  def getClose(i: Int): Iterable[Int] = clStore.allCloseness(i).map{case (v, _) => v}
 
   /**
     * returns the close subset to which initalVar is a part of.
@@ -112,7 +96,7 @@ class PropagationGuidedRelax(variables: Seq[CPIntVar]){
     val closeToSubset = Array.fill[Double](nVars){0.0}
     val toAddNext = new mutable.PriorityQueue[Int]()(Ordering.by[Int, Double](i => closeToSubset(i)))
     for(v <- getClose(initialVar)){
-      closeToSubset(v) = closeness(initialVar)(v)
+      closeToSubset(v) = clStore.getCloseness(initialVar)(v)
       toAddNext += v
     }
 
@@ -120,8 +104,8 @@ class PropagationGuidedRelax(variables: Seq[CPIntVar]){
       val v = toAddNext.dequeue()
       if(v != initialVar && !subset.contains(v)){
         subset += v
-        for(x <- getClose(v)) if(!subset.contains(v) && closeness(v)(x) > closeToSubset(x)){
-          closeToSubset(x) = closeness(v)(x)
+        for(x <- getClose(v)) if(!subset.contains(v) && clStore.getCloseness(v)(x) > closeToSubset(x)){
+          closeToSubset(x) = clStore.getCloseness(v)(x)
           toAddNext += x
         }
       }
@@ -214,20 +198,11 @@ class PropagationGuidedRelax(variables: Seq[CPIntVar]){
     }
 //    println("relaxation done, " + relaxStart + " vars frozen")
   }
-
-  override def toString: String = {
-    var str = ""
-    for(i <- 0 until nVars){
-      for(j <- 0 until nVars) str += "(" + closeness(i)(j) + ", " + nImpacted(i)(j) + ")  "
-      str += "\n"
-    }
-    str
-  }
 }
 
 object PropagationGuidedRelax{
   var varSeq: Seq[CPIntVar] = Seq()
-  lazy val propGuidedStore: PropagationGuidedRelax = new PropagationGuidedRelax(varSeq) // Closeness store used for propagation guided relax
+  lazy val propGuidedEngine: PropagationGuidedRelax = new PropagationGuidedRelax(varSeq) // Closeness store used for propagation guided relax
 
   /**
    * Relaxes variables using propagation to guide the relaxation until the estimated size s of the neighbourhood is attained.
@@ -235,7 +210,7 @@ object PropagationGuidedRelax{
    */
   def propagationGuidedRelax(solver: CPSolver, vars: Iterable[CPIntVar], currentSol: CPIntSol, s: Double): Unit = {
     if(varSeq.isEmpty) varSeq = vars.toSeq
-    propGuidedStore.propagationGuidedRelax(solver, currentSol, s)
+    propGuidedEngine.propagationGuidedRelax(solver, currentSol, s)
   }
 
   /**
@@ -244,7 +219,101 @@ object PropagationGuidedRelax{
    */
   def reversedPropagationGuidedRelax(solver: CPSolver, vars: Iterable[CPIntVar], currentSol: CPIntSol, s: Double): Unit = {
     if(varSeq.isEmpty) varSeq = vars.toSeq
-    propGuidedStore.reversedPropagationGuidedRelax(solver, currentSol, s)
+    propGuidedEngine.reversedPropagationGuidedRelax(solver, currentSol, s)
+  }
+}
+
+/**
+ * This class keeps track of the closeness relationship between variables. The closeness is defined as the average
+ * volume of propagation that is involved on one variable when another is instantiated.
+ */
+abstract class ClosenessStore{
+  /**
+   * Get the number of times that variable j has been impacted by an assignment of i.
+   */
+  def nImpacted(i: Int)(j: Int): Int
+
+  def allImpacted(i: Int): Iterable[(Int, Int)]
+
+  /**
+   * Get the closeness between vars i and j.
+   * @return the closeness between i and j or 0.0 if i or j are not valid indices.
+   */
+  def getCloseness(i: Int)(j: Int): Double
+
+  def allCloseness(i: Int): Iterable[(Int, Double)]
+
+  /**
+   * Get the close vars (closeness > 0) of i.
+   * @return a list of the close vars of i (empty if no var is close or i is not a valid index).
+   */
+  def getCloseVars(i: Int): Iterable[Int] = allCloseness(i).map{case (v, _) => v}
+
+  def updateEdge(i: Int, j: Int, newImpact: Int, newCloseness: Double): Unit
+
+  def updateEdge(i: Int, j: Int, newImpact: Int): Unit = updateEdge(i, j, newImpact, getCloseness(i)(j))
+  def updateEdge(i: Int, j: Int, newCloseness: Double): Unit = updateEdge(i, j, nImpacted(i)(j), newCloseness)
+}
+
+class ArrayClosenessStore(size: Int) extends ClosenessStore{
+  private val impacted: Array[Array[Int]] = Array.fill(size, size)(0)
+  private val closeness: Array[Array[Double]] = Array.fill(size, size)(0.0)
+
+  override def nImpacted(i: Int)(j: Int): Int = impacted(i)(j)
+
+  override def allImpacted(i: Int): Iterable[(Int, Int)] = impacted(i).zipWithIndex.filter(_._1 > 0).map(_.swap)
+
+  override def getCloseness(i: Int)(j: Int): Double = closeness(i)(j)
+
+  override def allCloseness(i: Int): Iterable[(Int, Double)] = closeness(i).zipWithIndex.filter(_._1 > 0.0).map(_.swap)
+
+  override def updateEdge(i: Int, j: Int, newImpact: Int, newCloseness: Double): Unit = {
+    impacted(i)(j) = newImpact
+    closeness(i)(j) = newCloseness
   }
 
+  override def updateEdge(i: Int, j: Int, newImpact: Int): Unit = impacted(i)(j) = newImpact
+
+  override def updateEdge(i: Int, j: Int, newCloseness: Double): Unit = closeness(i)(j) = newCloseness
+
+  override def toString: String = {
+    closeness.indices.map(i => {
+      closeness(i).indices.map(j => "(" + closeness(i)(j) + ", " + impacted(i)(j) + ")").mkString("  ")
+    }).mkString("\n")
+  }
+}
+
+class MapClosenessStore extends ClosenessStore{
+  private val edges: mutable.Map[Int, mutable.Map[Int, (Int, Double)]] = mutable.Map()
+
+  override def nImpacted(i: Int)(j: Int): Int = {
+    if(edges.contains(i)) edges(i).getOrElse(j, (0, 0.0))._1
+    else 0
+  }
+
+  override def allImpacted(i: Int): Iterable[(Int, Int)] = {
+    if(edges.contains(i)) edges(i).map{case (key, value) => (key, value._1)}
+    else Seq()
+  }
+
+  override def getCloseness(i: Int)(j: Int): Double = {
+    if(edges.contains(i)) edges(i).getOrElse(j, (0, 0.0))._2
+    else 0.0
+  }
+
+  override def allCloseness(i: Int): Iterable[(Int, Double)] = {
+    if(edges.contains(i)) edges(i).map{case (key, value) => (key, value._2)}
+    else Seq()
+  }
+
+  override def updateEdge(i: Int, j: Int, newImpact: Int, newCloseness: Double): Unit = {
+    val map = edges.getOrElseUpdate(i, mutable.Map[Int, (Int, Double)]())
+    map += j -> (newImpact, newCloseness)
+  }
+
+  override def toString: String = {
+    edges.map{case (i, subMap) => {
+      i + ": " + subMap.map{case (j, (imp, cl)) => j + ":(" + cl + ", " + imp + ")"}.mkString("  ")
+    }}.mkString("\n")
+  }
 }
