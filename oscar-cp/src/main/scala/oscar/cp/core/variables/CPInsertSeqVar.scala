@@ -296,6 +296,7 @@ class CPInsertSeqVar(
     if(allPossibleInsertionsFor(elem).size <= length){
       currentInsertions(elem) ++= allPossibleInsertionsFor(elem).filter(isMember)
     } else {
+      if(isInsertableAfter(elem, -1)) currentInsertions(elem) += -1
       currentInsertions(elem) ++= allMembersIterator.filter(isInsertableAfter(elem, _))
     }
     insertionsUpToDate(elem) = true
