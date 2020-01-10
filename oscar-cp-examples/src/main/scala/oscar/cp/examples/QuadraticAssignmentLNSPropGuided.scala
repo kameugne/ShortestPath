@@ -16,6 +16,9 @@ import scala.io.Source
  * The problem is to assign all facilities to different locations
  * with the goal of minimizing the sum of the distances multiplied by the corresponding flows.
  *
+ * Uses a Propagation Guided Relaxation (see Propagation Guided Large Neighborhood Search - Perron 2004)
+ *
+ * @author Charles Thomas cftmthomas@gmail.com
  * @author Pierre Schaus pschaus@gmail.com
  */
 object QuadraticAssignmentLNSPropGuided extends CPModel with App {
@@ -54,7 +57,7 @@ object QuadraticAssignmentLNSPropGuided extends CPModel with App {
         val v = y.min
         branch{
           post(y === v)
-          propGuided.updateCloseness(i) //Updating closeness metric when assigning variable
+          propGuided.updateCloseness(i) //Updating closeness metric when assigning variable (this is optional but allows to gain more information for the reverse PGLNS)
         }(post(y !== v))
       }
     }
@@ -74,12 +77,21 @@ object QuadraticAssignmentLNSPropGuided extends CPModel with App {
   val rand = new scala.util.Random(0)
   var limit = 100 // set the limit to 100 backtracks for LNS restarts
   val relaxSize = x.map(v => math.log(v.size)).sum * 0.5 //Desired size for the neighbourhood to relax
+  val iters = 200 //Number of LNS iterations
+  val reversePGLNSRatio = 0.5 //Probably to select the reverse PGLNS when used conjointly with PGLNS
 
-  for (r <- 1 to 200) {
+  //LNS Search with random relaxation:
+  for (r <- 1 to iters) {
     val stat = startSubjectTo(failureLimit = limit) {
-//      add(N.filter(i => rand.nextInt(100) < 50).map(i => x(i) === currentSol.values(i)))
-//      propGuided.propagationGuidedRelax(solver, currentSol, relaxSize) // Relaxation
-      propGuided.reversedPropagationGuidedRelax(solver, currentSol, relaxSize) // Relaxation
+//      add(N.filter(i => rand.nextInt(100) < 50).map(i => x(i) === currentSol.values(i))) // Random relaxation
+
+//      propGuided.propagationGuidedRelax(solver, currentSol, relaxSize) // Propagation Guided Relaxation
+
+//      propGuided.reversePropagationGuidedRelax(solver, currentSol, relaxSize) // reverse Propagation Guided Relaxation
+
+      //PGLNS and reverse PGLNS used conjointly:
+      if(rand.nextDouble() <= reversePGLNSRatio) propGuided.propagationGuidedRelax(solver, currentSol, relaxSize, updateCloseness = true)
+      else propGuided.reversePropagationGuidedRelax(solver, currentSol, relaxSize)
     }
     // adapt the backtrack limit for next run *2 is previous run reached the limit /2 otherwise
     limit = if (stat.completed) limit / 2 else limit * 2

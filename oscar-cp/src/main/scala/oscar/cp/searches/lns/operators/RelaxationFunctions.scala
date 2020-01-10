@@ -77,7 +77,7 @@ object RelaxationFunctions {
     * @param s The estimated size of the neighbourhood to attain.
     */
   def reversedPropagationGuidedRelax(solver: CPSolver, vars: Iterable[CPIntVar], currentSol: CPIntSol, s: Double): Unit =
-    PropagationGuidedRelax.reversedPropagationGuidedRelax(solver, vars, currentSol, s)
+    PropagationGuidedRelax.reversePropagationGuidedRelax(solver, vars, currentSol, s)
 
   /**
     * Relaxes variables using their values to guide the relaxation.

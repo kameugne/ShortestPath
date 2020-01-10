@@ -10,6 +10,8 @@ import scala.util.Random
 
 /**
  * Performs a Propagation Guided Relaxation (see Propagation Guided Large Neighborhood Search - Perron 2004)
+ *
+ * @author Charles Thomas cftmthomas@gmail.com
  */
 class PropagationGuidedRelax(variables: Seq[CPIntVar]){
   val nVars: Int = variables.length
@@ -19,7 +21,7 @@ class PropagationGuidedRelax(variables: Seq[CPIntVar]){
   val prevDomainSize: Array[ReversibleInt] = Array.tabulate(nVars)(i => ReversibleInt(variables(i).size)(variables(i).store))
 
   //Data structure to keep track of closeness:
-  val clStore: ClosenessStore = if(variables.length > 1000000) new MapClosenessStore else new ArrayClosenessStore(variables.length)
+  lazy val clStore: ClosenessStore = if(variables.length > 1000000) new MapClosenessStore else new ArrayClosenessStore(variables.length)
 
   /**
     * Updates the closeness store with the propagation given an instantiated variable.
@@ -80,6 +82,35 @@ class PropagationGuidedRelax(variables: Seq[CPIntVar]){
   }
 
   /**
+   * Returns the most impacted unbound variable.
+   * @param instantiated the var that has been instantiated.
+   * @return the index of the most impacted unbound variable (-1 if no variable has been impacted)
+   */
+  def getMostImpacted(instantiated: Int): Int ={
+    var maxImpact = 0.0
+    var mostImpacted = -1
+
+    for(i <- variables.indices) if(i != instantiated){
+      val currentDomSize = variables(i).size
+
+      //If domain size has changed:
+      if(currentDomSize < prevDomainSize(i).value){
+        val impact = (prevDomainSize(i) - currentDomSize).toDouble / startDomainSize(i)
+
+        //Checking impact:
+        if(!variables(i).isBound && impact > maxImpact){
+          mostImpacted = i
+          maxImpact = impact
+        }
+
+        prevDomainSize(i).setValue(currentDomSize)
+      }
+    }
+
+    mostImpacted
+  }
+
+  /**
     * Get the close vars (closeness > 0) of i.
     * @return a list of the close vars of i (empty if no var is close or i is not a valid index).
     */
@@ -118,7 +149,7 @@ class PropagationGuidedRelax(variables: Seq[CPIntVar]){
    * Relaxes variables using propagation to guide the relaxation until the estimated size s of the neighbourhood is attained.
    * @param s The estimated size of the neighbourhood to attain.
    */
-  def propagationGuidedRelax(solver: CPSolver, currentSol: CPIntSol, s: Double): Unit = {
+  def propagationGuidedRelax(solver: CPSolver, currentSol: CPIntSol, s: Double, updateCloseness: Boolean = false): Unit = {
     //    println("relaxing to size " + s)
     val varArray = Array.tabulate(variables.length)(i => i) //map to real index of variables
     var boundStart = varArray.length //Elements of varArray from this index are bound
@@ -134,7 +165,7 @@ class PropagationGuidedRelax(variables: Seq[CPIntVar]){
       if (!variables(next).isBound) throw Inconsistency
 
       //Updating closeness and next var to freeze:
-      toFreezeNext = updateClosenessAndGetMostImpacted(next)
+      toFreezeNext = if(updateCloseness) updateClosenessAndGetMostImpacted(next) else getMostImpacted(next)
 
       //Updating size and bounded vars:
       size = 0.0
@@ -159,7 +190,7 @@ class PropagationGuidedRelax(variables: Seq[CPIntVar]){
    * Relaxes variables using propagation to guide the relaxation until the estimated size s of the neighbourhood is attained.
    * @param s The estimated size of the neighbourhood to attain.
    */
-  def reversedPropagationGuidedRelax(solver: CPSolver, currentSol: CPIntSol, s: Double): Unit = {
+  def reversePropagationGuidedRelax(solver: CPSolver, currentSol: CPIntSol, s: Double): Unit = {
     //    println("relaxing to size " + s)
     val varArray = Array.tabulate(variables.length)(i => i) //map to real index of variables
 
@@ -202,24 +233,25 @@ class PropagationGuidedRelax(variables: Seq[CPIntVar]){
 
 object PropagationGuidedRelax{
   var varSeq: Seq[CPIntVar] = Seq()
-  lazy val propGuidedEngine: PropagationGuidedRelax = new PropagationGuidedRelax(varSeq) // Closeness store used for propagation guided relax
+  lazy val propGuidedEngine: PropagationGuidedRelax = new PropagationGuidedRelax(varSeq) // Propagation guided relax engine
 
   /**
    * Relaxes variables using propagation to guide the relaxation until the estimated size s of the neighbourhood is attained.
    * @param s The estimated size of the neighbourhood to attain.
+   * @param updateCloseness Set to true to maintain and update an internal closeness store if this relaxation is to be used conjointly with reverse PGLNS.
    */
-  def propagationGuidedRelax(solver: CPSolver, vars: Iterable[CPIntVar], currentSol: CPIntSol, s: Double): Unit = {
+  def propagationGuidedRelax(solver: CPSolver, vars: Iterable[CPIntVar], currentSol: CPIntSol, s: Double, updateCloseness: Boolean = false): Unit = {
     if(varSeq.isEmpty) varSeq = vars.toSeq
-    propGuidedEngine.propagationGuidedRelax(solver, currentSol, s)
+    propGuidedEngine.propagationGuidedRelax(solver, currentSol, s, updateCloseness)
   }
 
   /**
    * Relaxes variables using propagation to guide the relaxation until the estimated size s of the neighbourhood is attained.
    * @param s The estimated size of the neighbourhood to attain.
    */
-  def reversedPropagationGuidedRelax(solver: CPSolver, vars: Iterable[CPIntVar], currentSol: CPIntSol, s: Double): Unit = {
+  def reversePropagationGuidedRelax(solver: CPSolver, vars: Iterable[CPIntVar], currentSol: CPIntSol, s: Double): Unit = {
     if(varSeq.isEmpty) varSeq = vars.toSeq
-    propGuidedEngine.reversedPropagationGuidedRelax(solver, currentSol, s)
+    propGuidedEngine.reversePropagationGuidedRelax(solver, currentSol, s)
   }
 }
 
