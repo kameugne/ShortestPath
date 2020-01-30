@@ -66,10 +66,24 @@ class CPIntVarForeachSuite extends TestSuite {
       val v = CPIntVar(100, 100000)(store)
       assert(v.isInstanceOf[CPIntVarAdaptable] && v.isContinuous)
 
+      v.removeValue(1000)
+      assert(!v.isContinuous)
+
+      // reorder things inside the reversible set
+      for(_ <- 0 until 10) {
+        store.pushState()
+        for(i <- 100 to 100000) {
+          if (r.nextDouble() > 0.6) {
+            v.removeValue(i)
+          }
+        }
+        store.pop()
+      }
+
       val present = new mutable.HashSet[Int]()
 
       for(i <- 100 to 100000) {
-        if(r.nextDouble() > 0.6) {
+        if(v.hasValue(i) && r.nextDouble() > 0.6) {
           present.add(i)
         }
         else

@@ -258,10 +258,11 @@ abstract class CPIntVar extends CPVar with IntVarLike {
         // we reach the value we last saw in the continuous iteration
         while (i != 0 && (!wasContinous || va.values(i-1) > lastSeen)) {
           i -= 1
+          val thisValue = va.values(i)
           f(va.values(i) * multiplier + offset)
           if(origSize != va._size) {
             origSize -= 1
-            if(origSize != va._size || va.hasValue(i+va.offset))
+            if(origSize != va._size || va.hasValue(thisValue))
               throw new ConcurrentModificationException()
           }
         }
