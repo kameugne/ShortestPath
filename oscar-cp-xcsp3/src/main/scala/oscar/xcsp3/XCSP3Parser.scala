@@ -6,9 +6,8 @@ import org.xcsp.common.Condition
 import org.xcsp.common.Condition.{ConditionIntvl, ConditionRel, ConditionVal, ConditionVar}
 import org.xcsp.common.Types._
 import org.xcsp.common.predicates.XNodeParent
-import org.xcsp.parser.XCallbacks.{Implem, XCallbacksParameters}
-import org.xcsp.parser._
-import org.xcsp.parser.entries.AnyEntry.{CEntry, OEntry, VEntry}
+import org.xcsp.parser.callbacks.XCallbacks.{Implem, XCallbacksParameters}
+import org.xcsp.parser.entries.ParsingEntry.{CEntry, OEntry, VEntry}
 import org.xcsp.parser.entries.XConstraints.{XBlock, XGroup, XSlide}
 import org.xcsp.parser.entries.XVariables.{XArray, XVarInteger}
 import oscar.cp._
@@ -47,7 +46,7 @@ class XCSP3Parser(filename: String) extends XCallbacksDecomp {
 //  impl.currParameters.put(XCallbacksParameters.INTENSION_TO_EXTENSION_PRIORITY, java.lang.Boolean.FALSE)
 
 
-  override def implem(): XCallbacks.Implem = {
+  override def implem(): Implem = {
     impl
   }
 

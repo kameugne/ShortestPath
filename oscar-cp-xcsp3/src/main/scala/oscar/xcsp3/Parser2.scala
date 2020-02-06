@@ -3,15 +3,16 @@ package oscar.xcsp3
 import java.io.File
 import java.util
 
-import org.xcsp.common.{Condition, IVar}
 import org.xcsp.common.Condition.{ConditionIntvl, ConditionRel, ConditionVal, ConditionVar}
 import org.xcsp.common.Types._
 import org.xcsp.common.predicates.{XNode, XNodeLeaf, XNodeParent}
-import org.xcsp.parser.XCallbacks
-import org.xcsp.parser.XCallbacks.{Implem, XCallbacksParameters}
+import org.xcsp.common.{Condition, IVar}
+import org.xcsp.parser.callbacks.XCallbacks
+import org.xcsp.parser.callbacks.XCallbacks.{Implem, XCallbacksParameters}
 import org.xcsp.parser.entries.XVariables.XVarInteger
-import oscar.cp.constraints.{Automaton, PartialInverse}
+import oscar.cp.constraints.Automaton
 import oscar.modeling.algebra.bool._
+import oscar.modeling.algebra.integer.IntExpression._
 import oscar.modeling.algebra.integer._
 import oscar.modeling.constraints._
 import oscar.modeling.misc.SearchStatistics
@@ -19,7 +20,6 @@ import oscar.modeling.models.{ModelDeclaration, NoSolException}
 import oscar.modeling.solvers.cp.decompositions.CartProdRefinement
 import oscar.modeling.solvers.cp.{Branchings, CPApp, CPAppConfig}
 import oscar.modeling.vars.IntVar
-import oscar.modeling.algebra.integer.IntExpression._
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable

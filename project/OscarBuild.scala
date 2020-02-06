@@ -2,7 +2,6 @@ package oscar
 
 import sbt.Keys._
 import sbt._
-import oscar.OscarBuildParameters
 
 object OscarBuild {
 
@@ -64,7 +63,7 @@ object OscarBuild {
     val swingxWs = "org.swinglabs" % "swingx-ws" % "1.0"
     val xmlApisExt = "xml-apis" % "xml-apis-ext" % "latest.milestone"
     //    val xcsp3 = "xcsp3"  % "xcsp3" % "1.0.0-SNAPSHOT"
-    val xcsp3 = "org.xcsp" % "xcsp3-tools" % "1.0.0"
+    val xcsp3 = "org.xcsp" % "xcsp3-tools" % "1.1.0"
     val graphStreamCore = "org.graphstream" % "gs-core" % "1.3"
     val graphStreamAlgo = "org.graphstream" % "gs-algo" % "1.3"
     val graphStreamUI = "org.graphstream" % "gs-ui" % "1.3"

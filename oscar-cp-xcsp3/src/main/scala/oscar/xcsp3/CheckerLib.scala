@@ -2,9 +2,7 @@ package oscar.xcsp3
 
 import java.io.ByteArrayInputStream
 
-import org.xcsp.checker.SolutionChecker
-import org.xcsp.parser.entries.XConstraints.XCtr
-import org.xcsp.parser.entries.XObjectives.XObj
+import org.xcsp.parser.callbacks.SolutionChecker
 
 import scala.jdk.CollectionConverters._
 
