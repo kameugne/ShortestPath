@@ -75,7 +75,7 @@ class NelderMeadState(simplexInit: Array[MOOPoint], val startIntervals: Array[(D
   def printSimplex = {
     println("=" * 80)
     for (i <- 0 until simplexSize)
-      println(i + ": " + simplex(i).toString)
+      println(s"$i: ${simplex(i)}")
   }
   
 }
