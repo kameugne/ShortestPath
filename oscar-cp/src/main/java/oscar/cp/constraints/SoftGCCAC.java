@@ -116,7 +116,7 @@ public class SoftGCCAC extends Constraint{
 		this.low = low;
 		this.up = up;
 		this.viol = viol;
-		this.priorityL2_$eq(CPStore.MAXPRIORL2()-2);
+		this.priorityL2_$eq(CPStore.MaxPriorityL2()-2);
 		check();		
 	}
 

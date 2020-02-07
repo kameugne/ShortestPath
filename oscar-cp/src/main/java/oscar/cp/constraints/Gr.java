@@ -58,7 +58,7 @@ public class Gr extends Constraint {
 
 	@Override
 	public void setup(CPPropagStrength l) throws Inconsistency {
-		priorityL2_$eq(CPStore.MAXPRIORL2());
+		priorityL2_$eq(CPStore.MaxPriorityL2());
 		propagate();
 		if(isActive()){
 			if (!y.isBound()) y.callPropagateWhenBoundsChange(this);

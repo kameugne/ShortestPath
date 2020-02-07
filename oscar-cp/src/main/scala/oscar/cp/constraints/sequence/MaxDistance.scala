@@ -53,7 +53,7 @@ abstract class MaxDistance(sequence: CPSeqVar, distance: CPIntVar, transitions: 
 
 class MaxDistanceHead(sequence: CPHeadSeqVar, distance: CPIntVar, transitions: Array[Array[Int]]) extends MaxDistance(sequence, distance, transitions){
 
-  private def updateDist(visits: Iterator[Int] = sequence.allMembers.toIterator): Unit = {
+  private def updateDist(visits: Iterator[Int] = sequence.allMembers.iterator): Unit = {
     if(visits.isEmpty) return
     var prevVisit = visits.next()
     var d = 0

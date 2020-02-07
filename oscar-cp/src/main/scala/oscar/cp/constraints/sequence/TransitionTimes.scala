@@ -98,7 +98,7 @@ class TransitionTimesHead(
   /**
     * Updating starts of time windows for appended activities
     */
-  private def updateAppendedStarts(visits: Iterator[Int] = sequence.allMembers.toIterator): Unit = {
+  private def updateAppendedStarts(visits: Iterator[Int] = sequence.allMembers.iterator): Unit = {
     if (visits.isEmpty) return
     var prevVisit = visits.next()
     var time = ends(prevVisit).min

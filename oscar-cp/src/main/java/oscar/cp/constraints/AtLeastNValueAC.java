@@ -76,7 +76,7 @@ public class AtLeastNValueAC extends Constraint {
         this.x = x;
         this.posted = false;
         this.nValueVar = nval;
-        this.priorityL2_$eq(CPStore.MAXPRIORL2() - 3);
+        this.priorityL2_$eq(CPStore.MaxPriorityL2() - 3);
         this.idempotent_$eq(true);
     }
 

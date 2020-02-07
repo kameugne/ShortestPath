@@ -241,7 +241,7 @@ class CPHeadSeqVar(
 
   def changed(deltaSeqVar: DeltaSeqVar): Boolean = membersChanged(deltaSeqVar) || setDomain.changed(deltaSeqVar.asInstanceOf[DeltaSetBasedSeqVar].deltaSet)
 
-  def deltaMembers(seqVar: DeltaSeqVar): Iterator[Int] = elems.slice(seqVar.oldSizeMember, length).toIterator
+  def deltaMembers(seqVar: DeltaSeqVar): Iterator[Int] = elems.slice(seqVar.oldSizeMember, length).iterator
 
   def filterWhenDomainChangesWithDelta(idempotent: Boolean = false, priority: Int = CPStore.MaxPriorityL2 - 2)(filter: DeltaSeqVar => Unit)(implicit constraint: Constraint): DeltaSeqVar = {
     val propagator = new PropagatorSeqVar(this, 0, filter)

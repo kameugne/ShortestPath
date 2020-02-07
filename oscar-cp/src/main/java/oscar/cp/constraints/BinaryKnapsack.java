@@ -82,7 +82,7 @@ public class BinaryKnapsack extends Constraint {
 	public BinaryKnapsack(CPBoolVar [] b, final int [] weights, CPIntVar load) {
 		super(b[0].store(),"BinaryKnapsack");
         assert(b.length == weights.length);
-		priorityL2_$eq(CPStore.MAXPRIORL2()-2);
+		priorityL2_$eq(CPStore.MaxPriorityL2()-2);
 		Integer [] perm = new Integer [weights.length];
 		for (int i = 0; i < perm.length; i++) {
             assert (weights[i] >= 0);

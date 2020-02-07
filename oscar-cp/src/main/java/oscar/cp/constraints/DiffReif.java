@@ -59,8 +59,8 @@ public class DiffReif extends Constraint {
 
 	@Override
 	public void setup(CPPropagStrength l) {
-		priorityBindL1_$eq(CPStore.MAXPRIORL1());
-		priorityRemoveL1_$eq(CPStore.MAXPRIORL1());
+		priorityBindL1_$eq(CPStore.MaxPriorityL1());
+		priorityRemoveL1_$eq(CPStore.MaxPriorityL1());
 		
 		if (x.isBound() || b.isBound())
 			valBind(x);

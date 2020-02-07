@@ -94,7 +94,7 @@ public class GrEqVarReif extends Constraint {
 	
 	
 	protected int getPriorityBindL1(){
-		return CPStore.MAXPRIORL1()-1;
+		return CPStore.MaxPriorityL1()-1;
 	}
 		
 	@Override

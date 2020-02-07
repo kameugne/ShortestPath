@@ -75,7 +75,7 @@ public class Implication extends Constraint {
 	
 	
 	protected int getPriorityBindL1(){
-		return CPStore.MAXPRIORL1();
+		return CPStore.MaxPriorityL1();
 	}
 
 

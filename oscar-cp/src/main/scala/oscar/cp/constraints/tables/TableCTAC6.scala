@@ -156,7 +156,7 @@ final class TableCTAC6(X: Array[CPIntVar], table: Array[Array[Int]]) extends Con
 
       println("list of word"+i)
       while (curr != null) {
-        print(curr+",")
+        print(s"$curr,")
         curr = curr.next
 
       }

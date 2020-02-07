@@ -183,12 +183,12 @@ class Parser extends JavaTokenParsers { // RegexParsers {
   def float_const: Parser[Float] = (
     int_const ~ "." ~ "[0-9][0-9]*".r ~ opt("[eE]".r ~ int_const) ^^ {
       case i1 ~ "." ~ i2 ~ exp => exp match {
-        case Some(e ~ i3) => (i1 + "." + i2 + e + i3).toFloat
-        case None => (i1 + "." + i2).toFloat
+        case Some(e ~ i3) => (s"$i1.$i2$e$i3").toFloat
+        case None => (s"$i1.$i2").toFloat
       }
     }
     | int_const ~ "[eE]".r ~ int_const ^^ {
-      case i1 ~ e ~ i2 => (i1 + e + i2).toFloat
+      case i1 ~ e ~ i2 => (s"$i1$e$i2").toFloat
     })
   def int_const: Parser[Int] = "[+-]?[0-9][0-9]*".r ^^ (_.toInt) // "?" added in the regex, as it wasn't in the grammar
 
@@ -362,7 +362,7 @@ class Parser extends JavaTokenParsers { // RegexParsers {
                 ((id, (FZType.V_INT,
                   new VarInt(ann, CPIntVar(x)(cp), id))))
             } else {
-              throw new Exception(x + " not in the domain of " + id)
+              throw new Exception(s"$x not in the domain of $id")
             }
           case _ =>
             val cpvar = getCPIntVar(assign)
@@ -464,7 +464,7 @@ class Parser extends JavaTokenParsers { // RegexParsers {
                         if ((s contains y) || s.isEmpty) {
                           getCPIntVar(y)
                         } else {
-                          throw new Exception(y + " not in the domain of " + id)
+                          throw new Exception(s"$y not in the domain of $id")
                         }
                       case _ =>
                         val cpvar = getCPIntVar(d)
@@ -511,7 +511,7 @@ class Parser extends JavaTokenParsers { // RegexParsers {
                       case y: List[Int] =>
                         // same as in varset creation, what is the assignment is {varint, varint} or {array(#),...}
                         if (y.toSet.subsetOf(s)) { getCPSetVar(y) }
-                        else { throw new Exception(y + " not in the domain of " + id) }
+                        else { throw new Exception(s"$y not in the domain of $id") }
                       case _ =>
                         val cpvar = getCPSetVar(d)
                         shrinkDom(s, cpvar)
@@ -2195,7 +2195,7 @@ class Parser extends JavaTokenParsers { // RegexParsers {
       case "largest" => binary(array, -_.max, assignAnn(args))
       case "occurence" => binary(array, -_.constraintDegree, assignAnn(args))
       case "most_constrained" => {
-        System.err.println(args(1) + " not suppported so far occurence instead")
+        System.err.println(s"${args(1)} not suppported so far occurence instead")
         binary(array, -_.constraintDegree, assignAnn(args))
       }
       case "max_regret" => binary(array, -_.regret, assignAnn(args))
@@ -2213,7 +2213,7 @@ class Parser extends JavaTokenParsers { // RegexParsers {
       case "indomain_min" => _.min
       case "indomain_max" => _.max
       case "indomain_middle" => {
-        System.err.println(args(2) + " not suppported so far, in_domain_median used instead")
+        System.err.println(s"${args(2)} not suppported so far, in_domain_median used instead")
         _.median
       }
       case "indomain_median" => _.median
@@ -2222,15 +2222,15 @@ class Parser extends JavaTokenParsers { // RegexParsers {
       }
       case "indomain_random" => _.randomValue
       case "indomain_split" => {
-        System.err.println(args(2) + " not suppported so far, in_domain_min used instead")
+        System.err.println(s"${args(2)} not suppported so far, in_domain_min used instead")
         _.min
       } //should use binary domain split... need to check that the bound used on the intervals (with binarySplit the same as in the spec
       case "indomain_reverse_split" => {
-        System.err.println(args(2) + " not suppported so far, in_domain_min used instead")
+        System.err.println(s"${args(2)} not suppported so far, in_domain_min used instead")
         _.min
       }
       case "indomain_interval" => {
-        System.err.println(args(2) + " not suppported so far, in_domain_min used instead")
+        System.err.println(s"${args(2)} not suppported so far, in_domain_min used instead")
         _.min
       }
     }
@@ -2257,7 +2257,7 @@ class Parser extends JavaTokenParsers { // RegexParsers {
             val ann = getCPArrayOutputAnnotations(state(i).name)
             print(state(i).name + " = array" + ann.length + "d(")
             for (a <- ann) {
-              print(a.min + ".." + a.max + ", ")
+              print(s"${a.min}..${a.max}, ")
             }
             print("[")
             printCPVar(x(i))

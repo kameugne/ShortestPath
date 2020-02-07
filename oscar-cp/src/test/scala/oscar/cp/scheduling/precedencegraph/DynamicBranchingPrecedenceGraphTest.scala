@@ -40,7 +40,7 @@ class DynamicBranchingPrecedenceGraphTest extends FunSuite with Matchers with As
     testRandomInstances(nTests, 6, 6, 5, 15, 5, 20)
   }
 
-  def testRandomInstances(nTests: Int, nActivities : Int, nFamilies : Int, minDuration: Int, maxDuration: Int, minTT : Int, maxTT : Int) {
+  def testRandomInstances(nTests: Int, nActivities : Int, nFamilies : Int, minDuration: Int, maxDuration: Int, minTT : Int, maxTT : Int):Unit = {
 
     for(i <- 0 until nTests) {
       val (nActis, _, _, _, durations, ttMatrixWithSetup, _) = RandomFamilyInstanceGenerator.generateRandomJobShopInstance(nActivities, 1, nFamilies, minDuration, maxDuration, minTT, maxTT, true, 0)

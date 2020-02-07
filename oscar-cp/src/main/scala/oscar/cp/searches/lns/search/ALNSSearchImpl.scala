@@ -32,7 +32,7 @@ class ALNSSearchImpl(solver: CPSolver, decisionVars: Array[CPIntVar], auxiliaryV
   var nSols = 0
   var nFailures = 0
   var stopSearch = false
-  val opDeactivation: Boolean = config.metaParameters.getOrElse('opDeactivation, false).asInstanceOf[Boolean]
+  val opDeactivation: Boolean = config.metaParameters.getOrElse(Symbol("opDeactivation"), false).asInstanceOf[Boolean]
 
   val stopCondition: (DFSearch) => Boolean = (s: DFSearch) => {
     var stop = optimumFound
@@ -60,7 +60,7 @@ class ALNSSearchImpl(solver: CPSolver, decisionVars: Array[CPIntVar], auxiliaryV
 
   //Stagnation:
   var stagnation = 0
-  val stagnationThreshold: Int = config.metaParameters.getOrElse('stagnationThreshold, 0).asInstanceOf[Int]
+  val stagnationThreshold: Int = config.metaParameters.getOrElse(Symbol("stagnationThreshold"), 0).asInstanceOf[Int]
 
   lazy val relaxOps: Array[ALNSOperator] = config.relaxStore.getElements.toArray
   lazy val searchOps: Array[ALNSOperator] = config.searchStore.getElements.toArray
@@ -140,7 +140,7 @@ class ALNSSearchImpl(solver: CPSolver, decisionVars: Array[CPIntVar], auxiliaryV
     while(System.nanoTime() < endTime && !optimumFound && !stopSearch){
 
       //learning phase:
-      if (config.metaParameters.getOrElse('learning, false).asInstanceOf[Boolean]) {
+      if (config.metaParameters.getOrElse(Symbol("learning"), false).asInstanceOf[Boolean]) {
         if (!solver.silent) println("\nStarting learning phase...")
         alnsLearning()
         if (!solver.silent) {
@@ -319,7 +319,7 @@ class ALNSSearchImpl(solver: CPSolver, decisionVars: Array[CPIntVar], auxiliaryV
       currentSol = Some(initSol)
     }
 
-    if(config.metaParameters.getOrElse('opDeactivation, false).asInstanceOf[Boolean]) {
+    if(config.metaParameters.getOrElse(Symbol("opDeactivation"), false).asInstanceOf[Boolean]) {
       relaxPerf.values.filter { case (op, perfs) =>
         op.isActive && perfs.map(_._2).max == 0
       }.foreach { case (op, _) =>

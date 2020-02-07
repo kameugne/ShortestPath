@@ -60,8 +60,8 @@ public class LeEqCteReif extends Constraint {
 
 	@Override
 	public void setup(CPPropagStrength l) throws Inconsistency {
-		priorityBindL1_$eq(CPStore.MAXPRIORL1());
-		priorityL2_$eq(CPStore.MAXPRIORL2()-1);
+		priorityBindL1_$eq(CPStore.MaxPriorityL1());
+		priorityL2_$eq(CPStore.MaxPriorityL2()-1);
 		propagate();
 		if(isActive()){
 			b.callValBindWhenBind(this);

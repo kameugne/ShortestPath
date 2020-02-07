@@ -98,7 +98,7 @@ public class MinAssignment extends Constraint {
 
 
 
-        this.priorityL2_$eq(s().MAXPRIORL2()-3);
+        this.priorityL2_$eq(s().MaxPriorityL2()-3);
 
         this.cost = cost;
         this.values = new int[n];

@@ -11,12 +11,12 @@ import scala.util.Random
   * TODO
   */
 class EvalWindowLaborie(solver: CPSolver, decisionVars: Array[CPIntVar], auxiliaryVars: Array[CPIntVar], config: ALNSConfig) extends ALNSSearchImpl(solver, decisionVars, config) {
-  val tolerance: Double = config.metaParameters.getOrElse('tolerance, 0.5).asInstanceOf[Double]
-  val balance: Double = config.metaParameters.getOrElse('balance, 0.05).asInstanceOf[Double]
+  val tolerance: Double = config.metaParameters.getOrElse(Symbol("tolerance"), 0.5).asInstanceOf[Double]
+  val balance: Double = config.metaParameters.getOrElse(Symbol("balance"), 0.05).asInstanceOf[Double]
   def evalWindow: Long = 10 * iterTimeout
   override val stagnationThreshold = 10
-  val altScore: Boolean = config.metaParameters.getOrElse('altScore, false).asInstanceOf[Boolean]
-  val quickStart: Boolean = config.metaParameters.getOrElse('quickStart, false).asInstanceOf[Boolean]
+  val altScore: Boolean = config.metaParameters.getOrElse(Symbol("altScore"), false).asInstanceOf[Boolean]
+  val quickStart: Boolean = config.metaParameters.getOrElse(Symbol("quickStart"), false).asInstanceOf[Boolean]
 
   val iterStartState: ArrayBuffer[(Long, Int)] = ArrayBuffer[(Long, Int)]()
 
@@ -98,7 +98,7 @@ class EvalWindowLaborie(solver: CPSolver, decisionVars: Array[CPIntVar], auxilia
   protected def timeLearning(): Unit = {
     learning = true
     iterTimeout = config.timeout
-    val orderedBaseline = config.metaParameters.getOrElse('opOrder, None).asInstanceOf[Option[Seq[String]]]
+    val orderedBaseline = config.metaParameters.getOrElse(Symbol("opOrder"), None).asInstanceOf[Option[Seq[String]]]
     val orderedRelax = if(orderedBaseline.isDefined) {
       val mapping = orderedBaseline.get.map(_.split("_")(0)).zipWithIndex.reverse.toMap
       relaxOps.toSeq.sortBy(op => mapping.getOrElse(op.name, mapping.size))

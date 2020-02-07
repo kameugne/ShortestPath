@@ -17,16 +17,13 @@
 
 package oscar.cp.constraints
 
-import scala.annotation.elidable
-import scala.annotation.elidable.ASSERTION
-import oscar.algo.{DisjointSets, Inconsistency, RangeMinQuery, SortUtils}
 import oscar.algo.reversible.ReversibleInt
-import oscar.cp.CPIntVar
-import oscar.cp.CPIntVarOps
-import oscar.cp.CPSetVar
-import oscar.cp.Constraint
+import oscar.algo.{DisjointSets, Inconsistency, RangeMinQuery}
+import oscar.cp.{CPIntVar, CPIntVarOps, CPSetVar, Constraint}
 import oscar.cp.core.CPPropagStrength
 import oscar.cp.core.variables.CPVar
+
+import scala.math.Ordering.Double.TotalOrdering
 
 /**
  * @author Pierre Schaus pschaus@gmail.com

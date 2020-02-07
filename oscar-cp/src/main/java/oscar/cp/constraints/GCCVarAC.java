@@ -97,7 +97,7 @@ public class GCCVarAC extends Constraint {
 		this.minVal = minval;
 		this.maxVal = minval+o.length-1;
 		nbVals = maxVal-minVal+1;
-		this.priorityL2_$eq(CPStore.MAXPRIORL2()-3);
+		this.priorityL2_$eq(CPStore.MaxPriorityL2()-3);
 	}
 
 	@Override
