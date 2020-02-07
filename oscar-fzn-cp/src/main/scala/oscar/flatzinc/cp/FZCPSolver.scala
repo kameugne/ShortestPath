@@ -94,7 +94,7 @@ class FZCPModel(val model:oscar.flatzinc.model.FZProblem, val pstrength: oscar.c
             add(cons)
           }catch{
             case e: scala.MatchError if ignoreUnkownConstraints => Console.err.println("% ignoring in CP: "+c)
-            case foo =>
+            case foo: Throwable =>
               println(foo)
           }
         }
@@ -164,13 +164,13 @@ class FZCPModel(val model:oscar.flatzinc.model.FZProblem, val pstrength: oscar.c
      model.solution.handleSolution(
       (s: String) => dictVars.get(s) match {
         case Some(intVar) =>
-          intVar.value + ""
+          intVar.value.toString
         case r => if(s=="true" || s=="false") s 
         else try{
-          s.toInt.toString()
+          s.toInt.toString
         }catch{
           case e: NumberFormatException => {
-            throw new Exception("Unhappy: "+r+ " "+s)
+            throw new Exception(s"Unhappy: $r $s")
           }
         }
      });
