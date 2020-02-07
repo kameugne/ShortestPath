@@ -30,7 +30,7 @@ class ReversibleSparseSubset(store: ReversibleContext, val min: Int, val max: In
   def requires(value: Int): Unit = {
     assert(checkVal(value));
     if (isRequired(value)) return ;
-    if (!isPossible(value)) throw new RuntimeException(value + " cannot be required since it is even not possible")
+    if (!isPossible(value)) throw new RuntimeException(s"$value cannot be required since it is even not possible")
     exchangePositions(value, values(size1.value) + min);
     size1.incr()
     assert(size1.value <= values.length);
@@ -56,7 +56,7 @@ class ReversibleSparseSubset(store: ReversibleContext, val min: Int, val max: In
   def excludes(value: Int): Unit = {
     assert(checkVal(value))
     if (!isPossible(value)) return // it is already not possible
-    if (isRequired(value)) throw new RuntimeException(value + " is required so it cannot be excluded")
+    if (isRequired(value)) throw new RuntimeException(s"$value is required so it cannot be excluded")
     exchangePositions(value, values(size2.value - 1) + min);
     size2.decr()
     assert(size1.value <= values.length);
