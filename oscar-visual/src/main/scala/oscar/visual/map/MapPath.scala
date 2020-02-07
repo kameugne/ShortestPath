@@ -24,7 +24,7 @@ import java.awt.Color
  * Representation of a point defined by coordinates
  */
 case class MapPoint(lat : Double, long : Double) {
-    override def toString() = lat+","+long
+    override def toString() = s"$lat,$long"
 }
 
 /*

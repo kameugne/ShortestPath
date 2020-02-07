@@ -54,7 +54,7 @@ class VisualLabelledPoint(d:VisualDrawing, s:Ellipse2D.Double, label: String, an
   
   override def draw(g: Graphics2D): Unit = {
 	g.draw(point);
-	println(xText + " " + yText)
+	println(s"$xText $yText")
     g.drawString(label, xText, yText);
   }
 }
