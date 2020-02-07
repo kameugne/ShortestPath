@@ -6,6 +6,7 @@ import org.xcsp.common.Condition
 import org.xcsp.common.Condition.{ConditionIntvl, ConditionRel, ConditionVal, ConditionVar}
 import org.xcsp.common.Types._
 import org.xcsp.common.predicates.XNodeParent
+import org.xcsp.common.Constants
 import org.xcsp.parser.callbacks.XCallbacks.{Implem, XCallbacksParameters}
 import org.xcsp.parser.entries.ParsingEntry.{CEntry, OEntry, VEntry}
 import org.xcsp.parser.entries.XConstraints.{XBlock, XGroup, XSlide}
@@ -331,10 +332,17 @@ class XCSP3Parser(filename: String) extends XCallbacksDecomp {
   override def buildCtrExtension(id: String, list: Array[XVarInteger], tuples: Array[Array[Int]], positive: Boolean, flags: util.Set[TypeFlag]): Unit = {
     //println(list.map(x => x.id()).mkString(" "))
     val cst: Constraint = if (positive) {
-      table(list.map(x => varHashMap(x.id())), tuples)
-    }
-    else {
-      negativeTable(list.map(x => varHashMap(x.id())), tuples)
+      if (flags.contains(TypeFlag.STARRED_TUPLES)){
+        shortTable(list.map(x => varHashMap(x.id())), tuples,Constants.STAR_INT)
+      } else {
+        table(list.map(x => varHashMap(x.id())), tuples)
+      }
+    } else {
+      if (flags.contains(TypeFlag.STARRED_TUPLES)){
+        negativeShortTable(list.map(x => varHashMap(x.id())), tuples,Constants.STAR_INT)
+      } else {
+        negativeTable(list.map(x => varHashMap(x.id())), tuples)
+      }
     }
     cp.add(cst)
     cstHashMap += ((id, cst))
@@ -343,6 +351,32 @@ class XCSP3Parser(filename: String) extends XCallbacksDecomp {
   override def buildCtrInstantiation(id: String, list: Array[XVarInteger], values: Array[Int]): Unit = {
     val csts = list.zip(values).map { case (x, v) => varHashMap(x.id()) === v }
     cp.add(csts)
+  }
+
+  override def buildCtrElement(id: String, list: Array[XVarInteger], startIndex: Int, index: XVarInteger, rank: TypeRank, value: XVarInteger): Unit = {
+    if (rank != TypeRank.ANY)
+      throw new Exception("Element constraint only supports ANY as position for the index")
+    val idx: CPIntVar = varHashMap(index.id()) - startIndex
+    val x: Array[CPIntVar] = toCPIntVar(list)
+    val z: CPIntVar = varHashMap(value.id())
+    cp.add(elementVar(x, idx, z))
+  }
+
+  override def buildCtrElement(id: String, list: Array[XVarInteger], startIndex: Int, index: XVarInteger, rank: TypeRank, value: Int): Unit = {
+    if (rank != TypeRank.ANY)
+      throw new Exception("Element constraint only supports ANY as position for the index")
+    val idx: CPIntVar = varHashMap(index.id()) - startIndex
+    val x: Array[CPIntVar] = toCPIntVar(list)
+    val z: CPIntVar = CPIntVar(value)(cp)
+    cp.add(elementVar(x, idx, z))
+  }
+
+  override def buildCtrElement(id: String, list: Array[Int], startIndex: Int, index: XVarInteger, rank: TypeRank, value: XVarInteger): Unit = {
+    if(rank != TypeRank.ANY)
+      throw new Exception("Element constraint only supports ANY as position for the index")
+    val indexExpr = if(startIndex == 0) varHashMap(index.id()) else varHashMap(index.id()) - startIndex
+    val valueExpr = varHashMap(value.id())
+    cp.add(element(list,indexExpr,valueExpr))
   }
 
   // Objectives
@@ -551,24 +585,6 @@ class XCSP3Parser(filename: String) extends XCallbacksDecomp {
           case _ => throw new RuntimeException("not supported operator")
         }
     }
-  }
-
-  override def buildCtrElement(id: String, list: Array[XVarInteger], startIndex: Int, index: XVarInteger, rank: TypeRank, value: XVarInteger): Unit = {
-    if (rank != TypeRank.ANY)
-      throw new Exception("Element constraint only supports ANY as position for the index")
-    val idx: CPIntVar = varHashMap(index.id()) - startIndex
-    val x: Array[CPIntVar] = toCPIntVar(list)
-    val z: CPIntVar = varHashMap(value.id())
-    cp.add(elementVar(x, idx, z))
-  }
-
-  override def buildCtrElement(id: String, list: Array[XVarInteger], startIndex: Int, index: XVarInteger, rank: TypeRank, value: Int): Unit = {
-    if (rank != TypeRank.ANY)
-      throw new Exception("Element constraint only supports ANY as position for the index")
-    val idx: CPIntVar = varHashMap(index.id()) - startIndex
-    val x: Array[CPIntVar] = toCPIntVar(list)
-    val z: CPIntVar = CPIntVar(value)(cp)
-    cp.add(elementVar(x, idx, z))
   }
 
 

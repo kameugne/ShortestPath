@@ -228,10 +228,15 @@ class TestXCSP3Parser extends TestSuite {
     "Steiner3-08.xml"
   )
 
+  val NewTest = Array(
+    "StillLife-03-03.xml",
+    "Rack-r1.xml",
+    "OpenStacks-m1-gp-050-1.xml"
+  )
 
 
 
-  for (t <- KOTests) {
+  for (t <- OKTests) {
     test(t) {
       assert(isValid("./data/xcsp3/instancesTest/"+t))
     }

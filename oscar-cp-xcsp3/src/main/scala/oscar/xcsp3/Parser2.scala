@@ -6,7 +6,7 @@ import java.util
 import org.xcsp.common.Condition.{ConditionIntvl, ConditionRel, ConditionVal, ConditionVar}
 import org.xcsp.common.Types._
 import org.xcsp.common.predicates.{XNode, XNodeLeaf, XNodeParent}
-import org.xcsp.common.{Condition, IVar}
+import org.xcsp.common.{Condition, Constants, IVar}
 import org.xcsp.parser.callbacks.XCallbacks
 import org.xcsp.parser.callbacks.XCallbacks.{Implem, XCallbacksParameters}
 import org.xcsp.parser.entries.XVariables.XVarInteger
@@ -429,10 +429,10 @@ private class XCSP3Parser2(modelDeclaration: ModelDeclaration, filename: String)
   override def buildCtrExtension(id: String, list: Array[XVarInteger], tuples: Array[Array[Int]], positive: Boolean, flags: util.Set[TypeFlag]): Unit = {
     //println(list.map(x => x.id()).mkString(" "))
     val cst: Constraint = if(positive) {
-      Table(list.map(x => varHashMap(x.id())), tuples, if(flags.contains(TypeFlag.STARRED_TUPLES)) Some(Integer.MAX_VALUE-1) else None)
+      Table(list.map(x => varHashMap(x.id())), tuples, if(flags.contains(TypeFlag.STARRED_TUPLES)) Some(Constants.STAR_INT) else None)
     }
     else {
-      NegativeTable(list.map(x => varHashMap(x.id())), tuples, if(flags.contains(TypeFlag.STARRED_TUPLES)) Some(Integer.MAX_VALUE-1) else None)
+      NegativeTable(list.map(x => varHashMap(x.id())), tuples, if(flags.contains(TypeFlag.STARRED_TUPLES)) Some(Constants.STAR_INT) else None)
     }
     modelDeclaration.add(cst)
   }
