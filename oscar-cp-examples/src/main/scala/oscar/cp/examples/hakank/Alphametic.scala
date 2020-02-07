@@ -1,7 +1,7 @@
 package oscar.cp.examples.hakank
 
 import oscar.cp._
-import scala.io.Source._
+
 import scala.math._
 
 /*
@@ -73,7 +73,7 @@ object Alphametic {
   //
   // Main solve function
   //
-  def solve(problem_in: String = "SEND+MORE=MONEY", base: Int = 10, start: Int = 0) {
+  def solve(problem_in: String = "SEND+MORE=MONEY", base: Int = 10, start: Int = 0): Unit = {
 
     implicit val cp = CPSolver()
 
@@ -144,7 +144,7 @@ object Alphametic {
     println(stats)
   }
 
-  def testProblems(base: Int, start: Int = 0) {
+  def testProblems(base: Int, start: Int = 0): Unit = {
 
     val problems = Array(
       "SEND+MORE=MONEY",
@@ -170,7 +170,7 @@ object Alphametic {
   //
   // Testing SEND+MORE=MONEY in different bases
   //
-  def testProblems2(problem: String = "SEND+MORE=MONEY", start: Int = 0) {
+  def testProblems2(problem: String = "SEND+MORE=MONEY", start: Int = 0): Unit = {
 
     for (base <- 1 to 20) {
       try {
@@ -184,7 +184,7 @@ object Alphametic {
 
   }
 
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
 
     val problem = if (args.length > 0) args(0) else "SEND+MORE=MONEY";
     val base = if (args.length > 1) args(1).toInt else 10;

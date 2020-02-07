@@ -15,8 +15,6 @@
 package oscar.cp.examples.hakank
 
 import oscar.cp._
-import scala.io.Source._
-import scala.math._
 /*
   Kakuro puzzle in Oscar.
   http://en.wikipedia.org/wiki/Kakuro
@@ -56,7 +54,7 @@ object Kakuro extends CPModel with App  {
   def calc(
            cc: Array[Int],
            x: Array[Array[CPIntVar]],
-           res: Int) {
+           res: Int): Unit = {
     // ensure that the values are positive
     val len = (cc.length / 2).toInt
     for(i <- 0 until len) {

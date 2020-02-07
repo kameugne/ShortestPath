@@ -15,8 +15,6 @@
 package oscar.cp.examples.hakank
 
 import oscar.cp._
-import scala.io.Source._
-import scala.math._
 /*
   Exodus puzzle (Dell Logic Puzzles) in Oscar.
   From 
@@ -68,7 +66,7 @@ object Exodus extends CPModel with App {
   // 
   // Note: This requires the domain 0..n-1
   //
-  def inverse(x: Array[CPIntVar], y: Array[CPIntVar]) {
+  def inverse(x: Array[CPIntVar], y: Array[CPIntVar]): Unit = {
     val len = x.length
     for (
       i <- 0 until len;

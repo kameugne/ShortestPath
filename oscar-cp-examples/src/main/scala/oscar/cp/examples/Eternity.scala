@@ -61,7 +61,7 @@ object Eternity extends CPModel with App {
     add(down(l)(c) === up(l + 1)(c));
   }
 
-  def prettyPrint() {
+  def prettyPrint(): Unit = {
 
     for (l <- 0 until n) {
       println(up(l).mkString("   ", "       ", "\n"))

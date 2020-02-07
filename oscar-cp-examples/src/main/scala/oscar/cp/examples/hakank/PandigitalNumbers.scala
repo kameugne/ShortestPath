@@ -15,9 +15,8 @@
 package oscar.cp.examples.hakank
 
 import oscar.cp._
-import scala.io.Source._
+
 import scala.math._
-import Array._
 /**
  *
  * Pandigital numbers in OscaR.
@@ -65,7 +64,7 @@ object PandigitalNumbers extends CPModel with App  {
   //
   //each sub equation
   //
-  def solve(base: Int = 10, start: Int = 1, len1: Int = 1, len2: Int = 2) {
+  def solve(base: Int = 10, start: Int = 1, len1: Int = 1, len2: Int = 2): Unit = {
     //
     // data
     //

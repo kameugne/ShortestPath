@@ -15,9 +15,8 @@
 package oscar.cp.examples.hakank
 
 import oscar.cp._
-import scala.io.Source._
+
 import scala.math._
-import Array._
 /**
  *
  * Rogo puzzle solver in OscaR.
@@ -74,7 +73,7 @@ object Rogo2 extends CPModel with App  {
   //
   // read problem instance from a file
   //
-  def readFile(problem_file: String) {
+  def readFile(problem_file: String): Unit = {
     val file = scala.io.Source.fromFile(problem_file).getLines
     var linec = 0;
     for {line <- file

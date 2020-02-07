@@ -276,7 +276,7 @@ object ABCEndview extends App {
     }
   }
 
-  def solve(problem: Problem) {
+  def solve(problem: Problem): Unit = {
 
     implicit val cp = CPSolver()
 

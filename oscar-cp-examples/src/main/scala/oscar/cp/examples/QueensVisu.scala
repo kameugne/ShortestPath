@@ -42,7 +42,7 @@ object QueensVisu extends CPModel with App {
   w2.add(vg)
   w2.pack()
 
-  def updateVisu(doms: Seq[Set[Int]], i: Int, v: Int, assign: Boolean) {
+  def updateVisu(doms: Seq[Set[Int]], i: Int, v: Int, assign: Boolean): Unit = {
     for (q <- Queens; qv <- Queens) {
       val col = if (doms(q).contains(qv)) Color.green else Color.red
       vg(qv)(q).innerCol = col

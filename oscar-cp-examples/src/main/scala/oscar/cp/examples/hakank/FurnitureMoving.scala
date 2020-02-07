@@ -15,8 +15,6 @@
 package oscar.cp.examples.hakank
 
 import oscar.cp._
-import scala.io.Source._
-import scala.math._
 /*
   Furniture Moving (scheduling) problem in Oscar.
   Problem from Marriott & Stuckey: 'Programming with constraints', page  112f
@@ -31,7 +29,7 @@ object FurnitureMoving extends CPModel with App  {
     s: Array[CPIntVar],
     d: Array[Int],
     r: Array[Int],
-    b: CPIntVar) {
+    b: CPIntVar): Unit = {
     val tasks = for {
       i <- 0 to s.length - 1
       if (r(i) > 0 && d(i) > 0)

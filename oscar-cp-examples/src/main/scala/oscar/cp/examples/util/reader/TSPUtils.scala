@@ -11,7 +11,7 @@ object TSPUtils {
     lines.map(l => l.trim.split("[ ,\t]").map(_.toInt))
   }
 
-  def writeSet(filepath: String, set: Array[Array[Int]]) {
+  def writeSet(filepath: String, set: Array[Array[Int]]): Unit = {
     val out = OutFile(filepath)
     set.foreach(l => out.writeln(l.mkString(" ")))
     out.close()

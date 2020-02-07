@@ -1,10 +1,10 @@
 package oscar.cp.examples.hakank
 
+import java.util.Random
+
 import oscar.cp._
 
-import scala.io.Source._
 import scala.math._
-import java.util.Random
 
 /*
 
@@ -170,7 +170,7 @@ object AlphameticGenerate {
     if (numSols > 0) 1 else 0
   }
 
-  def generate(word_list: String, num_words: Int = 3, base: Int = 10, start: Int = 0) {
+  def generate(word_list: String, num_words: Int = 3, base: Int = 10, start: Int = 0): Unit = {
 
     println("testProblems")
     val words = readWords(word_list)
@@ -194,7 +194,7 @@ object AlphameticGenerate {
 
   }
 
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
 
     val wordlist = if (args.length > 0) args(0) else "/usr/share/dict/words";
     val num_words = if (args.length > 1) args(1).toInt else 3;

@@ -15,7 +15,7 @@
 package oscar.cp.examples.hakank
 
 import oscar.cp._
-import scala.io.Source._
+
 import scala.math._
 /*
   Photo problem in Oscar.
@@ -55,7 +55,7 @@ object PhotoProblem extends CPModel with App  {
   //   x is the position array
   //   y are the placements
   // 
-  def inverse(x: Array[CPIntVar], y: Array[CPIntVar]) {
+  def inverse(x: Array[CPIntVar], y: Array[CPIntVar]): Unit = {
     val len = x.length
     for (
       i <- 0 until len;

@@ -2,12 +2,9 @@ package oscar.cp.examples
 
 
 import oscar.algo.reversible.ReversibleInt
-
-import scala.io.Source
 import oscar.cp._
-import oscar.cp.core.variables.CPVar
 import oscar.cp.core.CPPropagStrength
-import oscar.util._
+import oscar.cp.core.variables.CPVar
 import oscar.visual._
 import oscar.visual.plot.PlotLine
 import oscar.visual.shapes.VisualRectangle
@@ -45,7 +42,7 @@ object ChemicalTanker extends CPModel with App {
     val id = (node \ "@id").text.toInt
     val name = (node \ "@name").text
     val volume = (node \ "@volume").text.toInt
-    override def toString = id + ""
+    override def toString = id.toString
   }
 
   /**
@@ -115,7 +112,7 @@ object ChemicalTanker extends CPModel with App {
     for (node <- (problemNode \ "tanks" \ "tank").toArray)
       yield new Tank(node, cargos)
 
-  val totCapa = (0 /: tanks)((s, t) => s + t.capa) // fold left to compute tot capa
+  val totCapa = tanks.foldLeft(0)((s, t) => s + t.capa) // fold left to compute tot capa
 
   // extract cargo that cannot be be adjacent to each others
   val incompatibles: Set[(Int, Int)] =

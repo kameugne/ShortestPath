@@ -93,7 +93,7 @@ object Hexiom extends CPModel with App {
     // pretty print
     for (ind <- 0 until k; if (card(ind).value < 7)) {
       val (i, j) = pos(ind)
-      tab(i)(j) = card(ind).value + ""
+      tab(i)(j) = card(ind).value.toString
     }
     tab.foreach(i => println(i.mkString(" ")))
     println("++++++++++++++++++++++++++++++++++++++++++++++++\n")

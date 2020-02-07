@@ -15,8 +15,6 @@
 package oscar.cp.examples.hakank
 
 import oscar.cp._
-import scala.io.Source._
-import scala.math._
 /**
  *
  * http://en.wikipedia.org/wiki/Killer_Sudoku
@@ -71,7 +69,7 @@ object KillerSudoku extends CPModel with App  {
   def calc(
            cc: Array[Int],
            x: Array[Array[CPIntVar]],
-           res: Int) {
+           res: Int): Unit = {
     val len = (cc.length / 2).toInt
     // sum the numbers
    add(sum(for{i <- 0 until len} yield x(cc(i*2)-1)(cc(i*2+1)-1)) === res)

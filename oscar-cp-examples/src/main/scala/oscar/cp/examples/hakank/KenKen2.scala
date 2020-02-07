@@ -15,8 +15,6 @@
 package oscar.cp.examples.hakank
 
 import oscar.cp._
-import scala.io.Source._
-import scala.math._
 /**
  *
  * KenKen puzzle in OscaR.
@@ -67,7 +65,7 @@ object KenKen2 extends CPModel with App  {
   def calc(
            cc: Array[Int],
            x: Array[Array[CPIntVar]],
-           res: Int) {
+           res: Int): Unit = {
     val ccLen = cc.length
     if (ccLen == 4) {
       // for two operands there's

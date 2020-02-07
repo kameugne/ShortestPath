@@ -68,7 +68,7 @@ object PMedian extends CPModel with App {
   }
   f.pack()
 
-  def updateVisu() {
+  def updateVisu(): Unit = {
     for (i <- 0 until nbCust) {
       val j = x(i).value
       vcircles(i).innerCol = Color.WHITE;

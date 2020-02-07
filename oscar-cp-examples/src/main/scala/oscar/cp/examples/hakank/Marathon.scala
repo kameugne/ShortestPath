@@ -55,7 +55,7 @@ object Marathon extends CPModel with App  {
    //   x is the position array
    //   y are the placements
    // 
-   def inverse(x: Array[CPIntVar], y: Array[CPIntVar]) {
+   def inverse(x: Array[CPIntVar], y: Array[CPIntVar]): Unit = {
       val len = x.length
       for(i <- 0 until len;
           j <- 0 until len) {
