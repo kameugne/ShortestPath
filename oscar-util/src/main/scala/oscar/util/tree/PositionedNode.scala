@@ -16,6 +16,7 @@ package oscar.util.tree
 
 import java.awt.Color
 import javax.swing.JPanel
+import scala.math.Ordering.Double.TotalOrdering
 
 class PositionedNode[T](val label: T, var pos: Double, val sons: List[PositionedNode[T]], val edgeLabels: List[T], val col: Color= Color.white, val action: () => Unit = () => {}) {
   private var maxLinesPerLevel = Array[Int]()

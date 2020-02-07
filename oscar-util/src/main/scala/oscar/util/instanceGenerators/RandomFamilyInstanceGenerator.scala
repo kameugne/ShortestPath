@@ -83,16 +83,16 @@ object RandomFamilyInstanceGenerator {
     val file = new File(outPath)
     val bw = new BufferedWriter(new FileWriter(file))
     bw.write("1\n")
-    bw.write(nJobs + " 9999 9999 9999 9999 9999 9999 9999 9999\n")
+    bw.write(s"$nJobs 9999 9999 9999 9999 9999 9999 9999 9999\n")
     for (i <- 0 to nJobs) {
-      bw.write(nMachines + "\n")
+      bw.write(s"$nMachines\n")
     }
     for (a <- 0 until nActivities) {
-      bw.write((machines(a) + 1) + " " + durations(a) + " 0 0\n")
+      bw.write(s"${machines(a) + 1} ${durations(a)} 0 0\n")
     }
     for (i <- 0 to nActivities) {
       for (j <- 0 to nActivities) {
-        bw.write(ttMatrix(i)(j) + "\n")
+        bw.write(s"${ttMatrix(i)(j)}\n")
       }
     }
     bw.close()

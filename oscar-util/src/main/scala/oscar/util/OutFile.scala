@@ -14,10 +14,7 @@
  ******************************************************************************/
 package oscar.util
 
-import java.io.IOException
-import java.io.FileWriter
-import java.io.BufferedWriter
-import scala.io.Source
+import java.io.{BufferedWriter, FileWriter}
 
 class OutFile(filepath: String, critical: Boolean, verbous: Boolean) {
 
@@ -46,12 +43,12 @@ class OutFile(filepath: String, critical: Boolean, verbous: Boolean) {
   }
   
   def write(line: Int): Unit = {
-    write(line+"")
+    write(line)
   }
 
   def writeln(line: String): Unit = write(line + "\n")
   
-  def writeln(line: Int): Unit = writeln(line+"")
+  def writeln(line: Int): Unit = writeln(line)
   
   def writeln() = write("\n")
 
