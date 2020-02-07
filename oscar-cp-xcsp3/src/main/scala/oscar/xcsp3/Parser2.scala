@@ -372,6 +372,7 @@ private class XCSP3Parser2(modelDeclaration: ModelDeclaration, filename: String)
       case TypeExpr.RATIONAL => throw new Exception("Variable in non-leaf node")
       case TypeExpr.SYMBOL => throw new Exception("Variable in non-leaf node")
       case TypeExpr.DECIMAL => throw new Exception("Variable in non-leaf node")
+      case TypeExpr.SPECIAL => ???
     }
   }
 

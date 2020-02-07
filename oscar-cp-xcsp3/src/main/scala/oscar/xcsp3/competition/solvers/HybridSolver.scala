@@ -148,7 +148,7 @@ object HybridSolver extends CompetitionApp with App {
           None,
           conf.memlimit(),
           "evalWindowLaborie",
-          Map('quickStart -> true)
+          Map(Symbol("quickStart") -> true)
         )
 
         val alns = ALNSSearch(solver, decisionVars, auxiliaryVars, config)
