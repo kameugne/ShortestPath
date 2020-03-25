@@ -1,8 +1,14 @@
+package oscar.ml.classificationtree
+
 import ANDORsearch.ANDORSearch
-import DataManipulation.{Data, FileFormat}
+import DataManipulation.{Data, FileFormat, SparseFormat}
 import DecisionTree.DTree
 import oscar.cp.core.CPStore
 
+/**
+ * Code of the paper "Learning Optimal Decision Tree Using CP", H. Verhaeghe, S. Nijssen, C-G Quimpert, G. Pesant, P. Schaus
+ * @author helene.verhaeghe27@gmail.com
+ */
 object RunTreeANDOR {
 
   def run(file: String,
@@ -71,6 +77,26 @@ object RunTreeANDOR {
       "NOSOL"
 
   }
+
+
+}
+
+object solveDecisionTree extends App {
+
+
+  val file ="./data/file.txt" // TODO CHANGE HERE
+  val format: FileFormat = SparseFormat
+  val TO: Int = 600
+  val isComplete: Boolean = false
+  val depth: Int = 4
+  val lbLeaf: Int = 5
+  val lbLeafPercent: Boolean = false
+  val heuristic: Int = 1
+  var isCacheActive = true
+  var isPrunningMinActive = true
+  println("===============")
+  val treeANDOR = RunTreeANDOR.run(file, format, TO, isComplete, depth, lbLeaf, lbLeafPercent, heuristic,isPrunningMinActive,isCacheActive)
+  println(treeANDOR)
 
 
 }

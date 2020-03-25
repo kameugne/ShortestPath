@@ -1,5 +1,11 @@
+package oscar.ml.classificationtree
+
 import DataManipulation.{Data, FileFormat}
 
+/**
+ * Code of the paper "Learning Optimal Decision Tree Using CP", H. Verhaeghe, S. Nijssen, C-G Quimpert, G. Pesant, P. Schaus
+ * @author helene.verhaeghe27@gmail.com
+ */
 class Validation(treeString: String) {
 
   // tree syntax : feature(yesTree, noTree) or 0:x (leaf of class 0 with x being the error of leaf) or 1:x (leaf of class 1 with x being the error of leaf) or 2:x if indertermine

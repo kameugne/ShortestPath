@@ -1,10 +1,28 @@
-package Constraints
+/*******************************************************************************
+ * OscaR is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * OscaR is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License  for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with OscaR.
+ * If not, see http://www.gnu.org/licenses/lgpl-3.0.en.html
+ ******************************************************************************/
+
+package oscar.ml.classificationtree.Constraints
 
 import oscar.algo.reversible.{ReversibleBoolean, ReversibleInt}
 import oscar.cp.core.CPPropagStrength
 import oscar.cp.core.variables.CPVar
 import oscar.cp.{CPIntVar, Constraint}
-
+/**
+ * Code of the paper "Learning Optimal Decision Tree Using CP", H. Verhaeghe, S. Nijssen, C-G Quimpert, G. Pesant, P. Schaus
+ * @author helene.verhaeghe27@gmail.com
+ */
 class CoverSizeSR(val I: Array[CPIntVar], val I2: Array[CPIntVar], val Sup: CPIntVar, val nItems: Int, val nTrans: Int, TDB: Array[Array[Long]],TDBI: Array[Array[Long]]) extends Constraint(Sup.store, "CoverSizeVar") {
 
 

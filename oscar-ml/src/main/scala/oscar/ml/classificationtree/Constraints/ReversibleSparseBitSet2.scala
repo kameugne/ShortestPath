@@ -1,32 +1,28 @@
-/** *****************************************************************************
-  * OscaR is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU Lesser General Public License as published by
-  * the Free Software Foundation, either version 2.1 of the License, or
-  * (at your option) any later version.
-  *
-  * OscaR is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU Lesser General Public License  for more details.
-  *
-  * You should have received a copy of the GNU Lesser General Public License along with OscaR.
-  * If not, see http://www.gnu.org/licenses/lgpl-3.0.en.html
-  * *****************************************************************************/
+/*******************************************************************************
+ * OscaR is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * OscaR is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License  for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with OscaR.
+ * If not, see http://www.gnu.org/licenses/lgpl-3.0.en.html
+ ******************************************************************************/
 
-/**
-  * Data structure (Reversible Sparse BitSet)
-  *
-  * @author John Aoga johnaoga@gmail.com
-  * @author Pierre Schaus pschaus@gmail.com
-  *         Relevant paper: Compact table and http://becool.info.ucl.ac.be/biblio/coversize-global-constraint-frequency-based-itemset-mining
-  *
-  */
-
-package Constraints
+package oscar.ml.classificationtree.Constraints
 
 
 import oscar.algo.reversible.BitSetOp._
 import oscar.algo.reversible.{ReversibleContext, TrailEntry}
+
+/**
+ * Code of the paper "Learning Optimal Decision Tree Using CP", H. Verhaeghe, S. Nijssen, C-G Quimpert, G. Pesant, P. Schaus
+ * @author helene.verhaeghe27@gmail.com
+ */
 
 /* Trailable entry to restore the value of the ith Long of the valid tuples */
 final class ReversibleSparseBitSetEntry(set: ReversibleSparseBitSet2, numberOfValues: Int) extends TrailEntry {

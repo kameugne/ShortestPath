@@ -1,10 +1,31 @@
-package DecisionTree
+/*******************************************************************************
+ * OscaR is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * OscaR is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License  for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with OscaR.
+ * If not, see http://www.gnu.org/licenses/lgpl-3.0.en.html
+ ******************************************************************************/
 
-import Constraints.CoverSizeSR
-import DataManipulation.Data
+package oscar.ml.classificationtree.DecisionTree
+
+import oscar.ml.classificationtree.Constraints.CoverSizeSR
+import oscar.ml.classificationtree.DataManipulation.Data
 import oscar.cp.core.variables.CPIntVar
 import oscar.cp.{sum, _}
 
+import scala.reflect.ClassManifest
+
+/**
+ * Code of the paper "Learning Optimal Decision Tree Using CP", H. Verhaeghe, S. Nijssen, C-G Quimpert, G. Pesant, P. Schaus
+ * @author helene.verhaeghe27@gmail.com
+ */
 object DTree {
   /*
    * Build a given decision tree with BSF numbering of the nodes
