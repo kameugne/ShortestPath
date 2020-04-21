@@ -64,6 +64,7 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
             shortPath(i)(e)(s) = 0
           if(s == 0 && e > 0 && i != 0)
             shortPath(i)(e)(s) = dynamicProgramShortestPath(e, i, transition)
+
           if(s > 0){
             if(e == s && i == order(s-1))
               shortPath(i)(e)(s) = pathLength(order.toList.dropRight(m-s), transition)
@@ -113,8 +114,10 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
   def bruteForceShortestPathOrder(p: Int, u: Int, order: Seq[Int], transition: Array[Array[Double]]): Double ={
     val n = transition.length
     val m = order.length
-    if(u == 0)
+    if(u == 0 && p == 0)
       return  0
+    if(u == 0 && p > 0)
+      return Double.MaxValue
     if(p < order.length)
       return  Double.MaxValue
     if(p == order.length && u == order.last)
