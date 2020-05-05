@@ -15,10 +15,10 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
   /*
   * Running example for the note
   * */
-  val transition = GeneratePointsAndTransitionMatrix(4, -1, 3)
+  /*val transition = GeneratePointsAndTransitionMatrix(4, -1, 3)
   val order = GeneratePreOrder(4, 50)
   val exactShortestPath = exactPremutationWithPreOrder(4 , order, transition)
-  println(exactShortestPath)
+  println(exactShortestPath)*/
 
 
 
@@ -26,11 +26,11 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
   * Run the Easy instances of the problems
   */
 
-  /*val writer: BufferedWriter = new BufferedWriter(new FileWriter("Data/ShortestPathWithPreOrder/Easy/SPPWPEasySolution.txt"))
-  writer.write("Instance |" + " nNode |" + "orderL| " + " MstLB| " + " DPLB |" + " bfDPLB |" + " PermLB|"+ " MstTime| " + " DPTime |" + " bfDPTime |" + " PermTime|")
-  writer.newLine()
-  for(tot <- List(6,7,8,9,10)){
-    for(perc <- List(40,50,60,70,80).map(i => tot*i/100)){
+  //val writer: BufferedWriter = new BufferedWriter(new FileWriter("Data/ShortestPathWithPreOrder/Easy/SPPWPEasySolution.txt"))
+  //writer.write("Instance |" + " nNode |" + "orderL| " + " MstLB| " + " DPLB |" + " bfDPLB |" + " PermLB|"+ " MstTime| " + " DPTime |" + " bfDPTime |" + " PermTime|")
+  //writer.newLine()
+  for(tot <- List(6)){//List(6,7,8,9,10)){
+    for(perc <- List(40).map(i => tot*i/100)){//List(40,50,60,70,80).map(i => tot*i/100)){
       val data = SPPWPPaser.paser("Data/ShortestPathWithPreOrder/Easy/SPPWP_" + tot + "_" + perc + ".txt")
       val num = data.nNode -1
       var order: Seq[Int] = data.order
@@ -42,15 +42,15 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
       println("SPPWP_" + tot + "_" + perc + " | " + num + " | " + perc + " | " +
         kruskalMSTLowerBound._1  + " | " + lowerBoundDynProg._1 + "| " + lowerBoundBruteForce._1 +  " | " + exactShortestPath._1 + " | " +
         kruskalMSTLowerBound._2  + " | " + lowerBoundDynProg._2 + " | " + lowerBoundBruteForce._2 + " | "+ exactShortestPath._2 + " | ")
-      writer.write("SPPWP_" + tot + "_" + perc + " | " + num + " | " + perc + " | " +
-        kruskalMSTLowerBound._1  + " | " + lowerBoundDynProg._1 + "| " + lowerBoundBruteForce._1 +" | " + exactShortestPath._1 + " | " +
-        kruskalMSTLowerBound._2  + " | " + lowerBoundDynProg._2 + "| " + lowerBoundBruteForce._2 + " | " + exactShortestPath._2 + "| ")
-      writer.newLine()
+      //writer.write("SPPWP_" + tot + "_" + perc + " | " + num + " | " + perc + " | " +
+        //kruskalMSTLowerBound._1  + " | " + lowerBoundDynProg._1 + "| " + lowerBoundBruteForce._1 +" | " + exactShortestPath._1 + " | " +
+        //kruskalMSTLowerBound._2  + " | " + lowerBoundDynProg._2 + "| " + lowerBoundBruteForce._2 + " | " + exactShortestPath._2 + "| " )
+      //writer.newLine()
 
 
     }
   }
-  writer.close()*/
+  //writer.close()
 
 
   /*
@@ -115,11 +115,11 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
   * O(pn^4) since the algorithm "dynamicProgramShortestPathOrder" of complexity O(pn^3) is called n time (here p <= n is the length of the vector "order"
   * and n the total number of nodes of the graph ).
   */
-  def dynamicProgramShortestPathOrderComplet(p: Int, order: Seq[Int], transition: Array[Array[Double]]): (Double, Double) ={
+  def dynamicProgramShortestPathOrderComplet(p: Int, order: Seq[Int], transition: Array[Array[Int]]): (Int, Double) ={
     val startTime = System.currentTimeMillis()
-    var distance = Double.MaxValue
+    var distance = Int.MaxValue
     for(u <- transition.indices; if u != 0)
-      distance = Math.min(distance, dynamicProgramShortestPathOrder(p, u, order, transition))
+      distance = Math.min(distance, dynamicProgramShortestPathOrderB(p, u, order, transition))
     val endTime = System.currentTimeMillis()
     val time = (endTime - startTime)/1000
     (distance, time)
@@ -131,14 +131,14 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
   * O(pn^3) where p <= n is the length of the vector "order" and n is the total number of nodes of the graph.
   */
 
-  def dynamicProgramShortestPathOrder(p: Int, u: Int, order: Seq[Int], transition: Array[Array[Double]]): Double ={
+  def dynamicProgramShortestPathOrder(p: Int, u: Int, order: Seq[Int], transition: Array[Array[Int]]): Int ={
     val n = transition.length
     val m = order.length
-    val shortPath: Array[Array[Array[Double]]] = Array.ofDim[Double](n,p+1,m+1)
+    val shortPath: Array[Array[Array[Int]]] = Array.ofDim[Int](n,p+1,m+1)
     for(e <- 0 to p){
       for(s <- 0 to m){
         for(i <- 0 until n) {
-          shortPath(i)(e)(s) = Double.MaxValue
+          shortPath(i)(e)(s) = Int.MaxValue
           if(s == 0 && e == 0 && i == 0)
             shortPath(i)(e)(s) = 0
           if(s > 0){
@@ -170,6 +170,47 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
     shortPath(u)(p)(m)
   }
 
+  def dynamicProgramShortestPathOrderB(p: Int, u: Int, order: Seq[Int], transition: Array[Array[Int]]): Int ={
+    val n = transition.length
+    val m = order.length
+    val shortPath: Array[Array[Array[Int]]] = Array.ofDim[Int](n,p+1,m+1)
+    for(e <- 0 to p){
+      for(s <- 0 to m){
+        for(i <- 0 until n) {
+          shortPath(i)(e)(s) = Int.MaxValue
+          if(s == 0 && e == 0 && i == 0)
+            shortPath(i)(e)(s) = 0
+          //if(s == 0 && e == 1 && (!order.contains(i) || order(s) == i))
+            //shortPath(i)(e)(s) = transition(0)(i)
+          if(s > 0){
+            if(e == s && i == order(s-1))
+              shortPath(i)(e)(s) = pathLength(order.toList.dropRight(m-s), transition)
+            if(e > s && i != 0){
+              val orderMinus = order.dropRight(m-s)
+              if(orderMinus.contains(i)){
+                if(i == orderMinus.last){
+                  val orderM = orderMinus.dropRight(1)
+                  for (a <- 0 until n if !order.contains(a) || ( orderM.nonEmpty && orderM.contains(a) && a == orderM.last)) {
+                    if (a != 0 && a != i && shortPath(a)(e - 1)(s - 1) != Int.MaxValue) {
+                      shortPath(i)(e)(s) = Math.min(shortPath(i)(e)(s), shortPath(a)(e - 1)(s - 1) + transition(a)(i))
+                    }
+                  }
+                }
+              }else{
+                for (a <- 0 until n if !order.contains(a) || (orderMinus.nonEmpty && orderMinus.contains(a) && a == orderMinus.last)) {
+                  if (a != 0 && a != i && shortPath(a)(e - 1)(s) != Int.MaxValue) {
+                    shortPath(i)(e)(s) = Math.min(shortPath(i)(e)(s), shortPath(a)(e - 1)(s) + transition(a)(i))
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    shortPath(u)(p)(m)
+  }
+
 
 
   /*
@@ -180,9 +221,9 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
   */
 
 
-  def bruteForceShortestPathOrderComplet(p: Int, order: Seq[Int], transition: Array[Array[Double]]): (Double, Double) ={
+  def bruteForceShortestPathOrderComplet(p: Int, order: Seq[Int], transition: Array[Array[Int]]): (Int, Double) ={
     val startTime = System.currentTimeMillis()
-    var distance = Double.MaxValue
+    var distance = Int.MaxValue
     for(u <- transition.indices; if u != 0)
       distance = Math.min(distance, bruteForceShortestPathOrder(p, u, order, order, transition))
     val endTime = System.currentTimeMillis()
@@ -197,20 +238,22 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
   * O(n^p) where p <= n is the length of the vector "order" and n is the total number of nodes of the graph.
   */
 
-  def bruteForceShortestPathOrder(p: Int, u: Int, order: Seq[Int], fixorder: Seq[Int], transition: Array[Array[Double]]): Double ={
+  def bruteForceShortestPathOrder(p: Int, u: Int, order: Seq[Int], fixorder: Seq[Int], transition: Array[Array[Int]]): Int ={
     val n = transition.length
     val m = order.length
+    val solution: Array[Int] = new Array[Int](n-1)
+    solution(n-2) = u
     if(u == 0 && p == 0)
       return  0
     if(u == 0 && p > 0)
-      return Double.MaxValue
+      return Int.MaxValue
     if(p < m)
-      return  Double.MaxValue
+      return  Int.MaxValue
     if(p == m && u != order.last)
-      return Double.MaxValue
+      return Int.MaxValue
     if(m == 0 && u != 0 && p == 0)
-      return  Double.MaxValue
-    var dist = Double.MaxValue
+      return  Int.MaxValue
+    var dist = Int.MaxValue
     if(m > 0){
       if(p == m && u == order.last)
         dist = Math.min(dist, pathLength(order.toList, transition))
@@ -218,14 +261,14 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
         if(u == order.last){
           val orderMinus = order.dropRight(1)
           for(a <- 0 until n if !fixorder.contains(a) || (orderMinus.nonEmpty && orderMinus.contains(a) && a == orderMinus.last)){
-            if(a != 0 && a != u && bruteForceShortestPathOrder(p-1, a, orderMinus, fixorder,  transition) != Double.MaxValue){
+            if(a != 0 && a != u && bruteForceShortestPathOrder(p-1, a, orderMinus, fixorder,  transition) != Int.MaxValue){
               dist = Math.min(dist, bruteForceShortestPathOrder(p-1, a, orderMinus, fixorder, transition) + transition(a)(u))
             }
           }
         }else{
           if(!order.contains(u)){
             for(a <- 0 until n if !fixorder.contains(a) || (order.contains(a) && a == order.last)){
-              if(a != 0 && a != u && bruteForceShortestPathOrder(p-1, a, order, fixorder, transition) != Double.MaxValue){
+              if(a != 0 && a != u && bruteForceShortestPathOrder(p-1, a, order, fixorder, transition) != Int.MaxValue){
                 dist = Math.min(dist, bruteForceShortestPathOrder(p-1, a, order, fixorder, transition) + transition(a)(u))
               }
             }
@@ -240,7 +283,7 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
    * Kruskal algorithm for the compuation of the minimum spanning tree of a graph. The MST is usually used as a lower bound a n-edges shortest path of
    * a graph of n+1 nodes. The program uses the priority queue for a complexity of O(n^2log n).
    */
-  def KruskalMST(num: Int, transition: Array[Array[Double]]): (Double, Double) = {
+  def KruskalMST(num: Int, transition: Array[Array[Int]]): (Double, Double) = {
     val startTime = System.currentTimeMillis()
     val nodes = 0 to num
     val edges = for(i <- nodes; j <- nodes if i != j) yield (i, j)
@@ -303,8 +346,9 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
    * the bottom position. The transition matrix is also built and return.
    */
 
-  def GeneratePointsAndTransitionMatrix(n: Int, min: Int, max: Int): Array[Array[Double]] = {
-    val matrix: Array[Array[Double]] = Array.ofDim[Double](n+1,n+1)
+  def GeneratePointsAndTransitionMatrix(n: Int, min: Int, max: Int): Array[Array[Int]] = {
+    val SCALING = 100
+    val matrix: Array[Array[Int]] = Array.ofDim[Int](n+1,n+1)
     val rand = new scala.util.Random(1L)
     val points: ArrayBuffer[(Int,Int)] = ArrayBuffer[(Int, Int)]()
     var i = 0
@@ -315,17 +359,17 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
         i += 1
       }
     }
-    println(points.mkString(" - "))
+    //println(points.mkString(" - "))
     for(i <- 0 until n+1; j <- 0 until n+1){
       if(i == 0 && j != 0) {
-        matrix(i)(j) = Math.sqrt(Math.pow(points(j-1)._1, 2) + Math.pow(points(j-1)._2, 2))
+        matrix(i)(j) = (Math.sqrt(Math.pow(points(j-1)._1, 2) + Math.pow(points(j-1)._2, 2)) * SCALING).round.toInt
       }
       if(j == 0 && i != 0){
-        matrix(i)(j) = Math.sqrt(Math.pow(points(i-1)._1, 2) + Math.pow(points(i-1)._2, 2))
+        matrix(i)(j) = (Math.sqrt(Math.pow(points(i-1)._1, 2) + Math.pow(points(i-1)._2, 2)) * SCALING).round.toInt
       }
       matrix(0)(0) = 0
       if(i != 0 && j != 0){
-        matrix(i)(j) = Math.sqrt(Math.pow(points(i-1)._1 - points(j-1)._1, 2) + Math.pow(points(i-1)._2 - points(j-1)._2, 2))
+        matrix(i)(j) = (Math.sqrt(Math.pow(points(i-1)._1 - points(j-1)._1, 2) + Math.pow(points(i-1)._2 - points(j-1)._2, 2)) * SCALING).round.toInt
       }
     }
     matrix
@@ -357,9 +401,9 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
   * Exact program that built the path of minimum length with pre-order. The permutation of minimum length if returned.
   */
 
-  def exactPremutationWithPreOrder(num: Int, preOrder: Seq[Int], transition: Array[Array[Double]]): (Double, Double)={
+  def exactPremutationWithPreOrder(num: Int, preOrder: Seq[Int], transition: Array[Array[Int]]): (Int, Double)={
     val startTime = System.currentTimeMillis()
-    var distance = Double.MaxValue
+    var distance = Int.MaxValue
     var bestPerm = (1 to num).toList
     for(perm <- (1 to num).toList.permutations){
       //println(perm.mkString(" - "))
@@ -386,8 +430,8 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
   * Length of the path starting at the bottom position
   */
 
-  def pathLength(perm: List[Int], transition: Array[Array[Double]]): Double ={
-    var score: Double = 0
+  def pathLength(perm: List[Int], transition: Array[Array[Int]]): Int ={
+    var score: Int = 0
     for(i <- 0 until perm.length){
       if(i == 0)
         score += transition(0)(perm(0))
@@ -427,9 +471,10 @@ object DynamicProgLowerBoundPreOrderSorthestPath extends App{
   }
 
 }
-class SPPWPInstance(val nNode: Int, val lengthOfOrder:Int, val notInOrder: Set[Int], val order: Seq[Int], val transition: Array[Array[Double]])
+class SPPWPInstance(val nNode: Int, val lengthOfOrder:Int, val notInOrder: Set[Int], val order: Seq[Int], val transition: Array[Array[Int]])
 
 object SPPWPPaser{
+  final val SCALING = 100
   def paser(filepath: String): SPPWPInstance ={
     val lines = Source.fromFile(filepath).getLines
     val line1 = lines.next.trim.split("[ ,\t]+")
@@ -449,15 +494,12 @@ object SPPWPPaser{
         coordBf += ((data(0).toInt, data(1).toInt))
       }
     }
-    val transition: Array[Array[Double]] = Array.ofDim[Double](coordBf.length, coordBf.length)
+    val transition: Array[Array[Int]] = Array.ofDim[Int](coordBf.length, coordBf.length)
     for(i <- 0 until coordBf.length; j <- 0 until coordBf.length){
-      transition(i)(j) = Math.sqrt(Math.pow(coordBf(i)._1 - coordBf(j)._1, 2) + Math.pow(coordBf(i)._2 - coordBf(j)._2, 2))
+      transition(i)(j) = (Math.sqrt(Math.pow(coordBf(i)._1 - coordBf(j)._1, 2) + Math.pow(coordBf(i)._2 - coordBf(j)._2, 2))*SCALING).round.toInt
     }
     val notInOrder = (1 until nNode).toSet.diff(order.toSet)
     new SPPWPInstance(nNode, lengthOfOrder, notInOrder, order.toSeq, transition)
   }
-
-
-
 }
 
